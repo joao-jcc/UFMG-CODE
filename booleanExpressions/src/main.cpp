@@ -44,8 +44,9 @@ int main(int argc, char* argv[]) {
     valuation = argv[optind + 1];
     // Resolver o problema especificado
     if (evaluate_problem) {        
-        bool result = evaluate_expression(formula, valuation);
-        std::cout << "Resultado da avaliação da expressão: " << result << std::endl;
+        char result = evaluate_expression(formula, valuation) ? '1' :  '0';
+        std::cout << "Resultado da avaliação da expressão: " << result  << std::endl;
+
     } 
 
     return 0;

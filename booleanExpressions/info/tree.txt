@@ -1,0 +1,22 @@
+.
+├── Makefile
+├── bin
+│   └── main
+├── include
+│   ├── stack.hpp
+│   └── utils.hpp
+├── info
+│   ├── TP1 - Especificao.pdf
+│   └── tree.txt
+├── obj
+│   ├── main.o
+│   └── stack.o
+├── src
+│   ├── main.cpp
+│   └── stack.cpp
+├── test
+│   └── test.cpp
+└── third_party
+    └── doctest.hpp
+
+8 directories, 12 files

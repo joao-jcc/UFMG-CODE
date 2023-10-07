@@ -1,0 +1,9 @@
+# Arquivos e diretórios gerados durante a compilação
+bin/
+obj/
+
+# Arquivos específicos de sistemas operacionais
+.DS_Store
+
+# Arquivos do ambiente de programação
+.vscode
