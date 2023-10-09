@@ -7,8 +7,7 @@ BIN_DIR = bin
 
 SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS))
-EXECUTABLE = $(BIN_DIR)/main
-
+EXECUTABLE = $(BIN_DIR)/pa6.out
 
 all: $(EXECUTABLE)
 
@@ -18,13 +17,20 @@ $(EXECUTABLE): $(OBJS)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(OBJS): | $(OBJ_DIR)
+
+$(EXECUTABLE): | $(BIN_DIR)
+
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+$(BIN_DIR):
+	mkdir -p $(BIN_DIR)
+
 run: all
 	./$(EXECUTABLE)
-
 
 clean:
 	rm -rf $(OBJ_DIR)/*.o $(EXECUTABLE)
 
 .PHONY: all clean
-
-
