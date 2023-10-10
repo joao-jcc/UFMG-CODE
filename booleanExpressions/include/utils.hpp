@@ -9,30 +9,30 @@
 
 // Operands
 
-const std::map<char, unsigned> opt_precedence = {{'|', 0}, {'&', 1}, {'-', 2}};
+const std::map<char, unsigned> opt_precedence = {{'|', 0}, {'&', 1}, {'~', 2}};
 
-bool precedence(char opt1, char opt2) {
+inline bool precedence(char opt1, char opt2) {
     return opt_precedence.at(opt1) > opt_precedence.at(opt2);
 }
 
-bool is_operand(char c) {
-    return (c == '|') || (c == '&') || (c == '-');
+inline bool is_operand(char c) {
+    return (c == '|') || (c == '&') || (c == '~');
 }
 
-bool is_digit(char c) {
+inline bool is_digit(char c) {
     return ('0' <= c) && (c <= '9');
 }
 
 // operands with char 1's ans 0's
-char _neg(char c) {
+inline char _neg(char c) {
     return c == '1' ? '0' : '1';
 }
 
-char _and(char c1, char c2) {
+inline char _and(char c1, char c2) {
     return (c1 == '1' && c2 == '1') ? '1' : '0';
 }
 
-char _or(char c1, char c2) {
+inline char _or(char c1, char c2) {
     return (c1 == '1' || c2 ==  '1') ? '1' : '0';
 }
 
@@ -41,7 +41,7 @@ char _or(char c1, char c2) {
 
 // varrer a formula copiando símbolos para outra string
 // mapeando valores numéricos para 0's e 1's pela string valuation
-std::string set_values(std::string formula, std::string valuation) {
+inline std::string set_values(std::string formula, std::string valuation) {
     std::string str_out;
     int len = formula.size();
 
@@ -73,7 +73,7 @@ std::string set_values(std::string formula, std::string valuation) {
 
 
 // infix_formula com zeros e uns e operadores apenas
-std::string to_posfix(std::string infix_formula, std::string valuation) {
+inline std::string to_posfix(std::string infix_formula, std::string valuation) {
     std::string posfix_formula;
     Stack stack;
 
@@ -121,7 +121,7 @@ std::string to_posfix(std::string infix_formula, std::string valuation) {
 
 
 
-bool evaluate_expression(std::string formula, std::string valuation) {
+inline bool evaluate_expression(std::string formula, std::string valuation) {
     // posfix expression with 0's and 1's
     formula = to_posfix(formula, valuation);
     
@@ -136,7 +136,7 @@ bool evaluate_expression(std::string formula, std::string valuation) {
             stack.add(c);
         }
 
-        else if (c == '-') {
+        else if (c == '~') {
             stack.print();
             std::cout << "opr: " << c << std::endl;
             // stack.add('0' + !(stack.pop() - '0')); //removo elemento e adiciono a stack
@@ -157,6 +157,81 @@ bool evaluate_expression(std::string formula, std::string valuation) {
     }
 
     return stack.pop() == '1' ? true : false;
+}
+
+
+// TREE
+
+
+enum Function {
+    AND, OR, LEAF
+};
+
+enum Direction {
+    RIGHT, LEFT
+};
+
+inline std::string func_to_str(Function function) {
+    if (function == AND) {
+        return "AND";
+    }
+    else if (function == OR) {
+        return "OR";
+    }
+    else if (function == LEAF) {
+        return "LEAF";
+    }
+    else {
+        return "";
+    }
+} 
+
+typedef struct Tuple {
+    Function function;
+    std::string sub_string;
+    int index;
+
+    void print() {
+        std::cout << "---tuple---" << std::endl;
+        std::cout << "f: " << func_to_str(function) << "\ns: " << sub_string << "\ni: " << index << std::endl;
+    }
+
+    bool is_leaf() {
+        return function == LEAF;
+    }
+} Tuple;
+
+
+inline std::string bool_to_str(bool value) {
+    return value ? "true" : "false";
+}
+
+
+inline int count_char(std::string str, char character) {
+    int count = 0;
+    for (char c : str) {
+        if (c == character) {
+            ++count;
+        }
+    }
+
+    return count;
+};
+
+
+// encontra a posicao de um quantificador a partir de um determinado index
+inline Tuple find_operator(std::string str, int index) {
+    int start_index = index;
+    for (; index < str.length(); ++index) {
+        if (str[index] == 'a') {
+            return Tuple{AND, str.substr(start_index, index - start_index), index};
+        }
+        else if (str[index] == 'e') {
+            return Tuple{OR, str.substr(start_index, index - start_index), index};
+        }
+    }
+    std::cout << "index: " << index << std::endl;
+    return Tuple{LEAF, str.substr(start_index, index - start_index), index};
 }
 
 
