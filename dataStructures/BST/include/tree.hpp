@@ -1,0 +1,62 @@
+#ifndef TREE_HPP
+#define TREE_HPP
+
+#include <iostream>
+#include <string>
+#include  "utils.hpp"
+
+
+typedef struct NodeT {
+    std::string formula;
+    Function function;
+    bool flag;
+
+    NodeT* right;
+    NodeT* left;
+    NodeT* parent;
+
+
+    NodeT(std::string formula="", Function function=LEAF, 
+    bool flag=false, NodeT* right=nullptr, NodeT* left=nullptr, NodeT* parent=nullptr) :
+    formula(formula), function(function), flag(flag), right(right), left(left), parent(parent) {
+    };
+
+    void print() {
+        std::cout << "--nodeT--" << std::endl;
+        std::cout << "formula: " << formula << std::endl;
+        std::cout << "function: " << func_to_str(function) << std::endl;
+        std::cout << "flag: " << bool_to_str(flag) << std::endl;
+        std::cout << "parent: " << parent << std::endl;
+        std::cout << "right: " << right << std::endl;
+        std::cout << "left: " << left << std::endl;
+
+    };
+
+} NodeT;
+
+
+class Tree {
+    public:
+        Tree(std::string base_formula);
+        ~Tree();
+
+        NodeT* get_root() {
+            return _root;
+        }
+
+        int get_depth() {
+            return _depth;
+        }
+
+    private:
+        NodeT* _root;
+        int _depth;
+        std::string _base_formula;
+
+        void _build();
+        void _expand(Tuple tuple, Direction direction);
+        NodeT* _walk_to(NodeT* temp, Direction direction);
+
+};
+
+#endif
