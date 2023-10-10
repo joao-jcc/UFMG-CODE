@@ -13,7 +13,6 @@ EXECUTABLE = $(BIN_DIR)/main
 TEST_SRCS = $(filter-out $(SRC_DIR)/main.cpp, $(wildcard $(SRC_DIR)/*.cpp)) $(wildcard $(TEST_DIR)/*.cpp)
 TEST_EXECUTABLE = $(BIN_DIR)/test
 
-
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJS)
@@ -26,10 +25,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 $(TEST_EXECUTABLE):
 	$(CC) -o $(TEST_EXECUTABLE) $(CFLAGS) $(TEST_SRCS)
 
-
 run: all
 	./$(EXECUTABLE)
-
 
 test: $(TEST_EXECUTABLE)
 	./$(TEST_EXECUTABLE)
@@ -39,4 +36,15 @@ clean:
 
 .PHONY: all clean
 
+# Add rules to create the obj and bin directories
+$(OBJS): | $(OBJ_DIR)
 
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+$(EXECUTABLE): | $(BIN_DIR)
+
+$(TEST_EXECUTABLE): | $(BIN_DIR)
+
+$(BIN_DIR):
+	mkdir -p $(BIN_DIR)
