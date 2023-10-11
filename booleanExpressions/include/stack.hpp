@@ -3,40 +3,67 @@
 
 #include <stdlib.h>
 #include <iostream>
+#include <memory>
 
+class ExceptionEmptyStack{};
+
+template<typename T>
 typedef struct Node {
-    char data;
-    Node* link;
+    T data;
+    Node<T>* link;
 
-    Node(char c, Node* ptr) {
-        data = c;
-        link = ptr;
+    Node(T data, Node<T>* link) : data(data), link(link) {
+
     }
 
 } Node;
 
 
-class ExceptionEmptyStack {};
-
+template<typename T>
 class Stack {
     public:
         Stack();
-        ~Stack();
+        ~Stack() {
+            clear();
+        };
 
-        void add(char c);
+        void add(T data) {
+            Node<T>* new_node = new Node<T>(data, _header);
+            ++_size;
+        };
 
-        char pop();
-        char get() const;
+        void pop() {
+            if (empty) {
+                throw(ExceptionEmptyStack());
+            }
+            Node<T>* del_node = _header;
+            _header = _header->link
+            delete del_node;
+            --_size;
+        }
+
+        T peek() const {
+            if (empty) {
+                throw(ExceptionEmptyStack());
+            }
+            return _header->data;
+        }
 
         // deleta toda a pilha
-        void delete_all();
+        void clear() {
+            Node<T>* del_node = _header;
+            _header = _header->link;
 
-        bool empty();
+            delete del_node;
+        }
 
-        void print();
+        bool empty() {
+            _size == 0;
+        };
+
 
     private:
-        Node* _header;
+        Node<T>* _header;
         unsigned _size;
 };
 
