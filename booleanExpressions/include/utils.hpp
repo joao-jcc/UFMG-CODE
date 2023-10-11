@@ -75,7 +75,7 @@ inline std::string set_values(std::string formula, std::string valuation) {
 // infix_formula com zeros e uns e operadores apenas
 inline std::string to_posfix(std::string infix_formula, std::string valuation) {
     std::string posfix_formula;
-    Stack stack;
+    Stack<char> stack;
 
     infix_formula = set_values(infix_formula, valuation);
     unsigned len = infix_formula.size();
@@ -95,7 +95,7 @@ inline std::string to_posfix(std::string infix_formula, std::string valuation) {
             }
         }
         else if (is_operand(c)) {
-            char stack_symb = stack.get();
+            char stack_symb = stack.peek();
 
             if (stack_symb == '(') {
                 stack.add(c);
@@ -127,32 +127,24 @@ inline bool evaluate_expression(std::string formula, std::string valuation) {
     
     std::cout << formula << std::endl;
 
-    Stack stack;
+    Stack<char> stack;
     int len = formula.size();
     for (int i=0; i < len; ++i) {
         char c = formula[i];
-        if ( is_digit(c) ) {
-            std::cout << "add literal: " << c << std::endl; 
+        if ( is_digit(c) ) { 
             stack.add(c);
         }
 
         else if (c == '~') {
-            stack.print();
-            std::cout << "opr: " << c << std::endl;
-            // stack.add('0' + !(stack.pop() - '0')); //removo elemento e adiciono a stack
             stack.add( _neg( stack.pop() ) );
-            stack.print();
+  
 
         } else {
-            stack.print();
-            std::cout << "opr: " << c << std::endl;
             char operand1 = stack.pop();
             char operand2 = stack.pop();
 
             char result = c == '&' ? _and(operand1, operand2) : _or(operand1, operand2);          
             stack.add(result);
-
-            stack.print();
         }
     }
 

@@ -37,23 +37,24 @@ void Tree::_expand(Tuple tuple, Direction direction) {
             temp = _walk_to(temp, direction);
 
             // achei a folha: crio dois filhos
-            temp->left = new NodeT(temp->formula + "1" + tuple.sub_string, tuple.function);
-            temp->right = new NodeT(temp->formula + "0" + tuple.sub_string, tuple.function);
+            temp->left = new NodeT(temp->formula + "1" + tuple.sub_string, tuple.function, temp);
+            temp->right = new NodeT(temp->formula + "0" + tuple.sub_string, tuple.function, temp);
             // set flag to true
             temp->flag = true;
 
             // ascensão
-            while(temp != nullptr && temp->flag == true) {
+            while(temp->flag == true) {
                 temp = temp->parent;
-            }
 
-            // preenchi todo um braço
-            if (temp == nullptr) {
-                break;
-            }
+                // preenchi todo um braço
+                if (temp == nullptr) {
+                    return;
+                }
 
+            }
             // set flag to true
             temp->flag = true;
+
             // modifico a direcao de caminhamento
             direction = direction == LEFT ? RIGHT : LEFT;
 
@@ -66,6 +67,7 @@ NodeT* Tree::_walk_to(NodeT* temp, Direction direction) {
         // caminho para a esquerda
         while(temp->left != nullptr) {
             temp = temp->left;
+            temp->flag = false;
         }
     }
 
@@ -73,8 +75,11 @@ NodeT* Tree::_walk_to(NodeT* temp, Direction direction) {
         // caminho para a direita
         while(temp->right != nullptr) {
             temp = temp->right;
+            temp->flag = false;
         }
 
     }
+
+    return temp;
 }
 

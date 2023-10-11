@@ -9,26 +9,30 @@
 typedef struct NodeT {
     std::string formula;
     Function function;
+    
+
+    NodeT* parent;
+    NodeT* left;
+    NodeT* right;
     bool flag;
 
-    NodeT* right;
-    NodeT* left;
-    NodeT* parent;
+    NodeT(std::string formula = "", Function function = LEAF, 
+        NodeT* parent = nullptr, NodeT* right = nullptr, NodeT* left = nullptr, bool flag = false) :
+        formula(formula), function(function), parent(parent), left(left), right(right), flag(flag) {
+    }
 
 
-    NodeT(std::string formula="", Function function=LEAF, 
-    bool flag=false, NodeT* right=nullptr, NodeT* left=nullptr, NodeT* parent=nullptr) :
-    formula(formula), function(function), flag(flag), right(right), left(left), parent(parent) {
-    };
-
-    void print() {
+    void print(bool option=false) {
         std::cout << "--nodeT--" << std::endl;
         std::cout << "formula: " << formula << std::endl;
         std::cout << "function: " << func_to_str(function) << std::endl;
-        std::cout << "flag: " << bool_to_str(flag) << std::endl;
-        std::cout << "parent: " << parent << std::endl;
-        std::cout << "right: " << right << std::endl;
-        std::cout << "left: " << left << std::endl;
+        if (option) {
+            std::cout << "flag: " << bool_to_str(flag) << std::endl;
+            std::cout << "parent: " << parent << std::endl;
+            std::cout << "right: " << right << std::endl;
+            std::cout << "left: " << left << std::endl;
+        }
+
 
     };
 

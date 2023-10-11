@@ -83,3 +83,31 @@ NodeT* Tree::_walk_to(NodeT* temp, Direction direction) {
     return temp;
 }
 
+Stack<NodeT*> Tree::_traversal_stack() {
+        Stack<NodeT*> node_stack;
+        Stack<NodeT*> traversal_stack;
+        NodeT* current = _root;
+
+        while (current || !node_stack.empty()) {
+            if (current) {
+                node_stack.add(current);
+                traversal_stack.add(current);
+                current = current->right;
+            } else {
+                NodeT* top_node = node_stack.peek();
+                node_stack.pop();
+                current = top_node->left;
+            }
+        }
+
+        while (!traversal_stack.empty()) {
+            traversal_stack.pop()->print();
+        }
+
+        return traversal_stack;
+    }
+
+
+void Tree::solve() {
+    traver
+}

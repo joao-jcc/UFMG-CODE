@@ -52,6 +52,8 @@ class Tree {
             return _depth;
         }
 
+        void solve();
+
     private:
         NodeT* _root;
         int _depth;
@@ -59,6 +61,7 @@ class Tree {
 
         void _build();
         void _expand(Tuple tuple, Direction direction);
+                Stack<NodeT*> _traversal_stack();
         NodeT* _walk_to(NodeT* temp, Direction direction);
 
 };

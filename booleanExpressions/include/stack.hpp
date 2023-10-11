@@ -5,45 +5,53 @@
 #include <iostream>
 #include <memory>
 
-class ExceptionEmptyStack{};
+
 
 template<typename T>
-typedef struct Node {
+struct Node {
     T data;
     Node<T>* link;
 
     Node(T data, Node<T>* link) : data(data), link(link) {
 
     }
+};
 
-} Node;
-
+class ExceptionEmptyStack{};
 
 template<typename T>
 class Stack {
     public:
-        Stack();
+        Stack() {
+            _header = nullptr;
+            _size = 0;
+        };
         ~Stack() {
             clear();
         };
 
         void add(T data) {
             Node<T>* new_node = new Node<T>(data, _header);
+            new_node->link = _header;
+            _header = new_node;
             ++_size;
         };
 
-        void pop() {
-            if (empty) {
+        T pop() {
+            if (empty()) {
                 throw(ExceptionEmptyStack());
             }
+
             Node<T>* del_node = _header;
-            _header = _header->link
+            T data = _header->data;
+            _header = _header->link;
             delete del_node;
             --_size;
+            return data;
         }
 
         T peek() const {
-            if (empty) {
+            if (empty()) {
                 throw(ExceptionEmptyStack());
             }
             return _header->data;
@@ -51,14 +59,13 @@ class Stack {
 
         // deleta toda a pilha
         void clear() {
-            Node<T>* del_node = _header;
-            _header = _header->link;
-
-            delete del_node;
+            while (_header != nullptr) {
+                pop();
+            }
         }
 
-        bool empty() {
-            _size == 0;
+        bool empty() const{
+            return _size == 0;
         };
 
 

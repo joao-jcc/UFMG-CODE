@@ -12,9 +12,17 @@ int main(void) {
 
 
     tree.get_root()->print();
+
     tree.get_root()->left->print();
+
     tree.get_root()->left->left->print();
-    tree.get_root()->left->right->print();
+    tree.get_root()->left->right->print(true);
+
+    tree.get_root()->left->left->left->print();
+    tree.get_root()->left->left->right->print();
+    tree.get_root()->left->right->left->print();
+    tree.get_root()->left->right->right->print();
+
 
     return 0;
 }

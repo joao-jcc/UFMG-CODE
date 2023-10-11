@@ -4,6 +4,7 @@
 
 #include "stack.hpp"
 #include "utils.hpp"
+#include "tree.hpp"
 
 int main(int argc, char* argv[]) {
     int option;
@@ -47,7 +48,12 @@ int main(int argc, char* argv[]) {
         char result = evaluate_expression(formula, valuation) ? '1' :  '0';
         std::cout << "Resultado da avaliação da expressão: " << result  << std::endl;
 
-    } 
+    }
+
+    else if(satisfiability_problem) {
+        Tree tree(valuation);
+        tree.traversal_stack();
+    }
 
     return 0;
 }
