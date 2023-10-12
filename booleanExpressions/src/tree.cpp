@@ -6,7 +6,10 @@ Tree::Tree(std::string formula, std::string valuation) : _root(nullptr), _formul
 }
 
 Tree::~Tree() {
-
+    Stack<NodeT*> stack;
+    while(!stack.empty()) {
+        delete stack.pop();
+    }
 }
 
 std::string Tree::_merge(std::string str1, std::string str2) {
