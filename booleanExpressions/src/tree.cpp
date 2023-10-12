@@ -1,7 +1,7 @@
 #include "tree.hpp"
 
-Tree::Tree(std::string base_formula) : _root(nullptr), _base_formula(base_formula) {
-    _depth = count_char(base_formula, 'a') + count_char(base_formula, 'e') + 1;
+Tree::Tree(std::string formula, std::string valuation) : _root(nullptr), _formula(formula), _valuation(valuation) {
+    _depth = count_char(valuation, 'a') + count_char(valuation, 'e') + 1;
     _build();
 }
 
@@ -9,36 +9,60 @@ Tree::~Tree() {
 
 }
 
+
+inline Tuple Tree::_find_operator(std::string str, int& index) {
+    int start_index = index;
+    for (; index < str.length(); ++index) {
+        if (str[index] == 'a') {
+            return Tuple{AND, str.substr(start_index, index - start_index), index};
+        }
+        else if (str[index] == 'e') {
+            return Tuple{OR, str.substr(start_index, index - start_index), index};
+        }
+    }
+
+    return Tuple{LEAF, str.substr(start_index, index - start_index), index};
+}
+
+
 void Tree::_build() {
     if (_depth == 1) {
-        _root = new NodeT(_base_formula);
+        _root = new NodeT(_valuation);
+        _root->flag = evaluate_expression(_formula, _root->valuation);
         return; // The tree with depth 1 has only one node
     }
 
+    //
     // initialize root
-    Tuple tuple = find_operator(_base_formula, 0);
+    Tuple tuple = find_operator(_valuation, 0);
     _root = new NodeT(tuple.sub_string, tuple.function);
 
     // expansão
     for (int i=1; i < _depth; ++i) {
-        tuple = find_operator(_base_formula, tuple.index + 1);
-        _expand(tuple, LEFT);
+        tuple = find_operator(_valuation, tuple.index + 1);
+        _expand(tuple, LEFT, i);
 
         if (i == 1) {
             continue;
         }
-        _expand(tuple, RIGHT);
+        _expand(tuple, RIGHT, i);
     }
 }
 
-void Tree::_expand(Tuple tuple, Direction direction) {
+void Tree::_expand(Tuple tuple, Direction direction, int depth) {
     NodeT* temp = _root;
     while (true) {
             temp = _walk_to(temp, direction);
 
             // achei a folha: crio dois filhos
-            temp->left = new NodeT(temp->formula + "1" + tuple.sub_string, tuple.function, temp);
-            temp->right = new NodeT(temp->formula + "0" + tuple.sub_string, tuple.function, temp);
+            temp->left = new NodeT(temp->valuation + "1" + tuple.sub_string, tuple.function, temp);
+            temp->right = new NodeT(temp->valuation + "0" + tuple.sub_string, tuple.function, temp);
+
+            if (depth == _depth - 1) {
+                temp->right->flag = evaluate_expression(_formula, temp->right->valuation);
+                temp->left->flag = evaluate_expression(_formula, temp->left->valuation);
+            }
+
             // set flag to true
             temp->flag = true;
 
@@ -83,6 +107,7 @@ NodeT* Tree::_walk_to(NodeT* temp, Direction direction) {
     return temp;
 }
 
+// são nodes
 Stack<NodeT*> Tree::_traversal_stack() {
         Stack<NodeT*> node_stack;
         Stack<NodeT*> traversal_stack;
@@ -100,14 +125,31 @@ Stack<NodeT*> Tree::_traversal_stack() {
             }
         }
 
-        while (!traversal_stack.empty()) {
-            traversal_stack.pop()->print();
-        }
-
         return traversal_stack;
     }
 
-
 void Tree::solve() {
-    traver
+    Stack<NodeT*> stack = _traversal_stack();
+    std::string string_result;
+
+    bool flag = true;
+    while(stack.get_size() > 1) {
+        NodeT* n1 = stack.pop();
+        NodeT* n2 = stack.pop();
+        NodeT* n3 = stack.pop();
+
+        if (flag) {
+            bool value = n3->function == AND ? n1->flag & n2->flag : n1->flag | n2->flag;
+            n1->flag = value;
+            stack.add(n1);
+        } else {
+            NodeT* n4 = stack.pop();
+            bool value = n4->function == AND ? n2->flag & n3->flag : n2->flag | n3->flag;
+            n2->flag = value;
+            stack.add(n2);
+            stack.add(n1);
+        }
+    }
+
+    std::cout << stack.pop()->flag << std::endl;
 }

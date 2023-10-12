@@ -3,9 +3,6 @@
 
 #include <stdlib.h>
 #include <iostream>
-#include <memory>
-
-
 
 template<typename T>
 struct Node {
@@ -67,6 +64,10 @@ class Stack {
         bool empty() const{
             return _size == 0;
         };
+
+        unsigned get_size() {
+            return _size;
+        }
 
 
     private:

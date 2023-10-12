@@ -7,27 +7,26 @@
 
 
 typedef struct NodeT {
-    std::string formula;
+    std::string valuation;
     Function function;
-    
+    bool flag;
 
     NodeT* parent;
     NodeT* left;
     NodeT* right;
-    bool flag;
+  
 
-    NodeT(std::string formula = "", Function function = LEAF, 
-        NodeT* parent = nullptr, NodeT* right = nullptr, NodeT* left = nullptr, bool flag = false) :
-        formula(formula), function(function), parent(parent), left(left), right(right), flag(flag) {
+    NodeT(std::string valuation = "", Function function = LEAF, bool flag = false,
+        NodeT* parent = nullptr, NodeT* right = nullptr, NodeT* left = nullptr) :
+        valuation(valuation), function(function), flag(flag), parent(parent), left(left), right(right) {
     }
-
 
     void print(bool option=false) {
         std::cout << "--nodeT--" << std::endl;
-        std::cout << "formula: " << formula << std::endl;
+        std::cout << "valuation: " << valuation << std::endl;
         std::cout << "function: " << func_to_str(function) << std::endl;
+        std::cout << "flag: " << bool_to_str(flag) << std::endl;
         if (option) {
-            std::cout << "flag: " << bool_to_str(flag) << std::endl;
             std::cout << "parent: " << parent << std::endl;
             std::cout << "right: " << right << std::endl;
             std::cout << "left: " << left << std::endl;
@@ -36,13 +35,19 @@ typedef struct NodeT {
 
     };
 
+    bool is_leaf() {
+        return function == LEAF;
+    }
+
 } NodeT;
 
 
 class Tree {
     public:
-        Tree(std::string base_formula);
+        Tree(std::string formula, std::string valuation);
         ~Tree();
+
+        void solve();
 
         NodeT* get_root() {
             return _root;
@@ -52,17 +57,20 @@ class Tree {
             return _depth;
         }
 
-        void solve();
 
     private:
         NodeT* _root;
         int _depth;
-        std::string _base_formula;
+        
+        std::string _formula;
+        std::string _valuation;
 
         void _build();
-        void _expand(Tuple tuple, Direction direction);
+        void _expand(Tuple tuple, Direction direction, int depth);
                 Stack<NodeT*> _traversal_stack();
         NodeT* _walk_to(NodeT* temp, Direction direction);
+
+        Tuple _find_operator(std::string valuation, int& index);
 
 };
 

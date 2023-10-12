@@ -8,11 +8,19 @@
 #include "stack.hpp"
 
 // Operands
-
-const std::map<char, unsigned> opt_precedence = {{'|', 0}, {'&', 1}, {'~', 2}};
-
-inline bool precedence(char opt1, char opt2) {
-    return opt_precedence.at(opt1) > opt_precedence.at(opt2);
+inline int precedence(char opt) {
+    switch (opt) {
+        case '|':
+            return 0;
+        case '&':
+            return 1;
+        case '~':
+            return 2;
+        case '(':
+            return 3;
+        default:
+            return -1;
+    }
 }
 
 inline bool is_operand(char c) {
@@ -71,45 +79,32 @@ inline std::string set_values(std::string formula, std::string valuation) {
     return str_out;
 }
 
-
-// infix_formula com zeros e uns e operadores apenas
 inline std::string to_posfix(std::string infix_formula, std::string valuation) {
     std::string posfix_formula;
     Stack<char> stack;
 
     infix_formula = set_values(infix_formula, valuation);
     unsigned len = infix_formula.size();
-    for (int i=0; i < len; ++i) {
-
+    for (int i = 0; i < len; ++i) {
         char c = infix_formula[i];
-        // caractere é um operando
+
         if (c == '0' || c == '1') {
             posfix_formula += c;
-        } 
-        else if (stack.empty() || c == '(') {    
-            stack.add(c);     
-        }
-        else if (c == ')') {
-            while((c = stack.pop()) != '(') {
-                posfix_formula += c;
+        } else if (c == '(') {
+            stack.add(c);
+        } else if (c == ')') {
+            while (!stack.empty() && stack.peek() != '(') {
+                posfix_formula += stack.pop();
             }
-        }
-        else if (is_operand(c)) {
-            char stack_symb = stack.peek();
-
-            if (stack_symb == '(') {
-                stack.add(c);
-                continue;
+            if (!stack.empty() && stack.peek() == '(') {
+                stack.pop();
             }
-
-            while (!precedence(c, stack_symb) && !stack.empty()) {
-                stack_symb = stack.pop();
-                posfix_formula += stack_symb;
-
+        } else if (is_operand(c)) {
+            while (!stack.empty() && (precedence(c) < precedence(stack.peek())) && stack.peek() != '(') {
+                posfix_formula += stack.pop();
             }
             stack.add(c);
         }
-
     }
 
     while (!stack.empty()) {
@@ -124,8 +119,6 @@ inline std::string to_posfix(std::string infix_formula, std::string valuation) {
 inline bool evaluate_expression(std::string formula, std::string valuation) {
     // posfix expression with 0's and 1's
     formula = to_posfix(formula, valuation);
-    
-    std::cout << formula << std::endl;
 
     Stack<char> stack;
     int len = formula.size();
@@ -222,7 +215,7 @@ inline Tuple find_operator(std::string str, int index) {
             return Tuple{OR, str.substr(start_index, index - start_index), index};
         }
     }
-    std::cout << "index: " << index << std::endl;
+
     return Tuple{LEAF, str.substr(start_index, index - start_index), index};
 }
 
