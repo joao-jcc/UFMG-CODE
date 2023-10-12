@@ -9,19 +9,31 @@ Tree::~Tree() {
 
 }
 
+std::string Tree::_merge(std::string str1, std::string str2) {
+    std::string result;
+    for (int i=0; i < str1.length(); ++i) {
+        if (str1[i] == str2[i]) {
+            result += str1[i];
+            continue;
+        }
+        result += "a";
+    }
 
-inline Tuple Tree::_find_operator(std::string str, int& index) {
-    int start_index = index;
+    return result;
+}
+
+Tuple Tree::_find_operator(std::string str, int& index) {
+    int start = index;
     for (; index < str.length(); ++index) {
         if (str[index] == 'a') {
-            return Tuple{AND, str.substr(start_index, index - start_index), index};
+            return Tuple{AND, str.substr(start, index - start)};
         }
         else if (str[index] == 'e') {
-            return Tuple{OR, str.substr(start_index, index - start_index), index};
+            return Tuple{OR, str.substr(start, index - start)};
         }
     }
 
-    return Tuple{LEAF, str.substr(start_index, index - start_index), index};
+    return Tuple{LEAF, str.substr(start, index - start)};
 }
 
 
@@ -32,14 +44,18 @@ void Tree::_build() {
         return; // The tree with depth 1 has only one node
     }
 
-    //
+    int index = 0;
     // initialize root
-    Tuple tuple = find_operator(_valuation, 0);
+    Tuple tuple = _find_operator(_valuation, index);
+    ++index;
+
     _root = new NodeT(tuple.sub_string, tuple.function);
 
     // expansão
     for (int i=1; i < _depth; ++i) {
-        tuple = find_operator(_valuation, tuple.index + 1);
+        tuple = _find_operator(_valuation, index);
+        ++index;
+
         _expand(tuple, LEFT, i);
 
         if (i == 1) {
@@ -60,6 +76,7 @@ void Tree::_expand(Tuple tuple, Direction direction, int depth) {
 
             if (depth == _depth - 1) {
                 temp->right->flag = evaluate_expression(_formula, temp->right->valuation);
+                          
                 temp->left->flag = evaluate_expression(_formula, temp->left->valuation);
             }
 
@@ -128,9 +145,21 @@ Stack<NodeT*> Tree::_traversal_stack() {
         return traversal_stack;
     }
 
+
+ void Tree::_update_nodes(NodeT* n1, NodeT* n2, NodeT* n3, bool value) {
+        if (n1->flag && n2->flag && value) {
+            n1->valuation = _merge(n1->valuation, n2->valuation);   
+        } else if (value) {
+            n1->valuation = n1->flag ? n1->valuation : n2->valuation;
+        } else {
+            n1->valuation = "";
+        }
+
+        n1->flag = value;
+ }
+
 void Tree::solve() {
     Stack<NodeT*> stack = _traversal_stack();
-    std::string string_result;
 
     bool flag = true;
     while(stack.get_size() > 1) {
@@ -140,16 +169,20 @@ void Tree::solve() {
 
         if (flag) {
             bool value = n3->function == AND ? n1->flag & n2->flag : n1->flag | n2->flag;
-            n1->flag = value;
+
+           _update_nodes(n1, n2, n3, value);
             stack.add(n1);
         } else {
             NodeT* n4 = stack.pop();
             bool value = n4->function == AND ? n2->flag & n3->flag : n2->flag | n3->flag;
-            n2->flag = value;
+            _update_nodes(n2, n3, n4, value);
             stack.add(n2);
             stack.add(n1);
         }
+
+        flag = !flag;
     }
 
-    std::cout << stack.pop()->flag << std::endl;
+    NodeT* node = stack.pop();
+    std::cout << node->flag << " " << node->valuation << std::endl;
 }

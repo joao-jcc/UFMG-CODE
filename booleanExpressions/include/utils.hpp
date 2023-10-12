@@ -174,11 +174,10 @@ inline std::string func_to_str(Function function) {
 typedef struct Tuple {
     Function function;
     std::string sub_string;
-    int index;
 
     void print() {
         std::cout << "---tuple---" << std::endl;
-        std::cout << "f: " << func_to_str(function) << "\ns: " << sub_string << "\ni: " << index << std::endl;
+        std::cout << "f: " << func_to_str(function) << "\ns: " << sub_string << std::endl;
     }
 
     bool is_leaf() {
@@ -204,20 +203,19 @@ inline int count_char(std::string str, char character) {
 };
 
 
-// encontra a posicao de um quantificador a partir de um determinado index
-inline Tuple find_operator(std::string str, int index) {
-    int start_index = index;
+
+inline Tuple find_operator(std::string str, int& index) {
+    int start = index;
     for (; index < str.length(); ++index) {
         if (str[index] == 'a') {
-            return Tuple{AND, str.substr(start_index, index - start_index), index};
+            return Tuple{AND, str.substr(start, index - start)};
         }
         else if (str[index] == 'e') {
-            return Tuple{OR, str.substr(start_index, index - start_index), index};
+            return Tuple{OR, str.substr(start, index - start)};
         }
     }
 
-    return Tuple{LEAF, str.substr(start_index, index - start_index), index};
+    return Tuple{LEAF, str.substr(start, index - start)};
 }
-
 
 #endif

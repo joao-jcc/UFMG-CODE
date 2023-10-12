@@ -42,7 +42,15 @@ int main(int argc, char* argv[]) {
 
     else if(satisfiability) {
         Tree tree(formula, valuation);
+        // std::string str1 = "100";
+        // std::string str2 = "000";
+        // std::cout << tree._merge(str1, str2) << std::endl;
         tree.solve();
+        // Stack<NodeT*> stack = tree._traversal_stack();
+
+        // while( !stack.empty() ) {
+        //     stack.pop()->print();
+        // }
 
     }
 

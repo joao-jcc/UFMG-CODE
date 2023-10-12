@@ -67,9 +67,15 @@ class Tree {
 
         void _build();
         void _expand(Tuple tuple, Direction direction, int depth);
-                Stack<NodeT*> _traversal_stack();
+        
         NodeT* _walk_to(NodeT* temp, Direction direction);
+        void _update_nodes(NodeT* n1, NodeT* n2, NodeT* n3, bool value);
 
+    public:
+        std::string _merge(std::string str1, std::string str2);
+
+    public:
+        Stack<NodeT*> _traversal_stack();
         Tuple _find_operator(std::string valuation, int& index);
 
 };
