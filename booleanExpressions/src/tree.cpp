@@ -8,13 +8,16 @@ Tree::Tree(std::string formula, std::string valuation) : _root(nullptr), _formul
 Tree::~Tree() {
     Stack<NodeT*> stack;
     while(!stack.empty()) {
-        delete stack.pop();
+       NodeT* node = stack.pop();
+       delete node;
     }
+    delete _root;
 }
 
 std::string Tree::_merge(std::string str1, std::string str2) {
     std::string result;
-    for (int i=0; i < str1.length(); ++i) {
+    int len = str1.length();
+    for (int i=0; i < len; ++i) {
         if (str1[i] == str2[i]) {
             result += str1[i];
             continue;
@@ -27,7 +30,8 @@ std::string Tree::_merge(std::string str1, std::string str2) {
 
 Tuple Tree::_find_operator(std::string str, int& index) {
     int start = index;
-    for (; index < str.length(); ++index) {
+    int len = str.length();
+    for (; index < len; ++index) {
         if (str[index] == 'a') {
             return Tuple{AND, str.substr(start, index - start)};
         }

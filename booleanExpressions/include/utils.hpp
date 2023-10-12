@@ -84,7 +84,7 @@ inline std::string to_posfix(std::string infix_formula, std::string valuation) {
     Stack<char> stack;
 
     infix_formula = set_values(infix_formula, valuation);
-    unsigned len = infix_formula.size();
+    int len = infix_formula.size();
     for (int i = 0; i < len; ++i) {
         char c = infix_formula[i];
 
@@ -206,7 +206,8 @@ inline int count_char(std::string str, char character) {
 
 inline Tuple find_operator(std::string str, int& index) {
     int start = index;
-    for (; index < str.length(); ++index) {
+    int len = str.length(); 
+    for (; index < len; ++index) {
         if (str[index] == 'a') {
             return Tuple{AND, str.substr(start, index - start)};
         }
