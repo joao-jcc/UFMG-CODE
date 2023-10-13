@@ -30,15 +30,27 @@ Tuple Tree::_find_operator(std::string str, int& index) {
     return Tuple{LEAF, str.substr(start, index - start)};
 }
 
-std::string Tree::_merge(std::string str1, std::string str2) {
+std::string Tree::_merge(NodeT* operand1, NodeT* operand2) {
     std::string result;
-    int len = str1.length();
-    for (int i=0; i < len; ++i) {
-        if (str1[i] == str2[i]) {
-            result += str1[i];
-            continue;
+    std::string str1 = operand1->valuation;
+    std::string str2 = operand2->valuation;
+
+    if (operand1->flag && operand2->flag) {   
+        int len = str1.length();
+        for (int i=0; i < len; ++i) {
+            if (str1[i] == str2[i]) {
+                result += str1[i];
+                continue;
+            }
+            result += "a";
         }
-        result += "a";
+    }
+
+    else if (!operand1->flag) {
+        result = operand2->valuation;
+    }
+    else {
+        result = operand1->valuation;
     }
 
     return result;
@@ -82,14 +94,14 @@ void Tree::_build() {
 
 
             queue.add(current->left);
-            queue.add(current->right);  // add right child first
+            queue.add(current->right); 
 
         }
     }
 
 }
 
-// são nodes
+// // são nodes
 Stack<NodeT*> Tree::_traversal_stack() {
         Stack<NodeT*> node_stack;
         Stack<NodeT*> traversal_stack;
@@ -111,46 +123,66 @@ Stack<NodeT*> Tree::_traversal_stack() {
     }
 
 
- void Tree::_update_nodes(NodeT* n1, NodeT* n2, NodeT* n3, bool value) {
-        if (n1->flag && n2->flag && value) {
-            n1->valuation = _merge(n1->valuation, n2->valuation);   
-        } else if (value) {
-            n1->valuation = n1->flag ? n1->valuation : n2->valuation;
-        } else {
-            n1->valuation = "";
-        }
-
-        n1->flag = value;
- }
-
 void Tree::solve() {
-    Stack<NodeT*> stack = _traversal_stack();
+    NodeT* current = _root;
+    if (current) {
+        // Initialize a stack for evaluation
+        Stack<NodeT*> stack_evaluation;
+        
+        // Use a post-order traversal to evaluate from leaf nodes to the root
+        Stack<NodeT*> post_stack = _traversal_stack();
+        
+        while (!post_stack.empty()) {
+            NodeT* current = post_stack.peek();
+            post_stack.pop();
+            
+            if (current->function == LEAF) {
+                // Push leaf nodes onto the evaluation stack
+                stack_evaluation.add(current);
+            } else {
+                // Pop two operands from the evaluation stack and evaluate
+                NodeT* operand2 = stack_evaluation.peek();
+                stack_evaluation.pop();
+                NodeT* operand1 = stack_evaluation.peek();
+                stack_evaluation.pop();
 
-    bool flag = true;
-    while(stack.get_size() > 1) {
-        NodeT* n1 = stack.pop();
-        NodeT* n2 = stack.pop();
-        NodeT* n3 = stack.pop();
-
-        if (flag) {
-            bool value = n3->function == AND ? n1->flag & n2->flag : n1->flag | n2->flag;
-
-           _update_nodes(n1, n2, n3, value);
-            stack.add(n1);
-        } else {
-            NodeT* n4 = stack.pop();
-            bool value = n4->function == AND ? n2->flag & n3->flag : n2->flag | n3->flag;
-            _update_nodes(n2, n3, n4, value);
-            stack.add(n2);
-            stack.add(n1);
+                
+                bool result = _evaluate(operand1, operand2, current->function);
+                std::string result_str = result ? _merge(operand1, operand2) : "";
+                
+                // result node
+                operand1->flag = result;
+                operand1->valuation = result_str;
+                operand1->parent = current->parent;                
+                // Push the result back onto the evaluation stack
+                stack_evaluation.add(operand1);
+            }
         }
+        
+        // The final result is the only item left on the evaluation stack
+        current = stack_evaluation.peek();
+        stack_evaluation.pop();
 
-        flag = !flag;
+        if (current->flag) {
+            std::cout << current->flag << " "  << current->valuation << std::endl;
+        } else {
+            std::cout << current->flag << std::endl;
+        }
     }
-
-    NodeT* node = stack.pop();
-    std::cout << node->flag << " " << node->valuation << std::endl;
 }
+
+bool Tree::_evaluate(NodeT* operand1, NodeT* operand2, Function function) {
+    if (function == AND) {
+        return operand1->flag && operand2->flag;
+    } else if (function == OR) {
+        return operand1->flag || operand2->flag;
+    }
+    else {
+      std::cerr << "Node não é um operador" << std::endl;
+      exit(2);  
+    };  // Default value if not AND or OR
+}
+
 
 void Tree::print(NodeT* node, int depth, char prefix) {
     if (node == nullptr) {
@@ -162,7 +194,7 @@ void Tree::print(NodeT* node, int depth, char prefix) {
     for (int i = 0; i < depth; i++) {
         std::cout << (i == depth - 1 ? "+" : "    ");
     }
-    std::cout << prefix << "--" << node->valuation << std::endl;
+    std::cout << prefix << "--" << node->valuation << "(" << node->flag << ")" << std::endl;
 
     // Print the left subtree
     print(node->left, depth + 1, 'L');

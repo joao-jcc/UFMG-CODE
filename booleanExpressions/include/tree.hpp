@@ -59,8 +59,6 @@ class Tree {
             return _depth;
         }
 
-
-
     private:
         NodeT* _root;
         int _depth;
@@ -69,13 +67,12 @@ class Tree {
         std::string _valuation;
 
         void _build();
-        void _update_nodes(NodeT* n1, NodeT* n2, NodeT* n3, bool value);
-        std::string _merge(std::string str1, std::string str2);
+        bool _evaluate(NodeT* operand1, NodeT* operand2, Function function);
+        std::string _merge(NodeT* operand1, NodeT* operand2);
 
         Stack<NodeT*> _traversal_stack();
         
         Tuple _find_operator(std::string valuation, int& index);
-
 };
 
 #endif

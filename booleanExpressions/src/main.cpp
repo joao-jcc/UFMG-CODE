@@ -42,8 +42,8 @@ int main(int argc, char* argv[]) {
 
     else if(satisfiability) {
         Tree tree(formula, valuation);
-        // tree.solve();
-        tree.print(tree.get_root(), tree.get_depth());
+        tree.solve();
+
     }
 
     return 0;
