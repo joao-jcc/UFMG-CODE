@@ -3,16 +3,7 @@
 
 #include <stdlib.h>
 #include <iostream>
-
-template<typename T>
-struct Node {
-    T data;
-    Node<T>* link;
-
-    Node(T data, Node<T>* link) : data(data), link(link) {
-
-    }
-};
+#include "node.hpp"
 
 class ExceptionEmptyStack{};
 
@@ -74,6 +65,5 @@ class Stack {
         Node<T>* _header;
         unsigned _size;
 };
-
 
 #endif

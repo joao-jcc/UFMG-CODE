@@ -3,7 +3,25 @@
 
 #include <iostream>
 #include <string>
+#include "stack.hpp"
+#include "queue.hpp"
 #include  "utils.hpp"
+
+
+enum Function {
+    AND, OR, LEAF
+};
+
+enum Direction {
+    RIGHT, LEFT
+};
+
+typedef struct Tuple {
+    Function function;
+    std::string sub_string;
+} Tuple;
+
+
 
 
 typedef struct NodeT {
@@ -19,24 +37,6 @@ typedef struct NodeT {
     NodeT(std::string valuation = "", Function function = LEAF, bool flag = false,
         NodeT* parent = nullptr, NodeT* right = nullptr, NodeT* left = nullptr) :
         valuation(valuation), function(function), flag(flag), parent(parent), left(left), right(right) {
-    }
-
-    void print(bool option=false) {
-        std::cout << "--nodeT--" << std::endl;
-        std::cout << "valuation: " << valuation << std::endl;
-        std::cout << "function: " << func_to_str(function) << std::endl;
-        std::cout << "flag: " << bool_to_str(flag) << std::endl;
-        if (option) {
-            std::cout << "parent: " << parent << std::endl;
-            std::cout << "right: " << right << std::endl;
-            std::cout << "left: " << left << std::endl;
-        }
-
-
-    };
-
-    bool is_leaf() {
-        return function == LEAF;
     }
 
 } NodeT;
@@ -66,16 +66,11 @@ class Tree {
         std::string _valuation;
 
         void _build();
-        void _expand(Tuple tuple, Direction direction, int depth);
-        
-        NodeT* _walk_to(NodeT* temp, Direction direction);
         void _update_nodes(NodeT* n1, NodeT* n2, NodeT* n3, bool value);
-
-    public:
         std::string _merge(std::string str1, std::string str2);
 
-    public:
         Stack<NodeT*> _traversal_stack();
+        
         Tuple _find_operator(std::string valuation, int& index);
 
 };

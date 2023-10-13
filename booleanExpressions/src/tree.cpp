@@ -14,6 +14,22 @@ Tree::~Tree() {
     delete _root;
 }
 
+
+Tuple Tree::_find_operator(std::string str, int& index) {
+    int start = index;
+    int len = str.length(); 
+    for (; index < len; ++index) {
+        if (str[index] == 'a') {
+            return Tuple{AND, str.substr(start, index - start)};
+        }
+        else if (str[index] == 'e') {
+            return Tuple{OR, str.substr(start, index - start)};
+        }
+    }
+
+    return Tuple{LEAF, str.substr(start, index - start)};
+}
+
 std::string Tree::_merge(std::string str1, std::string str2) {
     std::string result;
     int len = str1.length();
@@ -28,24 +44,9 @@ std::string Tree::_merge(std::string str1, std::string str2) {
     return result;
 }
 
-Tuple Tree::_find_operator(std::string str, int& index) {
-    int start = index;
-    int len = str.length();
-    for (; index < len; ++index) {
-        if (str[index] == 'a') {
-            return Tuple{AND, str.substr(start, index - start)};
-        }
-        else if (str[index] == 'e') {
-            return Tuple{OR, str.substr(start, index - start)};
-        }
-    }
-
-    return Tuple{LEAF, str.substr(start, index - start)};
-}
-
-
-void Tree::_build() {
+void Tree::_build() {    
     if (_depth == 1) {
+        // node craido com Leaf
         _root = new NodeT(_valuation);
         _root->flag = evaluate_expression(_formula, _root->valuation);
         return; // The tree with depth 1 has only one node
@@ -55,80 +56,37 @@ void Tree::_build() {
     // initialize root
     Tuple tuple = _find_operator(_valuation, index);
     ++index;
-
+    
     _root = new NodeT(tuple.sub_string, tuple.function);
+    Queue<NodeT*> queue;
+    queue.add(_root);
 
-    // expansão
-    for (int i=1; i < _depth; ++i) {
+    while (tuple.function != LEAF) {
         tuple = _find_operator(_valuation, index);
         ++index;
 
-        _expand(tuple, LEFT, i);
+        int size = queue.get_size();
+        for (int i=0; i < size; ++i) {
+            NodeT* current = queue.peek();
+            queue.pop();
 
-        if (i == 1) {
-            continue;
-        }
-        _expand(tuple, RIGHT, i);
-    }
-}
+            // CREATE CHILD
+            current->left = new NodeT(current->valuation + "1" + tuple.sub_string, tuple.function, false, current);
+            current->right = new NodeT(current->valuation + "0" + tuple.sub_string, tuple.function, false, current);
 
-void Tree::_expand(Tuple tuple, Direction direction, int depth) {
-    NodeT* temp = _root;
-    while (true) {
-            temp = _walk_to(temp, direction);
-
-            // achei a folha: crio dois filhos
-            temp->left = new NodeT(temp->valuation + "1" + tuple.sub_string, tuple.function, temp);
-            temp->right = new NodeT(temp->valuation + "0" + tuple.sub_string, tuple.function, temp);
-
-            if (depth == _depth - 1) {
-                temp->right->flag = evaluate_expression(_formula, temp->right->valuation);
+            if (tuple.function == LEAF) {
+                current->right->flag = evaluate_expression(_formula, current->right->valuation);
                           
-                temp->left->flag = evaluate_expression(_formula, temp->left->valuation);
+                current->left->flag = evaluate_expression(_formula, current->left->valuation);
             }
 
-            // set flag to true
-            temp->flag = true;
 
-            // ascensão
-            while(temp->flag == true) {
-                temp = temp->parent;
+            queue.add(current->left);
+            queue.add(current->right);  // add right child first
 
-                // preenchi todo um braço
-                if (temp == nullptr) {
-                    return;
-                }
-
-            }
-            // set flag to true
-            temp->flag = true;
-
-            // modifico a direcao de caminhamento
-            direction = direction == LEFT ? RIGHT : LEFT;
-
-     }
-}
-
-
-NodeT* Tree::_walk_to(NodeT* temp, Direction direction) {
-    if (direction == LEFT) {
-        // caminho para a esquerda
-        while(temp->left != nullptr) {
-            temp = temp->left;
-            temp->flag = false;
         }
     }
 
-    else if (direction == RIGHT) {
-        // caminho para a direita
-        while(temp->right != nullptr) {
-            temp = temp->right;
-            temp->flag = false;
-        }
-
-    }
-
-    return temp;
 }
 
 // são nodes

@@ -8,7 +8,7 @@ TEST_DIR = test
 
 SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS))
-EXECUTABLE = $(BIN_DIR)/main
+EXECUTABLE = $(BIN_DIR)/tp1.out
 
 TEST_SRCS = $(filter-out $(SRC_DIR)/main.cpp, $(wildcard $(SRC_DIR)/*.cpp)) $(wildcard $(TEST_DIR)/*.cpp)
 TEST_EXECUTABLE = $(BIN_DIR)/test
@@ -36,7 +36,7 @@ clean:
 
 .PHONY: all clean
 
-# Add rules to create the obj and bin directories
+# Adicione regras para criar as pastas "obj" e "bin" se não existirem
 $(OBJS): | $(OBJ_DIR)
 
 $(OBJ_DIR):

@@ -2,10 +2,7 @@
 #define UTILS_HPP
 
 #include <string>
-#include <map>
 #include <stdlib.h>
-
-#include "stack.hpp"
 
 // Operands
 inline int precedence(char opt) {
@@ -144,53 +141,6 @@ inline bool evaluate_expression(std::string formula, std::string valuation) {
     return stack.pop() == '1' ? true : false;
 }
 
-
-// TREE
-
-
-enum Function {
-    AND, OR, LEAF
-};
-
-enum Direction {
-    RIGHT, LEFT
-};
-
-inline std::string func_to_str(Function function) {
-    if (function == AND) {
-        return "AND";
-    }
-    else if (function == OR) {
-        return "OR";
-    }
-    else if (function == LEAF) {
-        return "LEAF";
-    }
-    else {
-        return "";
-    }
-} 
-
-typedef struct Tuple {
-    Function function;
-    std::string sub_string;
-
-    void print() {
-        std::cout << "---tuple---" << std::endl;
-        std::cout << "f: " << func_to_str(function) << "\ns: " << sub_string << std::endl;
-    }
-
-    bool is_leaf() {
-        return function == LEAF;
-    }
-} Tuple;
-
-
-inline std::string bool_to_str(bool value) {
-    return value ? "true" : "false";
-}
-
-
 inline int count_char(std::string str, char character) {
     int count = 0;
     for (char c : str) {
@@ -202,21 +152,5 @@ inline int count_char(std::string str, char character) {
     return count;
 };
 
-
-
-inline Tuple find_operator(std::string str, int& index) {
-    int start = index;
-    int len = str.length(); 
-    for (; index < len; ++index) {
-        if (str[index] == 'a') {
-            return Tuple{AND, str.substr(start, index - start)};
-        }
-        else if (str[index] == 'e') {
-            return Tuple{OR, str.substr(start, index - start)};
-        }
-    }
-
-    return Tuple{LEAF, str.substr(start, index - start)};
-}
 
 #endif
