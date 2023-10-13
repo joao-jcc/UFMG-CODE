@@ -6,12 +6,12 @@ Tree::Tree(std::string formula, std::string valuation) : _root(nullptr), _formul
 }
 
 Tree::~Tree() {
-    Stack<NodeT*> stack;
+    Stack<NodeT*> stack = _traversal_stack();
     while(!stack.empty()) {
-       NodeT* node = stack.pop();
+       NodeT* node = stack.peek();
+       stack.pop();
        delete node;
     }
-    delete _root;
 }
 
 
