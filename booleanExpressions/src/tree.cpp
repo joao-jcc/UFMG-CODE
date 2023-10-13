@@ -151,3 +151,22 @@ void Tree::solve() {
     NodeT* node = stack.pop();
     std::cout << node->flag << " " << node->valuation << std::endl;
 }
+
+void Tree::print(NodeT* node, int depth, char prefix) {
+    if (node == nullptr) {
+        return;
+    }
+
+    // Print the current node
+    std::cout << "  ";
+    for (int i = 0; i < depth; i++) {
+        std::cout << (i == depth - 1 ? "+" : "    ");
+    }
+    std::cout << prefix << "--" << node->valuation << std::endl;
+
+    // Print the left subtree
+    print(node->left, depth + 1, 'L');
+
+    // Print the right subtree
+    print(node->right, depth + 1, 'R');
+}

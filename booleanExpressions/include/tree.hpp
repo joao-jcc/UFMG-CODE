@@ -49,6 +49,8 @@ class Tree {
 
         void solve();
 
+        void print(NodeT* node, int depth, char prefix = 'o');
+
         NodeT* get_root() {
             return _root;
         }
@@ -56,6 +58,7 @@ class Tree {
         int get_depth() {
             return _depth;
         }
+
 
 
     private:

@@ -35,7 +35,6 @@ int main(int argc, char* argv[]) {
     std::string valuation = argv[optind + 1];
     // Resolver o problema especificado
     if (evaluation) {
-        std::cout << to_posfix(formula, valuation) << std::endl;
         bool result = evaluate_expression(formula, valuation);
         std::cout << result  << std::endl;
 
@@ -43,14 +42,8 @@ int main(int argc, char* argv[]) {
 
     else if(satisfiability) {
         Tree tree(formula, valuation);
-
-        tree.solve();
-        // Stack<NodeT*> stack = tree._traversal_stack();
-
-        // while( !stack.empty() ) {
-        //     stack.pop()->print();
-        // }
-
+        // tree.solve();
+        tree.print(tree.get_root(), tree.get_depth());
     }
 
     return 0;
