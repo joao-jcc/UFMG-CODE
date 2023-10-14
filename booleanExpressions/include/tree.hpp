@@ -12,10 +12,6 @@ enum Function {
     AND, OR, LEAF
 };
 
-enum Direction {
-    RIGHT, LEFT
-};
-
 typedef struct Tuple {
     Function function;
     std::string sub_string;
@@ -29,14 +25,12 @@ typedef struct NodeT {
     Function function;
     bool flag;
 
-    NodeT* parent;
     NodeT* left;
     NodeT* right;
   
 
-    NodeT(std::string valuation = "", Function function = LEAF, bool flag = false,
-        NodeT* parent = nullptr, NodeT* right = nullptr, NodeT* left = nullptr) :
-        valuation(valuation), function(function), flag(flag), parent(parent), left(left), right(right) {
+    NodeT(std::string valuation = "", Function function = LEAF, bool flag = false, NodeT* right = nullptr, NodeT* left = nullptr) :
+        valuation(valuation), function(function), flag(flag), left(left), right(right) {
     }
 
 } NodeT;

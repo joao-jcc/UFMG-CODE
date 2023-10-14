@@ -83,8 +83,8 @@ void Tree::_build() {
             queue.pop();
 
             // CREATE CHILD
-            current->left = new NodeT(current->valuation + "1" + tuple.sub_string, tuple.function, false, current);
-            current->right = new NodeT(current->valuation + "0" + tuple.sub_string, tuple.function, false, current);
+            current->left = new NodeT(current->valuation + "1" + tuple.sub_string, tuple.function, false);
+            current->right = new NodeT(current->valuation + "0" + tuple.sub_string, tuple.function, false);
 
             if (tuple.function == LEAF) {
                 current->right->flag = evaluate_expression(_formula, current->right->valuation);
@@ -153,7 +153,7 @@ void Tree::solve() {
                 // result node
                 operand1->flag = result;
                 operand1->valuation = result_str;
-                operand1->parent = current->parent;                
+                 
                 // Push the result back onto the evaluation stack
                 stack_evaluation.add(operand1);
             }
