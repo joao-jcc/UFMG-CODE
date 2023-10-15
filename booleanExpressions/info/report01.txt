@@ -1,0 +1,381 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+ no time accumulated
+
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  Ts/call  Ts/call  name    
+  0.00      0.00     0.00       26     0.00     0.00  Stack<char>::empty() const
+  0.00      0.00     0.00       18     0.00     0.00  Stack<NodeT*>::empty() const
+  0.00      0.00     0.00       17     0.00     0.00  is_digit(char)
+  0.00      0.00     0.00       16     0.00     0.00  __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::base() const
+  0.00      0.00     0.00       10     0.00     0.00  Node<char>::Node(char, Node<char>*)
+  0.00      0.00     0.00       10     0.00     0.00  Stack<char>::add(char)
+  0.00      0.00     0.00       10     0.00     0.00  Stack<char>::pop()
+  0.00      0.00     0.00        8     0.00     0.00  bool __gnu_cxx::operator!=<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&)
+  0.00      0.00     0.00        7     0.00     0.00  Stack<char>::peek() const
+  0.00      0.00     0.00        6     0.00     0.00  __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator++()
+  0.00      0.00     0.00        6     0.00     0.00  __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator*() const
+  0.00      0.00     0.00        5     0.00     0.00  Node<NodeT*>::Node(NodeT*, Node<NodeT*>*)
+  0.00      0.00     0.00        5     0.00     0.00  Stack<NodeT*>::add(NodeT*)
+  0.00      0.00     0.00        5     0.00     0.00  Stack<NodeT*>::pop()
+  0.00      0.00     0.00        5     0.00     0.00  Stack<NodeT*>::clear()
+  0.00      0.00     0.00        5     0.00     0.00  Stack<NodeT*>::Stack()
+  0.00      0.00     0.00        5     0.00     0.00  Stack<NodeT*>::~Stack()
+  0.00      0.00     0.00        5     0.00     0.00  Stack<NodeT*>::peek() const
+  0.00      0.00     0.00        4     0.00     0.00  precedence(char)
+  0.00      0.00     0.00        3     0.00     0.00  is_operand(char)
+  0.00      0.00     0.00        2     0.00     0.00  count_char(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char)
+  0.00      0.00     0.00        2     0.00     0.00  Tree::_traversal_stack()
+  0.00      0.00     0.00        2     0.00     0.00  Stack<char>::clear()
+  0.00      0.00     0.00        2     0.00     0.00  Stack<char>::Stack()
+  0.00      0.00     0.00        2     0.00     0.00  Stack<char>::~Stack()
+  0.00      0.00     0.00        1     0.00     0.00  set_values(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)
+  0.00      0.00     0.00        1     0.00     0.00  evaluate_expression(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)
+  0.00      0.00     0.00        1     0.00     0.00  _or(char, char)
+  0.00      0.00     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00      0.00     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00      0.00     0.00        1     0.00     0.00  _and(char, char)
+  0.00      0.00     0.00        1     0.00     0.00  _neg(char)
+  0.00      0.00     0.00        1     0.00     0.00  to_posfix(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)
+  0.00      0.00     0.00        1     0.00     0.00  Tree::solve()
+  0.00      0.00     0.00        1     0.00     0.00  Tree::_build()
+  0.00      0.00     0.00        1     0.00     0.00  Tree::Tree(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)
+  0.00      0.00     0.00        1     0.00     0.00  Tree::~Tree()
+  0.00      0.00     0.00        1     0.00     0.00  NodeT::NodeT(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Function, bool, NodeT*, NodeT*)
+  0.00      0.00     0.00        1     0.00     0.00  NodeT::~NodeT()
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2023 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 4 byte(s) no time propagated
+
+index % time    self  children    called     name
+                0.00    0.00       7/26          Stack<char>::peek() const [17]
+                0.00    0.00       9/26          to_posfix(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [41]
+                0.00    0.00      10/26          Stack<char>::pop() [15]
+[9]      0.0    0.00    0.00      26         Stack<char>::empty() const [9]
+-----------------------------------------------
+                0.00    0.00       2/18          Tree::~Tree() [45]
+                0.00    0.00       2/18          Tree::solve() [42]
+                0.00    0.00       4/18          Tree::_traversal_stack() [30]
+                0.00    0.00       5/18          Stack<NodeT*>::peek() const [26]
+                0.00    0.00       5/18          Stack<NodeT*>::pop() [22]
+[10]     0.0    0.00    0.00      18         Stack<NodeT*>::empty() const [10]
+-----------------------------------------------
+                0.00    0.00       6/17          evaluate_expression(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [35]
+                0.00    0.00      11/17          set_values(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [34]
+[11]     0.0    0.00    0.00      17         is_digit(char) [11]
+-----------------------------------------------
+                0.00    0.00      16/16          bool __gnu_cxx::operator!=<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&) [16]
+[12]     0.0    0.00    0.00      16         __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::base() const [12]
+-----------------------------------------------
+                0.00    0.00      10/10          Stack<char>::add(char) [14]
+[13]     0.0    0.00    0.00      10         Node<char>::Node(char, Node<char>*) [13]
+-----------------------------------------------
+                0.00    0.00       4/10          to_posfix(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [41]
+                0.00    0.00       6/10          evaluate_expression(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [35]
+[14]     0.0    0.00    0.00      10         Stack<char>::add(char) [14]
+                0.00    0.00      10/10          Node<char>::Node(char, Node<char>*) [13]
+-----------------------------------------------
+                0.00    0.00       4/10          to_posfix(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [41]
+                0.00    0.00       6/10          evaluate_expression(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [35]
+[15]     0.0    0.00    0.00      10         Stack<char>::pop() [15]
+                0.00    0.00      10/26          Stack<char>::empty() const [9]
+-----------------------------------------------
+                0.00    0.00       8/8           count_char(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char) [29]
+[16]     0.0    0.00    0.00       8         bool __gnu_cxx::operator!=<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&) [16]
+                0.00    0.00      16/16          __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::base() const [12]
+-----------------------------------------------
+                0.00    0.00       7/7           to_posfix(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [41]
+[17]     0.0    0.00    0.00       7         Stack<char>::peek() const [17]
+                0.00    0.00       7/26          Stack<char>::empty() const [9]
+-----------------------------------------------
+                0.00    0.00       6/6           count_char(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char) [29]
+[18]     0.0    0.00    0.00       6         __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator++() [18]
+-----------------------------------------------
+                0.00    0.00       6/6           count_char(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char) [29]
+[19]     0.0    0.00    0.00       6         __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator*() const [19]
+-----------------------------------------------
+                0.00    0.00       5/5           Stack<NodeT*>::add(NodeT*) [21]
+[20]     0.0    0.00    0.00       5         Node<NodeT*>::Node(NodeT*, Node<NodeT*>*) [20]
+-----------------------------------------------
+                0.00    0.00       1/5           Tree::solve() [42]
+                0.00    0.00       4/5           Tree::_traversal_stack() [30]
+[21]     0.0    0.00    0.00       5         Stack<NodeT*>::add(NodeT*) [21]
+                0.00    0.00       5/5           Node<NodeT*>::Node(NodeT*, Node<NodeT*>*) [20]
+-----------------------------------------------
+                0.00    0.00       1/5           Tree::~Tree() [45]
+                0.00    0.00       2/5           Tree::_traversal_stack() [30]
+                0.00    0.00       2/5           Tree::solve() [42]
+[22]     0.0    0.00    0.00       5         Stack<NodeT*>::pop() [22]
+                0.00    0.00       5/18          Stack<NodeT*>::empty() const [10]
+-----------------------------------------------
+                0.00    0.00       5/5           Stack<NodeT*>::~Stack() [25]
+[23]     0.0    0.00    0.00       5         Stack<NodeT*>::clear() [23]
+-----------------------------------------------
+                0.00    0.00       1/5           Tree::solve() [42]
+                0.00    0.00       4/5           Tree::_traversal_stack() [30]
+[24]     0.0    0.00    0.00       5         Stack<NodeT*>::Stack() [24]
+-----------------------------------------------
+                0.00    0.00       1/5           Tree::~Tree() [45]
+                0.00    0.00       2/5           Tree::_traversal_stack() [30]
+                0.00    0.00       2/5           Tree::solve() [42]
+[25]     0.0    0.00    0.00       5         Stack<NodeT*>::~Stack() [25]
+                0.00    0.00       5/5           Stack<NodeT*>::clear() [23]
+-----------------------------------------------
+                0.00    0.00       1/5           Tree::~Tree() [45]
+                0.00    0.00       2/5           Tree::_traversal_stack() [30]
+                0.00    0.00       2/5           Tree::solve() [42]
+[26]     0.0    0.00    0.00       5         Stack<NodeT*>::peek() const [26]
+                0.00    0.00       5/18          Stack<NodeT*>::empty() const [10]
+-----------------------------------------------
+                0.00    0.00       4/4           to_posfix(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [41]
+[27]     0.0    0.00    0.00       4         precedence(char) [27]
+-----------------------------------------------
+                0.00    0.00       3/3           to_posfix(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [41]
+[28]     0.0    0.00    0.00       3         is_operand(char) [28]
+-----------------------------------------------
+                0.00    0.00       2/2           Tree::Tree(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [44]
+[29]     0.0    0.00    0.00       2         count_char(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char) [29]
+                0.00    0.00       8/8           bool __gnu_cxx::operator!=<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&) [16]
+                0.00    0.00       6/6           __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator*() const [19]
+                0.00    0.00       6/6           __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator++() [18]
+-----------------------------------------------
+                0.00    0.00       1/2           Tree::~Tree() [45]
+                0.00    0.00       1/2           Tree::solve() [42]
+[30]     0.0    0.00    0.00       2         Tree::_traversal_stack() [30]
+                0.00    0.00       4/5           Stack<NodeT*>::Stack() [24]
+                0.00    0.00       4/5           Stack<NodeT*>::add(NodeT*) [21]
+                0.00    0.00       4/18          Stack<NodeT*>::empty() const [10]
+                0.00    0.00       2/5           Stack<NodeT*>::pop() [22]
+                0.00    0.00       2/5           Stack<NodeT*>::peek() const [26]
+                0.00    0.00       2/5           Stack<NodeT*>::~Stack() [25]
+-----------------------------------------------
+                0.00    0.00       2/2           Stack<char>::~Stack() [33]
+[31]     0.0    0.00    0.00       2         Stack<char>::clear() [31]
+-----------------------------------------------
+                0.00    0.00       1/2           to_posfix(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [41]
+                0.00    0.00       1/2           evaluate_expression(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [35]
+[32]     0.0    0.00    0.00       2         Stack<char>::Stack() [32]
+-----------------------------------------------
+                0.00    0.00       1/2           to_posfix(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [41]
+                0.00    0.00       1/2           evaluate_expression(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [35]
+[33]     0.0    0.00    0.00       2         Stack<char>::~Stack() [33]
+                0.00    0.00       2/2           Stack<char>::clear() [31]
+-----------------------------------------------
+                0.00    0.00       1/1           to_posfix(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [41]
+[34]     0.0    0.00    0.00       1         set_values(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [34]
+                0.00    0.00      11/17          is_digit(char) [11]
+-----------------------------------------------
+                0.00    0.00       1/1           Tree::_build() [43]
+[35]     0.0    0.00    0.00       1         evaluate_expression(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [35]
+                0.00    0.00       6/17          is_digit(char) [11]
+                0.00    0.00       6/10          Stack<char>::add(char) [14]
+                0.00    0.00       6/10          Stack<char>::pop() [15]
+                0.00    0.00       1/1           to_posfix(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [41]
+                0.00    0.00       1/2           Stack<char>::Stack() [32]
+                0.00    0.00       1/1           _neg(char) [40]
+                0.00    0.00       1/1           _and(char, char) [39]
+                0.00    0.00       1/1           _or(char, char) [36]
+                0.00    0.00       1/2           Stack<char>::~Stack() [33]
+-----------------------------------------------
+                0.00    0.00       1/1           evaluate_expression(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [35]
+[36]     0.0    0.00    0.00       1         _or(char, char) [36]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I_main [49]
+[37]     0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [37]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN4TreeC2ENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_ [48]
+[38]     0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [38]
+-----------------------------------------------
+                0.00    0.00       1/1           evaluate_expression(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [35]
+[39]     0.0    0.00    0.00       1         _and(char, char) [39]
+-----------------------------------------------
+                0.00    0.00       1/1           evaluate_expression(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [35]
+[40]     0.0    0.00    0.00       1         _neg(char) [40]
+-----------------------------------------------
+                0.00    0.00       1/1           evaluate_expression(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [35]
+[41]     0.0    0.00    0.00       1         to_posfix(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [41]
+                0.00    0.00       9/26          Stack<char>::empty() const [9]
+                0.00    0.00       7/7           Stack<char>::peek() const [17]
+                0.00    0.00       4/10          Stack<char>::add(char) [14]
+                0.00    0.00       4/10          Stack<char>::pop() [15]
+                0.00    0.00       4/4           precedence(char) [27]
+                0.00    0.00       3/3           is_operand(char) [28]
+                0.00    0.00       1/2           Stack<char>::Stack() [32]
+                0.00    0.00       1/1           set_values(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [34]
+                0.00    0.00       1/2           Stack<char>::~Stack() [33]
+-----------------------------------------------
+                0.00    0.00       1/1           main [7]
+[42]     0.0    0.00    0.00       1         Tree::solve() [42]
+                0.00    0.00       2/5           Stack<NodeT*>::peek() const [26]
+                0.00    0.00       2/5           Stack<NodeT*>::pop() [22]
+                0.00    0.00       2/18          Stack<NodeT*>::empty() const [10]
+                0.00    0.00       2/5           Stack<NodeT*>::~Stack() [25]
+                0.00    0.00       1/5           Stack<NodeT*>::Stack() [24]
+                0.00    0.00       1/2           Tree::_traversal_stack() [30]
+                0.00    0.00       1/5           Stack<NodeT*>::add(NodeT*) [21]
+-----------------------------------------------
+                0.00    0.00       1/1           Tree::Tree(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [44]
+[43]     0.0    0.00    0.00       1         Tree::_build() [43]
+                0.00    0.00       1/1           NodeT::NodeT(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Function, bool, NodeT*, NodeT*) [46]
+                0.00    0.00       1/1           evaluate_expression(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [35]
+-----------------------------------------------
+                0.00    0.00       1/1           main [7]
+[44]     0.0    0.00    0.00       1         Tree::Tree(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [44]
+                0.00    0.00       2/2           count_char(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char) [29]
+                0.00    0.00       1/1           Tree::_build() [43]
+-----------------------------------------------
+                0.00    0.00       1/1           main [7]
+[45]     0.0    0.00    0.00       1         Tree::~Tree() [45]
+                0.00    0.00       2/18          Stack<NodeT*>::empty() const [10]
+                0.00    0.00       1/2           Tree::_traversal_stack() [30]
+                0.00    0.00       1/5           Stack<NodeT*>::pop() [22]
+                0.00    0.00       1/5           Stack<NodeT*>::peek() const [26]
+                0.00    0.00       1/1           NodeT::~NodeT() [47]
+                0.00    0.00       1/5           Stack<NodeT*>::~Stack() [25]
+-----------------------------------------------
+                0.00    0.00       1/1           Tree::_build() [43]
+[46]     0.0    0.00    0.00       1         NodeT::NodeT(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Function, bool, NodeT*, NodeT*) [46]
+-----------------------------------------------
+                0.00    0.00       1/1           Tree::~Tree() [45]
+[47]     0.0    0.00    0.00       1         NodeT::~NodeT() [47]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2023 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+  [29] count_char(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char) [13] Node<char>::Node(char, Node<char>*) [14] Stack<char>::add(char)
+  [28] is_operand(char)       [30] Tree::_traversal_stack() [15] Stack<char>::pop()
+  [27] precedence(char)       [42] Tree::solve()          [31] Stack<char>::clear()
+  [34] set_values(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [43] Tree::_build() [32] Stack<char>::Stack()
+  [35] evaluate_expression(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [44] Tree::Tree(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [33] Stack<char>::~Stack()
+  [36] _or(char, char)        [45] Tree::~Tree()          [18] __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator++()
+  [37] __static_initialization_and_destruction_0(int, int) [46] NodeT::NodeT(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Function, bool, NodeT*, NodeT*) [16] bool __gnu_cxx::operator!=<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >(__gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&)
+  [38] __static_initialization_and_destruction_0(int, int) [47] NodeT::~NodeT() [26] Stack<NodeT*>::peek() const
+  [39] _and(char, char)       [21] Stack<NodeT*>::add(NodeT*) [10] Stack<NodeT*>::empty() const
+  [40] _neg(char)             [22] Stack<NodeT*>::pop()   [17] Stack<char>::peek() const
+  [11] is_digit(char)         [23] Stack<NodeT*>::clear()  [9] Stack<char>::empty() const
+  [41] to_posfix(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [24] Stack<NodeT*>::Stack() [12] __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::base() const
+  [20] Node<NodeT*>::Node(NodeT*, Node<NodeT*>*) [25] Stack<NodeT*>::~Stack() [19] __gnu_cxx::__normal_iterator<char*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::operator*() const

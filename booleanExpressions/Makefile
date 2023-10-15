@@ -27,8 +27,8 @@ $(TEST_EXECUTABLE):
 
 experimental: CFLAGS += -pg
 experimental: all
-	gprof $(EXECUTABLE) -a "0 & (1 | ~2)" 100 > info/report01.txt
-	gprof $(EXECUTABLE) -s "0 & (1 | ~2)" ae1 > info/report02.txt
+	./$(EXECUTABLE) $(shell cat test/input.txt)
+	@gprof $(EXECUTABLE) gmon.out > test/report.txt
 
 run: all
 	./$(EXECUTABLE)
@@ -37,7 +37,7 @@ test: $(TEST_EXECUTABLE)
 	./$(TEST_EXECUTABLE)
 
 clean:
-	rm -rf $(OBJ_DIR)/*.o $(EXECUTABLE) $(TEST_EXECUTABLE)
+	rm -rf $(OBJ_DIR)/*.o $(EXECUTABLE) $(TEST_EXECUTABLE) gmon.out
 
 .PHONY: all clean
 
