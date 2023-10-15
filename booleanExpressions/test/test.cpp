@@ -1,8 +1,8 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.hpp"
-
-#include "utils.hpp"
 #include "stack.hpp"
+#include "utils.hpp"
+
 #include <string>
 
 
@@ -15,8 +15,8 @@ TEST_CASE("Infix to Posfix Expression") {
 }
 
 TEST_CASE("Boolean Evaluation") {
-    std::string formula = "(0 | 1) & -2";
+    std::string formula = "(0 | 1) & ~2";
     std::string valuation = "010";
 
-    CHECK_EQ(1, evaluate_expression(formula, valuation));
+    CHECK_EQ(true, evaluate_expression(formula, valuation));
 }

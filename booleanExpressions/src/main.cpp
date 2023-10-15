@@ -26,25 +26,24 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    if ((!evaluation && !satisfiability) || (evaluation && satisfiability) || optind+2 != argc) {
+    // Verificar a validade dos argumentos de linha de comando
+    if ((!evaluation && !satisfiability) || (evaluation && satisfiability) || optind + 2 != argc) {
         std::cerr << "Uso: " << argv[0] << " [-a xor -s] fórmula valoração" << std::endl;
         return 1;
     }
 
     std::string formula = argv[optind];
     std::string valuation = argv[optind + 1];
+
     // Resolver o problema especificado
     if (evaluation) {
+        // Avaliar a expressão lógica e imprimir o resultado
         bool result = evaluate_expression(formula, valuation);
-        std::cout << result  << std::endl;
-
-    }
-
-    else if(satisfiability) {
+        std::cout << result << std::endl;
+    } else if (satisfiability) {
+        // Realizar a satisfabilidade da fórmula e imprimir a árvore
         Tree tree(formula, valuation);
-        tree.print(tree.get_root(), tree.get_depth(), 'o');
         tree.solve();
-
     }
 
     return 0;
