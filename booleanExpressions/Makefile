@@ -25,6 +25,11 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 $(TEST_EXECUTABLE):
 	$(CC) -o $(TEST_EXECUTABLE) $(CFLAGS) $(TEST_SRCS)
 
+experimental: CFLAGS += -pg
+experimental: all
+	gprof $(EXECUTABLE) -a "0 & (1 | ~2)" 100 > info/report01.txt
+	gprof $(EXECUTABLE) -s "0 & (1 | ~2)" ae1 > info/report02.txt
+
 run: all
 	./$(EXECUTABLE)
 

@@ -1,22 +1,26 @@
 .
 ├── Makefile
 ├── bin
-│   └── main
+│   └── tp1.out
 ├── include
+│   ├── node.hpp
+│   ├── queue.hpp
 │   ├── stack.hpp
+│   ├── tree.hpp
 │   └── utils.hpp
 ├── info
 │   ├── TP1 - Especificao.pdf
+│   ├── lreport.teX
 │   └── tree.txt
 ├── obj
 │   ├── main.o
-│   └── stack.o
+│   └── tree.o
 ├── src
 │   ├── main.cpp
-│   └── stack.cpp
+│   └── tree.cpp
 ├── test
 │   └── test.cpp
 └── third_party
     └── doctest.hpp
 
-8 directories, 12 files
+8 directories, 16 files

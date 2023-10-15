@@ -1,5 +1,0 @@
-Expressões booleanas com '-' no início geram erros. Problema na leitura dos argumentos na linha de comando.
-
-./bin/main -a  '-1' 1
-./bin/main: illegal option -- 1
-Uso: ./bin/main [-a | -s] fórmula valoração
