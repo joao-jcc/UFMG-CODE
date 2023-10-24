@@ -2,7 +2,7 @@
 #define HEAP_HPP
 
 #include <iostream>
-#include "utils.hpp"
+#include "unionFind.hpp"
 
 class Heap {
     
@@ -10,11 +10,11 @@ class Heap {
         Heap(int max_size);
         ~Heap();
 
-        void insert(int number);
-        int remove();
+        void insert(Aresta aresta);
+        Aresta remove();
         bool empty();
         
-        void print(int position=0, int level=0);
+        void print(int position=0, int level=0, int indentation=3);
 
     private:
         int _get_ancestral(int position);
@@ -25,7 +25,7 @@ class Heap {
         void _heapify_down();
         
         int _size;
-        int* _node;
+        Aresta* _node;
 
 };
 

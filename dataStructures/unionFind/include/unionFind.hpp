@@ -21,6 +21,7 @@ class UnionFind{
         void Make(int x);
         int Find(int x);
         void Union(int x, int y);
+
     private:
         int tamanho;
         Subconjunto* subconjuntos;
