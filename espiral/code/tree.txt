@@ -1,0 +1,12 @@
+.
+├── Makefile
+├── bin
+│   ├── square
+│   └── triangular
+├── leiame.txt
+├── src
+│   ├── square.c
+│   └── triangular.c
+└── tree.txt
+
+3 directories, 7 files
