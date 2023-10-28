@@ -18,10 +18,10 @@ $(TRIANGULAR_EXEC): $(SRC_DIR)/esptriangular.c
 $(SQUARE_EXEC): $(SRC_DIR)/espquadrada.c
 	$(CC) $(CFLAGS) -o $@ $^
 
-run_triangular: $(TRIANGULAR_EXEC)
+run_esptriangular: $(TRIANGULAR_EXEC)
 	$(TRIANGULAR_EXEC) $(ARGS)
 
-run_square: $(SQUARE_EXEC)
+run_espquadrada: $(SQUARE_EXEC)
 	$(SQUARE_EXEC) $(ARGS)
 
 clean:
@@ -31,6 +31,6 @@ clean:
 .PHONY: help
 help:
 	@echo "Uso:"
-	@echo "make run_triangular ARGS=<seu_argumento>"
-	@echo "make run_square ARGS=<seu_argumento>"
+	@echo "make run_espquadrada ARGS=<seu_argumento>"
+	@echo "make run_esptriangular ARGS=<seu_argumento>"
 	@echo "make clean"
