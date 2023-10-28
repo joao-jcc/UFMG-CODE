@@ -7,15 +7,15 @@ SRC_DIR = src
 BIN_DIR = bin
 
 # Nome dos executáveis
-TRIANGULAR_EXEC = $(BIN_DIR)/triangular
-SQUARE_EXEC = $(BIN_DIR)/square
+TRIANGULAR_EXEC = $(BIN_DIR)/esptriangular
+SQUARE_EXEC = $(BIN_DIR)/espquadrada
 
 all: $(TRIANGULAR_EXEC) $(SQUARE_EXEC)
 
-$(TRIANGULAR_EXEC): $(SRC_DIR)/triangular.c
+$(TRIANGULAR_EXEC): $(SRC_DIR)/esptriangular.c
 	$(CC) $(CFLAGS) -o $@ $^
 
-$(SQUARE_EXEC): $(SRC_DIR)/square.c
+$(SQUARE_EXEC): $(SRC_DIR)/espquadrada.c
 	$(CC) $(CFLAGS) -o $@ $^
 
 run_triangular: $(TRIANGULAR_EXEC)

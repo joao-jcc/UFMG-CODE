@@ -1,6 +1,6 @@
 # Projeto de Mapeamento de Pontos em Espiral
 
-Este projeto implementa um algoritmo simples para mapear um índice (i ≥ 0) de um ponto em uma espiral para coordenadas cartesianas (x, y). Ele fornece dois programas executáveis, `triangular` e `square`, para calcular essas coordenadas.
+Este projeto implementa um algoritmo simples para mapear um índice (i ≥ 0) de um ponto em uma espiral para coordenadas cartesianas (x, y). Ele fornece dois programas executáveis, `esptriangular` e `espquadrada`, para calcular essas coordenadas.
 
 ## Pré-requisitos
 
@@ -25,7 +25,7 @@ Para compilar o projeto, siga as instruções abaixo:
     make
     ```
 
-   Isso irá compilar o projeto e gerar os executáveis `bin/triangular` e `bin/square`.
+   Isso irá compilar o projeto e gerar os executáveis `bin/esptriangular` e `bin/espquadrada`.
 
 ## Execução do Projeto
 
@@ -34,13 +34,13 @@ Para executar os programas compilados, utilize os seguintes comandos:
 ### Executar o programa `triangular`
 
 ```bash
-./bin/triangular <point-index>
+./bin/esptriangular <point-index>
 ```
 
 ### Executar o programa `square`
 
 ```bash
-./bin/square <point-index>
+./bin/espquadrada <point-index>
 ```
 
 ## Ajuda e Limpeza
