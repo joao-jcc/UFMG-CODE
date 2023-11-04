@@ -158,11 +158,11 @@ class Vertex : public LinkedList<T> {
 
         bool validate(Vertex<int>**& graph) {
 
-            for (int target_color=1; target_color < _color; ++target_color) {
+            for (unsigned target_color=1; target_color < _color; ++target_color) {
                 bool color_found = false;
                 Node<T>* temp = this->_first;
 
-                for (int j=0; j < this->_size; ++j) {
+                for (unsigned j=0; j < this->_size; ++j) {
                     if (graph[temp->data]->get_color() == target_color) {
                         color_found = true;
                         break;
