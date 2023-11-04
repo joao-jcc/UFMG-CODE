@@ -15,21 +15,22 @@ int main() {
 
     // validation
     bool validation = validate_graph(graph, n_vertex);
-    std::cout << validation;
 
     if (!validation) {
+        std::cout << validation << std::endl;
         return 0;
     } else {
         //sort
         sort(graph, n_vertex, sort_option);
 
+        std::cout << validation;
         // printing graph
         print_graph_id(graph, n_vertex);
     }
 
 
     // releasing memory
-    delete[] graph;
+    free_graph(graph, n_vertex);
 
     return 0;
 }

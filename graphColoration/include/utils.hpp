@@ -98,4 +98,14 @@ void swap_vertex(Vertex<int>*& vertex1, Vertex<int>*& vertex2) {
 }
 
 
+void free_graph(Vertex<int>** graph, int n_vertex) {
+    for (int i=0; i < n_vertex; ++i) {
+        delete graph[i];
+    }
+
+    delete graph;
+}
+
+
+
 #endif //UTILS_HPP

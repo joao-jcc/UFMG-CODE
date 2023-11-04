@@ -16,7 +16,7 @@ bool criterium(Vertex<int>*& vertex1, Vertex<int>*& vertex2);
 void bubble_sort(Vertex<int>**& graph, int n_vertex) {
     for (int i=0; i < n_vertex; ++i) {
 
-        for (int j=0; j < n_vertex-i; ++j) {
+        for (int j=0; j < n_vertex-i-1; ++j) {
 
             if (criterium(graph[j], graph[j+1])) {
                 swap_vertex(graph[j], graph[j+1]);
@@ -32,7 +32,7 @@ void bubble_sort_opt(Vertex<int>**& graph, int n_vertex) {
     for (int i=0; i < n_vertex; ++i) {
 
         bool swapped = false;
-        for (int j=0; j < n_vertex-i; ++j) {
+        for (int j=0; j < n_vertex-i-1; ++j) {
 
             if (criterium(graph[j], graph[j+1])) {
                 swap_vertex(graph[j], graph[j+1]);
