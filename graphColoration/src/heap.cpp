@@ -11,7 +11,7 @@ Heap::Heap(int size) {
 }
 
 Heap::~Heap() {
-    delete _node;
+    delete[] _node;
 }
 
 bool Heap::criterium(Tuple tuple1, Tuple tuple2) {

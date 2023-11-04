@@ -103,7 +103,7 @@ void free_graph(Vertex<int>** graph, int n_vertex) {
         delete graph[i];
     }
 
-    delete graph;
+    delete[] graph;
 }
 
 
