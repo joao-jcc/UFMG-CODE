@@ -33,14 +33,12 @@ struct Node {
 // Generic LinkedList
 template <typename T>
 class LinkedList {
-    static int _count;
     public:
-        LinkedList() : _first(nullptr), _last(nullptr), _size(0), _id(_count), _color(0) {
-            ++_count;
+        LinkedList() : _first(nullptr), _last(nullptr), _size(0) {
         };
 
         ~LinkedList() {
-            std::cout << "Destroying List" << std::endl;
+            std::cout << "Destroying Linked List" << std::endl;
             Node<T>* temp = _first;
             while (temp != nullptr) {
                 _first = _first->next;
@@ -55,6 +53,17 @@ class LinkedList {
 
         bool empty() {
             return _size == 0;
+        }
+
+        bool contains(const T& data) {
+            Node<T>* temp = _first;
+            while (temp != nullptr) {
+                if (temp->data == data) {
+                    return true;
+                }
+                temp = temp->next;
+            }
+            return false;
         }
 
         // by the end
@@ -102,6 +111,31 @@ class LinkedList {
             return _size;
         }
 
+        Node<T>* get_first() const {
+            return  _first;
+        }
+
+
+    protected:
+        Node<T>* _first;
+        Node<T>* _last;
+
+        unsigned _size;
+};
+
+
+template <typename T>
+class Vertex : public LinkedList<T> {
+    static int _count;
+    public:
+        Vertex() : LinkedList<T>(),  _id(_count), _color(0), _status(false) {
+            ++_count;
+        }
+
+        ~Vertex() {
+
+        }
+
         unsigned get_id() const {
             return _id;
         }
@@ -110,30 +144,51 @@ class LinkedList {
             return _color;
         }
 
-        void set_color(unsigned  color) {
-            _color = color;
+        bool get_status() const {
+            return _status;
         }
 
-        Node<T>* get_first() const {
-            return  _first;
+        void set_color(unsigned  color) {
+            _color = color;
         }
 
         static int get_count() {
             return _count;
         }
 
-    private:
-        Node<T>* _first;
-        Node<T>* _last;
+        bool validate(Vertex<int>**& graph) {
 
-        unsigned _size;
+            for (int target_color=1; target_color < _color; ++target_color) {
+                bool color_found = false;
+                Node<T>* temp = this->_first;
+
+                for (int j=0; j < this->_size; ++j) {
+                    if (graph[temp->data]->get_color() == target_color) {
+                        color_found = true;
+                        break;
+                    }
+                    temp = temp->next;
+                }
+
+                if(!color_found) {
+                    _status = false;
+                    return false;
+                }
+
+            }
+
+            _status = true;
+            return true;
+        }
+
+    private:
         unsigned _id;
         unsigned _color;
+        bool _status; // validate the vertex
 
 };
 
-
 template<typename T>
-int LinkedList<T>::_count = 0;
+inline int Vertex<T>::_count = 0;
 
 #endif

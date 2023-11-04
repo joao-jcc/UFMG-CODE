@@ -7,13 +7,18 @@
 
 #include "linkedList.hpp"
 #include "utils.hpp"
+#include "heap.hpp"
 
-void bubble_sort(LinkedList<int>**& graph, int n_vertex) {
+void swap_vertex(Vertex<int>*& vertex1, Vertex<int>*& vertex2);
+
+bool criterium(Vertex<int>*& vertex1, Vertex<int>*& vertex2);
+
+void bubble_sort(Vertex<int>**& graph, int n_vertex) {
     for (int i=0; i < n_vertex; ++i) {
 
         for (int j=0; j < n_vertex-i; ++j) {
 
-            if (graph[j]->get_color() > graph[j+1]->get_color()) {
+            if (criterium(graph[j], graph[j+1])) {
                 swap_vertex(graph[j], graph[j+1]);
 
             }
@@ -23,13 +28,13 @@ void bubble_sort(LinkedList<int>**& graph, int n_vertex) {
 }
 
 
-void bubble_sort_opt(LinkedList<int>**& graph, int n_vertex) {
+void bubble_sort_opt(Vertex<int>**& graph, int n_vertex) {
     for (int i=0; i < n_vertex; ++i) {
 
         bool swapped = false;
         for (int j=0; j < n_vertex-i; ++j) {
 
-            if (graph[j]->get_color() > graph[j+1]->get_color()) {
+            if (criterium(graph[j], graph[j+1])) {
                 swap_vertex(graph[j], graph[j+1]);
                 swapped = true;
             }
@@ -42,13 +47,13 @@ void bubble_sort_opt(LinkedList<int>**& graph, int n_vertex) {
 }
 
 
-void selection_sort(LinkedList<int>**& graph, int n_vertex) {
+void selection_sort(Vertex<int>**& graph, int n_vertex) {
     for (int i=0; i < n_vertex-1; ++i) {
 
         unsigned min = i;
         for (int j=i+1; j < n_vertex; ++j) {
 
-            if (graph[j]->get_color() < graph[min]->get_color()) {
+            if (criterium(graph[min], graph[j])) {
                 min = j;
             }
 
@@ -60,13 +65,14 @@ void selection_sort(LinkedList<int>**& graph, int n_vertex) {
 }
 
 
-void insertion_sort(LinkedList<int>**& graph, int n_vertex) {
+void insertion_sort(Vertex<int>**& graph, int n_vertex) {
     for (int i=1; i < n_vertex; ++i) {
 
-        LinkedList<int>* current = graph[i];
+        Vertex<int>* current = graph[i];
         int j = i - 1;
 
-        while((j>=0) && (current->get_color() < graph[j]->get_color())) {
+
+        while((j>=0) && (criterium(graph[j], current))) {
             graph[j+1] = graph[j];
             --j;
         }
@@ -77,18 +83,152 @@ void insertion_sort(LinkedList<int>**& graph, int n_vertex) {
 }
 
 
-void quick_sort(LinkedList<int>**& graph, int n_vertex) {
+int partition(Vertex<int>**& graph, int p, int r) {
+    Vertex<int> *x = graph[p];
+    int i = p - 1;
+    int j = r + 1;
 
+    while (true) {
+        do { --j; } while (criterium(graph[j], x));
+        do { ++i; } while (criterium(x, graph[i]));
+
+        if (i < j) {
+            swap_vertex(graph[i], graph[j]);
+        } else {
+            return j;
+        }
+    }
+}
+
+void quick_sort(Vertex<int>** graph, int p, int r) {
+    if (p < r) {
+        int q = partition(graph, p, r);
+        quick_sort(graph, p , q);
+        quick_sort(graph, q+1, r);
+
+    }
+}
+
+void quick_sort(Vertex<int>**& graph, int n_vertex) {
+    quick_sort(graph, 0, n_vertex-1);
 }
 
 
-void merge_sort(LinkedList<int>**& graph, int n_vertex) {
+void merge(Vertex<int>** graph, int left, int mid, int right) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
 
+    Vertex<int>** left_arr = new Vertex<int>*[n1];
+    Vertex<int>** right_arr = new Vertex<int>*[n2];
+
+    for (int i = 0; i < n1; i++) {
+        left_arr[i] = graph[left + i];
+    }
+    for (int i = 0; i < n2; i++) {
+        right_arr[i] = graph[mid + 1 + i];
+    }
+
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2) {
+        if (left_arr[i]->get_color() <= right_arr[j]->get_color()) {
+            graph[k] = left_arr[i];
+            i++;
+        } else {
+            graph[k] = right_arr[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        graph[k] = left_arr[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        graph[k] = right_arr[j];
+        j++;
+        k++;
+    }
+
+    delete[] left_arr;
+    delete[] right_arr;
+}
+
+void merge_sort_aux(Vertex<int>** graph, int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+        merge_sort_aux(graph, left, mid);
+        merge_sort_aux(graph, mid + 1, right);
+        merge(graph, left, mid, right);
+    }
+}
+
+void merge_sort(Vertex<int>** graph, int n_vertex) {
+    merge_sort_aux(graph, 0, n_vertex - 1);
+}
+
+void heap_sort(Vertex<int>**& graph, int n_vertex) {
+    Heap heap(n_vertex);
+
+    // Insert the vertices into the heap
+    for (int i = 0; i < n_vertex; ++i) {
+        Tuple tuple = {graph[i]->get_color(), graph[i]->get_id()};
+        heap.insert(tuple);
+    }
+
+    // Create a temporary array to store the sorted vertices
+    Vertex<int>** sortedGraph = new Vertex<int>*[n_vertex];
+
+    // Reorder the sortedGraph array based on the heap's removal order
+    for (int i = 0; i < n_vertex; ++i) {
+        int index = heap.remove().id;
+        sortedGraph[i] = graph[index];
+    }
+
+    // Copy the sorted vertices back to the original graph array
+    for (int i = 0; i < n_vertex; ++i) {
+        graph[i] = sortedGraph[i];
+    }
+
+
+    delete[] sortedGraph;
 }
 
 
-void heap_sort(LinkedList<int>**& graph, int n_vertex) {
+void sort(Vertex<int>**& graph, int n_vertex, char sort_option) {
+    // sort
+    switch (sort_option) {
+        case 'b':
+            bubble_sort(graph, n_vertex);
+            break;
 
+        case 's':
+            selection_sort(graph, n_vertex);
+            break;
+
+        case 'i':
+            insertion_sort(graph, n_vertex);
+            break;
+
+        case 'q':
+            quick_sort(graph, n_vertex);
+            break;
+
+        case 'h':
+            heap_sort(graph, n_vertex);
+            break;
+
+        case 'm':
+            merge_sort(graph, n_vertex);
+            break;
+
+        default:
+            bubble_sort(graph, n_vertex);
+            break;
+    }
 }
+
 
 #endif //SORT_HPP

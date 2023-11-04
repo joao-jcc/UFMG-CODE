@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall -Iinclude -Ithird_party -std=c++11
+CFLAGS = -Wall -Iinclude -Ithird_party -std=c++17
 
 SRC_DIR = src
 OBJ_DIR = obj
