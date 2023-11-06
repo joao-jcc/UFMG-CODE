@@ -38,7 +38,6 @@ class LinkedList {
         };
 
         ~LinkedList() {
-            std::cout << "Destroying Linked List" << std::endl;
             Node<T>* temp = _first;
             while (temp != nullptr) {
                 _first = _first->next;

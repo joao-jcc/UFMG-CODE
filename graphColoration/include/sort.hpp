@@ -47,6 +47,54 @@ void bubble_sort_opt(Vertex<int>**& graph, int n_vertex) {
 }
 
 
+void count_sort(Vertex<int>**& graph, int n_vertex) {
+    int unique = 0;
+    // check all different colors
+    for (int i=1; i < n_vertex+1; ++i) {
+        for (int j=0; j < n_vertex; ++j) {
+            if (graph[j]->get_color() == i) {
+                ++unique;
+                break;
+            }
+        }
+    }
+
+
+    int count_arr[unique];
+    for (int i=0; i<unique; ++i) {
+        count_arr[i] = 0;
+    }
+
+
+    // counting colors in graph
+    for (int i=0; i < n_vertex; ++i) {
+        ++count_arr[graph[i]->get_color()-1];
+    }
+
+    // cumulative counting
+    for (int i=1; i < unique; ++i) {
+        count_arr[i] += count_arr[i-1];
+    }
+
+    // output
+    Vertex<int>** output = new Vertex<int>*[n_vertex];
+    for (int i=0; i < n_vertex; ++i) {
+        output[i] = graph[i];
+    }
+
+    for (int i=n_vertex-1; i>=0; --i) {
+        output[count_arr[graph[i]->get_color()-1]-1] = graph[i];
+        --count_arr[graph[i]->get_color()-1];
+    }
+
+    for (int i=0; i < n_vertex; ++i) {
+        graph[i] = output[i];
+    }
+
+    delete[] output;
+}
+
+
 void selection_sort(Vertex<int>**& graph, int n_vertex) {
     for (int i=0; i < n_vertex-1; ++i) {
 
@@ -105,7 +153,6 @@ void quick_sort(Vertex<int>** graph, int p, int r) {
         int q = partition(graph, p, r);
         quick_sort(graph, p , q);
         quick_sort(graph, q+1, r);
-
     }
 }
 
@@ -183,7 +230,7 @@ void heap_sort(Vertex<int>**& graph, int n_vertex) {
 
     // Reorder the sortedGraph array based on the heap's removal order
     for (int i = 0; i < n_vertex; ++i) {
-        int index = heap.remove().id;
+        int index = (int) heap.remove().id;
         sortedGraph[i] = graph[index];
     }
 
@@ -216,12 +263,16 @@ void sort(Vertex<int>**& graph, int n_vertex, char sort_option) {
             quick_sort(graph, n_vertex);
             break;
 
-        case 'h':
+        case 'p':
             heap_sort(graph, n_vertex);
             break;
 
         case 'm':
             merge_sort(graph, n_vertex);
+            break;
+
+        case 'y':
+            count_sort(graph, n_vertex);
             break;
 
         default:
