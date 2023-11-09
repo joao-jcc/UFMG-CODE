@@ -1,2 +1,0 @@
-graph06.txt: 1.583e-06 sec
-graph05.txt: 8.34e-07 sec

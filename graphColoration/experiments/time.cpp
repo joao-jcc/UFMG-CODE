@@ -22,8 +22,13 @@ int read_graph(const char* input_path, Vertex<int>**& graph) {
         return 0;
     }
 
+    char letter;
+    input_file >> letter;
+
     int n_vertex; // Number of vertices in the graph
     input_file >> n_vertex;
+
+
     graph = new Vertex<int>*[n_vertex]; // array of pointers to Vertex;
 
     for (int i = 0; i < n_vertex; ++i) {
@@ -45,6 +50,7 @@ int read_graph(const char* input_path, Vertex<int>**& graph) {
     }
 
     input_file.close();
+
     return n_vertex;
 }
 
@@ -142,8 +148,12 @@ void store_time_all(const char* input_dir, const char* output_path, char sort_op
                 int n_vertex = read_graph(file_path.c_str(), graph);
 
                 if (n_vertex > 0) {
+                    // Extracting the number from the filename
+                    std::string number_str = filename.substr(filename.find('_') + 1, filename.find('.') - filename.find('_') - 1);
+                    int number = std::stoi(number_str);
+
                     double sorting_time = measure_time(graph, n_vertex, sort_option);
-                    result_file << filename << ": " << sorting_time << " sec" << std::endl;
+                    result_file << number << " " << sorting_time << " sec" << std::endl;
 
                     // Clean up memory
                     free_graph(graph, n_vertex);
@@ -157,7 +167,6 @@ void store_time_all(const char* input_dir, const char* output_path, char sort_op
 
     result_file.close();
 }
-
 
 
 int main(void) {
