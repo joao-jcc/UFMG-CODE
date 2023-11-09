@@ -1,47 +1,11 @@
-.
-├── Makefile
-├── _ED_TP2.pdf
-├── bin
-├── cmake-build-debug
-│   ├── CMakeCache.txt
-│   ├── CMakeFiles
-│   │   ├── 3.26.4
-│   │   │   ├── CMakeCCompiler.cmake
-│   │   │   ├── CMakeCXXCompiler.cmake
-│   │   │   ├── CMakeDetermineCompilerABI_C.bin
-│   │   │   ├── CMakeDetermineCompilerABI_CXX.bin
-│   │   │   ├── CMakeSystem.cmake
-│   │   │   ├── CompilerIdC
-│   │   │   │   ├── CMakeCCompilerId.c
-│   │   │   │   ├── CMakeCCompilerId.o
-│   │   │   │   └── tmp
-│   │   │   └── CompilerIdCXX
-│   │   │       ├── CMakeCXXCompilerId.cpp
-│   │   │       ├── CMakeCXXCompilerId.o
-│   │   │       └── tmp
-│   │   ├── CMakeConfigureLog.yaml
-│   │   ├── CMakeScratch
-│   │   ├── TargetDirectories.txt
-│   │   ├── clion-Debug-log.txt
-│   │   ├── clion-environment.txt
-│   │   ├── cmake.check_cache
-│   │   ├── graphColoration.dir
-│   │   │   └── src
-│   │   ├── pkgRedirects
-│   │   └── rules.ninja
-│   ├── Testing
-│   │   └── Temporary
-│   │       └── LastTest.log
-│   ├── build.ninja
-│   └── cmake_install.cmake
-├── include
-│   ├── linkedList.hpp
-│   ├── sort.hpp
-│   └── utils.hpp
-├── input.txt
-├── obj
-├── src
-│   └── main.cpp
-└── tree.txt
+src
+├── heap.cpp
+├── main.cpp
+└── time.cpp
+include
+├── heap.hpp
+├── linkedList.hpp
+├── sort.hpp
+└── utils.hpp
 
-18 directories, 27 files
+2 directories, 7 files

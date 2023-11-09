@@ -9,11 +9,11 @@
 #include "utils.hpp"
 #include "heap.hpp"
 
-void swap_vertex(Vertex<int>*& vertex1, Vertex<int>*& vertex2);
+inline void swap_vertex(Vertex<int>*& vertex1, Vertex<int>*& vertex2);
 
-bool criterium(Vertex<int>*& vertex1, Vertex<int>*& vertex2);
+inline bool criterium(Vertex<int>*& vertex1, Vertex<int>*& vertex2);
 
-void bubble_sort(Vertex<int>**& graph, int n_vertex) {
+inline void bubble_sort(Vertex<int>**& graph, int n_vertex) {
     for (int i=0; i < n_vertex; ++i) {
 
         for (int j=0; j < n_vertex-i-1; ++j) {
@@ -28,7 +28,7 @@ void bubble_sort(Vertex<int>**& graph, int n_vertex) {
 }
 
 
-void bubble_sort_opt(Vertex<int>**& graph, int n_vertex) {
+inline void bubble_sort_opt(Vertex<int>**& graph, int n_vertex) {
     for (int i=0; i < n_vertex; ++i) {
 
         bool swapped = false;
@@ -47,7 +47,7 @@ void bubble_sort_opt(Vertex<int>**& graph, int n_vertex) {
 }
 
 
-void count_sort(Vertex<int>**& graph, int n_vertex) {
+inline void count_sort(Vertex<int>**& graph, int n_vertex) {
     int unique = 0;
     // check all different colors
     for (int i=1; i < n_vertex+1; ++i) {
@@ -95,7 +95,7 @@ void count_sort(Vertex<int>**& graph, int n_vertex) {
 }
 
 
-void selection_sort(Vertex<int>**& graph, int n_vertex) {
+inline void selection_sort(Vertex<int>**& graph, int n_vertex) {
     for (int i=0; i < n_vertex-1; ++i) {
 
         unsigned min = i;
@@ -113,7 +113,7 @@ void selection_sort(Vertex<int>**& graph, int n_vertex) {
 }
 
 
-void insertion_sort(Vertex<int>**& graph, int n_vertex) {
+inline void insertion_sort(Vertex<int>**& graph, int n_vertex) {
     for (int i=1; i < n_vertex; ++i) {
 
         Vertex<int>* current = graph[i];
@@ -131,7 +131,7 @@ void insertion_sort(Vertex<int>**& graph, int n_vertex) {
 }
 
 
-int partition(Vertex<int>**& graph, int p, int r) {
+inline int partition(Vertex<int>**& graph, int p, int r) {
     Vertex<int> *x = graph[p];
     int i = p - 1;
     int j = r + 1;
@@ -148,7 +148,7 @@ int partition(Vertex<int>**& graph, int p, int r) {
     }
 }
 
-void quick_sort(Vertex<int>** graph, int p, int r) {
+inline void quick_sort(Vertex<int>** graph, int p, int r) {
     if (p < r) {
         int q = partition(graph, p, r);
         quick_sort(graph, p , q);
@@ -156,12 +156,12 @@ void quick_sort(Vertex<int>** graph, int p, int r) {
     }
 }
 
-void quick_sort(Vertex<int>**& graph, int n_vertex) {
+inline void quick_sort(Vertex<int>**& graph, int n_vertex) {
     quick_sort(graph, 0, n_vertex-1);
 }
 
 
-void merge(Vertex<int>** graph, int left, int mid, int right) {
+inline void merge(Vertex<int>** graph, int left, int mid, int right) {
     int n1 = mid - left + 1;
     int n2 = right - mid;
 
@@ -203,7 +203,7 @@ void merge(Vertex<int>** graph, int left, int mid, int right) {
     delete[] right_arr;
 }
 
-void merge_sort_aux(Vertex<int>** graph, int left, int right) {
+inline void merge_sort_aux(Vertex<int>** graph, int left, int right) {
     if (left < right) {
         int mid = left + (right - left) / 2;
         merge_sort_aux(graph, left, mid);
@@ -212,11 +212,11 @@ void merge_sort_aux(Vertex<int>** graph, int left, int right) {
     }
 }
 
-void merge_sort(Vertex<int>** graph, int n_vertex) {
+inline void merge_sort(Vertex<int>** graph, int n_vertex) {
     merge_sort_aux(graph, 0, n_vertex - 1);
 }
 
-void heap_sort(Vertex<int>**& graph, int n_vertex) {
+inline void heap_sort(Vertex<int>**& graph, int n_vertex) {
     Heap heap(n_vertex);
 
     // Insert the vertices into the heap
@@ -244,7 +244,7 @@ void heap_sort(Vertex<int>**& graph, int n_vertex) {
 }
 
 
-void sort(Vertex<int>**& graph, int n_vertex, char sort_option) {
+inline void sort(Vertex<int>**& graph, int n_vertex, char sort_option) {
     // sort
     switch (sort_option) {
         case 'b':

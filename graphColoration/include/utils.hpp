@@ -8,7 +8,7 @@
 #include "linkedList.hpp"
 #include "sort.hpp"
 
-int read_graph(Vertex<int>**& graph) {
+inline int read_graph(Vertex<int>**& graph) {
     int n_vertex; // Number of vertices in the graph
     std::cin >> n_vertex;
     graph = new Vertex<int>*[n_vertex]; // array of pointers to Vertex;
@@ -35,7 +35,7 @@ int read_graph(Vertex<int>**& graph) {
 
 }
 
-void print_graph(Vertex<int>**& graph, int n_vertex) {
+inline void print_graph(Vertex<int>**& graph, int n_vertex) {
     std::cout << "Printing the graph:" << std::endl;
     for (int i = 0; i < n_vertex; ++i) {
         Vertex<int>* list = graph[i];
@@ -55,7 +55,7 @@ void print_graph(Vertex<int>**& graph, int n_vertex) {
 
 }
 
-void print_graph_id(Vertex<int>**& graph, int n_vertex) {
+inline void print_graph_id(Vertex<int>**& graph, int n_vertex) {
     for (int i = 0; i < n_vertex; ++i) {
         std::cout << " " << graph[i]->get_id();
     }
@@ -63,7 +63,7 @@ void print_graph_id(Vertex<int>**& graph, int n_vertex) {
 }
 
 
-bool validate_graph(Vertex<int>**& graph, int n_vertex) {
+inline bool validate_graph(Vertex<int>**& graph, int n_vertex) {
     for (int i=0; i < n_vertex; ++i) {
         bool status = graph[i]->validate(graph);
         if (!status) {
@@ -74,7 +74,7 @@ bool validate_graph(Vertex<int>**& graph, int n_vertex) {
     return true;
 }
 
-bool criterium(Vertex<int>*& vertex1, Vertex<int>*& vertex2) {
+inline bool criterium(Vertex<int>*& vertex1, Vertex<int>*& vertex2) {
     // color criterium
     if (vertex1->get_color() > vertex2->get_color()) {
         return true;
@@ -89,7 +89,7 @@ bool criterium(Vertex<int>*& vertex1, Vertex<int>*& vertex2) {
 }
 
 
-void swap_vertex(Vertex<int>*& vertex1, Vertex<int>*& vertex2) {
+inline void swap_vertex(Vertex<int>*& vertex1, Vertex<int>*& vertex2) {
 
     Vertex<int>* temp = vertex1;
     vertex1 = vertex2;
@@ -98,7 +98,7 @@ void swap_vertex(Vertex<int>*& vertex1, Vertex<int>*& vertex2) {
 }
 
 
-void free_graph(Vertex<int>** graph, int n_vertex) {
+inline void free_graph(Vertex<int>** graph, int n_vertex) {
     for (int i=0; i < n_vertex; ++i) {
         delete graph[i];
     }

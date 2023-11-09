@@ -32,7 +32,12 @@ run: all
 	./$(EXECUTABLE)
 
 
+time:
+	$(CC) $(CFLAGS) -o experiments/time experiments/time.cpp src/heap.cpp
+	./experiments/time
+
+
 clean:
-	rm -rf $(OBJ_DIR)/*.o $(EXECUTABLE) $(TEST_EXECUTABLE)
+	rm -rf $(OBJ_DIR)/*.o $(EXECUTABLE)
 
 .PHONY: all clean
