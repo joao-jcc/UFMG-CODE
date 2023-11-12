@@ -17,14 +17,14 @@ int main() {
     bool validation = validate_graph(graph, n_vertex);
 
     if (!validation) {
-        std::cout << "Grafo inválido." << std::endl;
+        std::cout << validation << std::endl;
         return 0;
     } else {
         // Ordenar o grafo
         sort(graph, n_vertex, sort_option);
 
         // Imprimir a validação
-        std::cout << "Grafo válido." << std::endl;
+        std::cout << validation;
 
         // Imprimir o grafo ordenado
         print_graph_id(graph, n_vertex);
