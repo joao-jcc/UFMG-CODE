@@ -178,11 +178,16 @@ int main(void) {
         return 1;
     }
 
-    char sorting_algorithms[] = {'b', 's', 'i', 'q', 'p', 'm', 'y'};
-    const char* algorithm_names[] = {"bubble_sort", "selection_sort", "insertion_sort", "quick_sort", "heap_sort", "merge_sort", "count_sort"};
+    // sem heapsort
+//    char sorting_algorithms[] = {'b', 's', 'i', 'q', 'm', 'y'};
+//    const char* algorithm_names[] = {"bubble_sort", "selection_sort", "insertion_sort", "quick_sort", "merge_sort", "count_sort"};
+
+    char sorting_algorithms[] = {'p'};
+    const char* algorithm_names[] = {"heap_sort"};
 
 
-    for (int i = 0; i < 7; ++i) {
+
+    for (int i = 0; i < 1; ++i) {
         std::string output_path = output_dir;
         output_path += "/";
         output_path += algorithm_names[i];
