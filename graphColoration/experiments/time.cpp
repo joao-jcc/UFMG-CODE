@@ -56,12 +56,12 @@ int read_graph(const char* input_path, Vertex<int>**& graph) {
 
 
 
-double measure_time(Vertex<int>** graph, int n_vertex, char sort_option) {
+double measure_time(Vertex<int>** graph, int n_vertex, char option) {
     // Declare start_time and end_time variables outside the switch
     auto start_time = std::chrono::high_resolution_clock::now();
     auto end_time = std::chrono::high_resolution_clock::now();
 
-    switch (sort_option) {
+    switch (option) {
         case 'b':
             bubble_sort(graph, n_vertex);
             break;
@@ -89,6 +89,10 @@ double measure_time(Vertex<int>** graph, int n_vertex, char sort_option) {
         case 'y':
             count_sort(graph, n_vertex);
             break;
+        
+        case 'v':
+            validate_graph(graph, n_vertex);
+            break;
 
         default:
             bubble_sort(graph, n_vertex);
@@ -105,12 +109,12 @@ double measure_time(Vertex<int>** graph, int n_vertex, char sort_option) {
 
 
 
-void store_time(const char* input_path, const char* output_path, char sort_option) {
+void save_time(const char* input_path, const char* output_path, char option) {
     Vertex<int>** graph = nullptr;
     int n_vertex = read_graph(input_path, graph);
 
     if (n_vertex > 0) {
-        double sorting_time = measure_time(graph, n_vertex, sort_option);
+        double sorting_time = measure_time(graph, n_vertex, option);
 
         // Store sorting time in the output file
         std::ofstream result_file(output_path);
@@ -129,7 +133,7 @@ void store_time(const char* input_path, const char* output_path, char sort_optio
 
 
 // Function to process and store the sorting time for all graphs
-void store_time_all(const char* input_dir, const char* output_path, char sort_option) {
+void save_time_all(const char* input_dir, const char* output_path, char option) {
     std::ofstream result_file(output_path);
     if (!result_file.is_open()) {
         std::cerr << "Error: Could not open the output file for writing." << std::endl;
@@ -152,7 +156,7 @@ void store_time_all(const char* input_dir, const char* output_path, char sort_op
                     std::string number_str = filename.substr(filename.find('_') + 1, filename.find('.') - filename.find('_') - 1);
                     int number = std::stoi(number_str);
 
-                    double sorting_time = measure_time(graph, n_vertex, sort_option);
+                    double sorting_time = measure_time(graph, n_vertex, option);
                     result_file << number << " " << sorting_time << " sec" << std::endl;
 
                     // Clean up memory
@@ -182,8 +186,9 @@ int main(void) {
 //    char sorting_algorithms[] = {'b', 's', 'i', 'q', 'm', 'y'};
 //    const char* algorithm_names[] = {"bubble_sort", "selection_sort", "insertion_sort", "quick_sort", "merge_sort", "count_sort"};
 
-    char sorting_algorithms[] = {'p'};
-    const char* algorithm_names[] = {"heap_sort"};
+    char sorting_algorithms[] = {'y'};
+    const char* algorithm_names[] = {"validation"};
+
 
 
 
@@ -192,7 +197,7 @@ int main(void) {
         output_path += "/";
         output_path += algorithm_names[i];
         output_path += ".txt";
-        store_time_all(input_dir, output_path.c_str(), sorting_algorithms[i]);
+        save_time_all(input_dir, output_path.c_str(), sorting_algorithms[i]);
     }
 
     return 0;

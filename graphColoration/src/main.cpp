@@ -5,31 +5,32 @@
 
 int main() {
 
-    // sort option
+    // Opção de ordenação
     char sort_option;
     std::cin >> sort_option;
 
-    // read graph
+    // Ler o grafo
     Vertex<int>** graph = nullptr;
     int n_vertex = read_graph(graph);
 
-    // validation
+    // Validar o grafo
     bool validation = validate_graph(graph, n_vertex);
 
     if (!validation) {
-        std::cout << validation << std::endl;
+        std::cout << "Grafo inválido." << std::endl;
         return 0;
     } else {
-        //sort
+        // Ordenar o grafo
         sort(graph, n_vertex, sort_option);
 
-        std::cout << validation;
-        // printing graph
+        // Imprimir a validação
+        std::cout << "Grafo válido." << std::endl;
+
+        // Imprimir o grafo ordenado
         print_graph_id(graph, n_vertex);
     }
 
-
-    // releasing memory
+    // Liberar a memória alocada para o grafo
     free_graph(graph, n_vertex);
 
     return 0;
