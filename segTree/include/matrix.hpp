@@ -24,20 +24,20 @@ public:
 private:
     std::string errorMessage;
 };
-
-class NotSquareMatrixException : public std::exception {
-public:
-    // Constructor that takes a custom error message
-    explicit NotSquareMatrixException(const char* message) : errorMessage(message) {}
-
-    // Override the what() function to provide error message
-    const char* what() const noexcept override {
-        return errorMessage.c_str();
-    }
-
-private:
-    std::string errorMessage;
-};
+//
+//class NotSquareMatrixException : public std::exception {
+//public:
+//    // Constructor that takes a custom error message
+//    explicit NotSquareMatrixException(const char* message) : errorMessage(message) {}
+//
+//    // Override the what() function to provide error message
+//    const char* what() const noexcept override {
+//        return errorMessage.c_str();
+//    }
+//
+//private:
+//    std::string errorMessage;
+//};
 
 
 
@@ -52,11 +52,12 @@ public:
     void read();
 
     Matrix* operator*(const Matrix& other);
+    Vector2D operator*(const Vector2D& other) const;
 
     int get_rows() const;
     int get_cols() const;
 
-    LI** get_matrix() const;
+    LI** get_array() const;
 
 private:
     LI** _matrix;

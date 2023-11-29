@@ -2,34 +2,47 @@
 // Created by João Costa on 26/11/23.
 //
 
-#include <stdlib.h>
+#include <iostream>
 #include "matrix.hpp"
 #include "segTree.hpp"
 
-int main(int argc, char* argv[]) {
+int main(void) {
 
-    Matrix matrix0(2, 2, false);
-    Matrix matrix1(2, 2, false);
-    Matrix matrix2(2, 2, false);
-    Matrix matrix3(2, 2, false);
+    int n, q;
+    std::cin >> n >> q;
 
-    matrix0.read();
-    matrix1.read();
-    matrix2.read();
-    matrix3.read();
+    SegTree seg_tree(n);
 
+    char operation;
+    while(q--) {
+        std::cin >> operation;
 
-    Matrix* array[4] = {&matrix0, &matrix1, &matrix2, &matrix3};
+        if (operation == 'u') {
+            // index
+            int i;
+            std::cin >> i;
 
+            // matrix
+            Matrix* matrix = new Matrix(2, 2, false);
+            matrix->read();
 
-    SegTree seg(4);
-    seg.build(1, 0, 4-1, array);
+            seg_tree.update(i, matrix, 1, 0, n-1);
 
-    int a  = (int)strtol(argv[1], NULL, 10);
-    int b = (int)strtol(argv[2], NULL, 10);
+        }
 
-    seg.query(a, b, 1,0, 3)->print();
+        else if (operation == 'q') {
+            int born_time, death_time;
+            Vector2D point;
+            std::cin >> born_time >> death_time >> point.x >> point.y;
 
+            Matrix* matrix = seg_tree.query(born_time, death_time, 1, 0, n-1);
+
+            Vector2D new_point = (*matrix) * point;
+            new_point.print();
+
+        }
+    }
 
     return 0;
+
 }

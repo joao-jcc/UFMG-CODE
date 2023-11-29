@@ -2,9 +2,6 @@
 #include "matrix.hpp"
 
 Matrix::Matrix(int rows, int cols, bool identity) : _rows(rows), _cols(cols) {
-    if (rows != cols) {
-        throw(NotSquareMatrixException("Matrix must be Square"));
-    }
     _matrix = allocate_array2D(_rows, _cols);
 
     if (identity) {
@@ -54,7 +51,7 @@ Matrix* Matrix::operator*(const Matrix& other) {
 
 
     LI** array1 = _matrix;
-    LI** array2 = other.get_matrix();
+    LI** array2 = other.get_array();
 
     LI** result = allocate_array2D(_rows, other.get_cols());
 
@@ -62,13 +59,23 @@ Matrix* Matrix::operator*(const Matrix& other) {
         for (int j = 0; j < other.get_cols(); ++j) {
         result[i][j] = 0;
             for (int k = 0; k < _cols; ++k) {
-            result[i][j] += array1[i][k] * array2[k][j];
+            result[i][j] += array1[i][k] % (int)(1e8) * array2[k][j] % (int)(1e8);
+            result[i][j] %= (int)(1e8);
             }
         }
     }
 
     return new Matrix(result, _rows, other.get_cols());
 }
+
+Vector2D Matrix::operator*(const Vector2D& other) const {
+
+    LI cord_x = (_matrix[0][0] * other.x + _matrix[0][1] * other.y) % (int)(1e8);
+    LI cord_y = (_matrix[1][0] * other.x + _matrix[1][1] * other.y) % (int)(1e8);
+
+    return Vector2D(cord_x, cord_y);
+}
+
 
 int Matrix::get_rows() const {
     return _rows;
@@ -78,7 +85,7 @@ int Matrix::get_cols() const {
     return _cols;
 }
 
-LI** Matrix::get_matrix() const {
+LI** Matrix::get_array() const {
     return _matrix;
 }
 

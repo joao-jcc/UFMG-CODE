@@ -19,6 +19,8 @@ public:
 
     Matrix* query(int a, int b, int p, int l, int r);
 
+    Matrix* update(int i, Matrix* x, int p, int l, int r);
+
     void print_node(int position);
 
 private:
