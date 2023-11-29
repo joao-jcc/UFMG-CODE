@@ -1,0 +1,31 @@
+//
+// Created by João Costa on 26/11/23.
+//
+
+#ifndef SEGTREE_HPP
+#define SEGTREE_HPP
+
+#include "matrix.hpp"
+
+
+class SegTree {
+public:
+    SegTree(int size);
+    ~SegTree();
+
+    int get_size();
+
+    Matrix* build(int p, int l, int r, Matrix** array);
+
+    Matrix* query(int a, int b, int p, int l, int r);
+
+
+private:
+    int _size;
+    Matrix** seg_array;
+
+
+
+};
+
+#endif
