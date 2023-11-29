@@ -1,7 +1,10 @@
 
 #include "matrix.hpp"
 
-Matrix::Matrix(int row, int col, bool identity) : _rows(row), _cols(col) {
+Matrix::Matrix(int rows, int cols, bool identity) : _rows(rows), _cols(cols) {
+    if (rows != cols) {
+        throw(NotSquareMatrixException("Matrix must be Square"));
+    }
     _matrix = allocate_array2D(_rows, _cols);
 
     if (identity) {
@@ -13,12 +16,14 @@ Matrix::Matrix(int row, int col, bool identity) : _rows(row), _cols(col) {
     }
 }
 
-Matrix::Matrix(Tuple tuple) : _matrix(tuple.array), _rows(tuple.row), _cols(tuple.col) {
+Matrix::Matrix(LI** array, int rows, int cols) : _rows(rows), _cols(cols) {
+    _matrix = array;
 }
 
 
 Matrix::~Matrix() {
-    deallocate_array2D(_matrix, _rows, _cols);
+//    std::cout << "destroying matrix" << std::endl;
+//    deallocate_array2D(_matrix, _rows, _cols);
 }
 
 
@@ -41,7 +46,7 @@ void Matrix::print() {
 }
 
 
-Tuple Matrix::operator*(const Matrix& other) {
+Matrix* Matrix::operator*(const Matrix& other) {
 
     if (_cols != other.get_rows()) {
         throw(MatrixMultiplicationException("Matrix dimensions are not compatible for multiplication."));
@@ -62,7 +67,7 @@ Tuple Matrix::operator*(const Matrix& other) {
         }
     }
 
-    return Tuple{result, _rows, other.get_cols()};
+    return new Matrix(result, _rows, other.get_cols());
 }
 
 int Matrix::get_rows() const {

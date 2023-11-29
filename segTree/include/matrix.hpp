@@ -11,27 +11,47 @@
 #include "utils.hpp"
 
 
-class MatrixMultiplicationException : public std::runtime_error {
+class MatrixMultiplicationException : public std::exception {
 public:
-    MatrixMultiplicationException(const std::string& message) : std::runtime_error(message) {
+    // Constructor that takes a custom error message
+    explicit MatrixMultiplicationException(const char* message) : errorMessage(message) {}
 
-    };
+    // Override the what() function to provide error message
+    const char* what() const noexcept override {
+        return errorMessage.c_str();
+    }
 
+private:
+    std::string errorMessage;
+};
+
+class NotSquareMatrixException : public std::exception {
+public:
+    // Constructor that takes a custom error message
+    explicit NotSquareMatrixException(const char* message) : errorMessage(message) {}
+
+    // Override the what() function to provide error message
+    const char* what() const noexcept override {
+        return errorMessage.c_str();
+    }
+
+private:
+    std::string errorMessage;
 };
 
 
 
 class Matrix {
 public:
-    Matrix(int row=2, int col=2, bool identity=true);
-    Matrix(Tuple tuple);
+    explicit Matrix(int rows=2, int cols=2, bool identity=true);
+    Matrix(LI** array, int rows, int cols);
 
     ~Matrix();
 
     void print();
     void read();
 
-    Tuple operator*(const Matrix& other);
+    Matrix* operator*(const Matrix& other);
 
     int get_rows() const;
     int get_cols() const;
