@@ -7,11 +7,3 @@ LI** allocate_array2D(int rows, int cols) {
     }
     return matrix;
 }
-
-void deallocate_array2D(LI** array, int row, int col) {
-    for (int i = 0; i < row; ++i) {
-        delete[] array[i];
-    }
-
-    delete[] array;
-}

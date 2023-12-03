@@ -7,6 +7,7 @@
 
 #include "matrix.hpp"
 
+class Matrix;
 
 class SegTree {
 public:

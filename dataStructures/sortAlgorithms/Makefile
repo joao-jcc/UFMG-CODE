@@ -7,7 +7,7 @@ BIN_DIR = bin
 
 SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS))
-EXECUTABLE = $(BIN_DIR)/tp3.out
+EXECUTABLE = $(BIN_DIR)/sort.out
 
 all: $(EXECUTABLE)
 

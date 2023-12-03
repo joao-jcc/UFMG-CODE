@@ -24,8 +24,6 @@ SegTree::~SegTree() {
 
 Matrix* SegTree::build(int p, int l, int r, Matrix** array) {
     if (l == r) {
-//        std::cout << "LEAF " << p << std::endl;
-//        array[l]->print();
         delete seg_array[p];
         return seg_array[p] = array[l];
     }
@@ -36,8 +34,6 @@ Matrix* SegTree::build(int p, int l, int r, Matrix** array) {
     Matrix right_child = *build(2*p+1, m+1, r, array);
     Matrix* result = left_child * right_child;
 
-//    std::cout << "INNER " << p << std::endl;
-//    result->print();
     delete seg_array[p];
     return seg_array[p] = result;
 
@@ -45,17 +41,13 @@ Matrix* SegTree::build(int p, int l, int r, Matrix** array) {
 
 
 Matrix* SegTree::query(int a, int b, int p, int l, int r) {
-//    std::cout << "build(" << a << " " << b << " " << p << " " << l << " " << r << ")" << std::endl;
-
     // Disjoint
     if (r < a || l > b) {
-//        std::cout << "disjoint" << std::endl;
         return seg_array[0]; // identity;
     }
 
     // Contains
     if (a <= l && r <= b) {
-//        std::cout << "contains" << std::endl;
         return seg_array[p];
     }
 

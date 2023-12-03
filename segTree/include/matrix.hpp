@@ -24,22 +24,6 @@ public:
 private:
     std::string errorMessage;
 };
-//
-//class NotSquareMatrixException : public std::exception {
-//public:
-//    // Constructor that takes a custom error message
-//    explicit NotSquareMatrixException(const char* message) : errorMessage(message) {}
-//
-//    // Override the what() function to provide error message
-//    const char* what() const noexcept override {
-//        return errorMessage.c_str();
-//    }
-//
-//private:
-//    std::string errorMessage;
-//};
-
-
 
 class Matrix {
 public:

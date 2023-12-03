@@ -19,8 +19,6 @@ Matrix::Matrix(LI** array, int rows, int cols) : _rows(rows), _cols(cols) {
 
 
 Matrix::~Matrix() {
-//    std::cout << "destroying matrix" << std::endl;
-//    deallocate_array2D(_matrix, _rows, _cols);
 }
 
 
