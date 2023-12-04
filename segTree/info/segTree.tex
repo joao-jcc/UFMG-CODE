@@ -234,17 +234,14 @@ Varremos o vetor sequencialmente entre os índices de busca $i$ e $j$, multiplic
 \subsection{\texttt{SimpleVector::build}}
 Varremos o vetor sequencialmente entre os índices de busca $i$ e $j$, multiplicando as matrizes e armazenando em uma matriz resultante, tem-se custo  \(O(n)\).
 
-   
 
 
 % Estratégias de Robustez
 
 \section{Estratégias de Robustez}
-Com o objetivo de tornar o programa mais robusto e evitar problemas com entradas inválidas, foram criadas classes de exceção \texttt{ExceptionEmptyList}. Essa exceção é disparada, com uma mensagem de erro descritiva, caso a função de remoção de um elemento da lista seja invocada para uma estrutura vazia. 
+Com o objetivo de tornar o programa mais robusto e evitar problemas com entradas inválidas, foram criadas classes de exceção \texttt{MatrixMultiplicationException }. Essa exceção é disparada, com uma mensagem de erro descritiva, casa a função de multiplicação seja aplicada em matrizes com shape inconsistentes.
 
-Para manter a integridade do programa e evitar vazamentos de memória, todos os Tipos Abstratos de Dados (TADs) implementam destrutores apropriados. Nos destrutores da lista encadeada, garantimos que o estado da instância retorne ao \texttt{default} e \texttt{asserts} checam se o tamanho da estrutura é zero.
-
-Além disso, foram realizados testes com o Valgrind, e nenhum erro relacionado à alocação de memória foi observado.
+Para manter a integridade do programa e evitar vazamentos de memória, os Tipos Abstratos de Dados (TADs) implementam destrutores apropriados. Além disso, os métodos \texttt{SegTree::update} e  \texttt{SegTree::build} garantem que as matrizes a serem substituídas são deletadas.Foram realizados testes com o Valgrind, e nenhum erro relacionado à alocação de memória foi observado.
 
 Entretanto, é importante destacar que o programa ainda possui limitações, uma vez que não cobre um amplo espectro de possíveis entradas de dados, presumindo que o usuário fornecerá entradas corretas. 
 
@@ -275,13 +272,16 @@ Essa análise é fundamentada na compreensão da complexidade dos métodos envol
 
 
 
-\section{Conclusões}
+\section{Conclusão}
 
-No projeto, abordamos o problema clássico de coloração em grafos, com ênfase na complexidade algorítmica e nas estruturas de dados implementadas em C++. Inicialmente, desenvolvemos um algoritmo para identificar se a coloração do grafo é gulosa, isto é, se um vértice \(v\) possui coloração \(i\), então ele possui pelo menos um vizinho com cada uma das cores menores que \(i\). Em seguida, aplicamos algoritmos clássicos de ordenação, seguindo o critério de cor e índice, conforme descrito na função \texttt{bool criterium}.
+Em resumo, a implementação da Árvore de Segmentação sobre um vetor de matrizes \(A_{2 \times 2}\) se revelou uma abordagem eficaz para lidar com transformações vetoriais em um espaço \(2D\). A estrutura da árvore permitiu realizar consultas de maneira eficiente, sintetizando sequências de transformações em matrizes resultantes \(R_{ij}\).
 
-Ao longo do projeto, aprofundamos nosso entendimento das estruturas de dados eficientes para modelagem de grafos, como a combinação de array e lista encadeada. Também exploramos os algoritmos de ordenação clássicos, destacando as nuances entre suas complexidades assintóticas em termos de tempo e memória.
+Ao construir a Árvore de Segmentação, a divisão recursiva do vetor em segmentos menores possibilitou consultas rápidas e atualizações eficientes. Essa abordagem hierárquica ofereceu um equilíbrio entre complexidade de tempo e espaço, tornando-a especialmente adequada para cenários em que o vetor de entrada é estático e as operações mais frequentes envolvem consultas ou atualizações em intervalos específicos.
 
-Este trabalho não apenas ampliou nossa habilidade de implementar soluções algorítmicas em C++, mas também proporcionou insights sobre a escolha e aplicação de estruturas de dados e algoritmos em cenários específicos, contribuindo para uma compreensão mais abrangente da ciência da computação.
+A capacidade de calcular a matriz de transformação \(R_{ij}\) associada a um subvetor de matrizes permitiu prever de maneira eficaz o resultado da aplicação de transformações vetoriais a um vetor 2D fornecido. Essa funcionalidade é valiosa em diversas aplicações, como gráficos computacionais, simulações físicas e processamento de imagens.
+
+Em conclusão, a implementação bem-sucedida desta Árvore de Segmentação abre portas para uma gama de aplicações em que a manipulação eficiente de transformações vetoriais em um espaço bidimensional é crucial.
+
 
 
 

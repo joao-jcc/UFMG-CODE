@@ -22,6 +22,10 @@ run: all
 	./$(EXECUTABLE)
 
 
+time:
+	$(CC) $(CFLAGS) -o experiments/time experiments/time.cpp src/matrix.cpp src/utils.cpp src/segTree.cpp
+	./experiments/time
+
 clean:
 	rm -rf $(OBJ_DIR)/*.o $(EXECUTABLE) $(TEST_EXECUTABLE)
 
