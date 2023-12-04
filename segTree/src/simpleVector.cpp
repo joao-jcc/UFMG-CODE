@@ -5,7 +5,7 @@
 #include "simpleVector.hpp"
 
 SimpleVector::SimpleVector(int n) : _n(n), _vector(nullptr) {
-
+    build();
 }
 
 SimpleVector::~SimpleVector() {
@@ -17,6 +17,7 @@ SimpleVector::~SimpleVector() {
 }
 
 void SimpleVector::build() {
+    _vector = new Matrix*[_n];
     for (int i=0; i < _n; ++i) {
         _vector[i] = new Matrix();
     }
@@ -29,13 +30,19 @@ void SimpleVector::update(int i, Matrix *matrix) {
 
 Matrix* SimpleVector::query(int i, int j) {
     Matrix* matrix = new Matrix();
-    for (; i <= j; i++) {
+    for (; i <= j; ++i) {
         Matrix* temp = (*matrix) * (*_vector[i]);
         delete matrix;
         matrix = temp;
     }
 
     return matrix;
+}
+
+void SimpleVector::print() {
+    for (int i=0; i < _n; ++i) {
+        _vector[i]->print();
+    }
 }
 
 

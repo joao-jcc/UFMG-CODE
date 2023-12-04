@@ -19,6 +19,7 @@ Matrix::Matrix(LI** array, int rows, int cols) : _rows(rows), _cols(cols) {
 
 
 Matrix::~Matrix() {
+    deallocate_array2D(_matrix, _rows);
 }
 
 

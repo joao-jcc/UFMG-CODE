@@ -17,6 +17,8 @@ class SimpleVector{
         void update(int i, Matrix* matrix);
         Matrix* query(int i, int j);
 
+        void print();
+
         int get_size() {
             return _n;
         }

@@ -108,12 +108,12 @@ Duas soluções foram implementadas. A primeira consiste em armazenar cada uma d
 
 \subsection{Vetor Simples de Matrizes}
 
-Uma abordagem simplificada para o problema seria armazenar cada uma das transformações em um vetor indexado de matrizes. Para a operação de consulta, considerando os instantes (índices) $i$ e $j$, seria suficiente multiplicar todas as matrizes nos índices de $i$ a $j$. No pior caso, essa abordagem tem complexidade $O(n)$. Para as operações de atualização, bastaria modificar a matriz na posição $i$, o que é feito em tempo constante. Ver Figura 1.
+Uma abordagem simplificada para o problema seria armazenar cada uma das transformações em um vetor indexado de matrizes. Para a operação de consulta, considerando os instantes (índices) $i$ e $j$, seria suficiente multiplicar todas as matrizes nos índices de $i$ a $j$. No pior caso, essa abordagem tem complexidade $O(n)$. Para as operações de atualização, bastaria modificar a matriz na posição $i$, o que é feito em tempo constante $O(1)$. Ver Figura 1.
 
 
 \subsection{Árvore de Segmentação}
 
-A segunda abordagem adotada para resolver o problema consiste na implementação de uma Árvore de Segmentação que armazena matrizes de transformação pré-computadas em seus nós. Essa estratégia tem como objetivo otimizar a execução das operações de consulta de maneira eficiente.
+A segunda abordagem adotada para resolver o problema consiste na implementação de uma Árvore de Segmentação que armazena matrizes de transformação pré-computadas em seus nós. Essa estratégia tem como objetivo otimizar a execução das operações de consulta.
 
 \subsubsection{Construção da Árvore}
 
@@ -210,7 +210,7 @@ Essa seção se dedica a analisar a complexidade assintótica, em termos de espa
             \item Multiplica a matriz dos vértices filhos para obter a matriz do nó.
         \end{enumerate}
     \item O início da construção ocorre no vértice raiz, permitindo a computação da árvore de segmentação completa.
-    \item A complexidade de tempo dessa construção é \(O(n)\), considerando que a operação de multiplicação (\texttt{Matrix* operator*(const Matrix\& other)}) é de tempo constante (a operação de multiplicação é chamada \(n\) vezes, que é igual ao número de nós internos na árvore de segmentação).
+    \item A complexidade de tempo dessa construção é \(O(n)\), onde n é o número de nós na árvore, considerando que a operação de multiplicação (\texttt{Matrix* operator*(const Matrix\& other)}) é de tempo constante (a operação de multiplicação é chamada \(n\) vezes, que é igual ao número de nós internos na árvore de segmentação).
 \end{itemize}
 
 
@@ -239,36 +239,24 @@ Varremos o vetor sequencialmente entre os índices de busca $i$ e $j$, multiplic
 % Estratégias de Robustez
 
 \section{Estratégias de Robustez}
-Com o objetivo de tornar o programa mais robusto e evitar problemas com entradas inválidas, foram criadas classes de exceção \texttt{MatrixMultiplicationException }. Essa exceção é disparada, com uma mensagem de erro descritiva, casa a função de multiplicação seja aplicada em matrizes com shape inconsistentes.
+Com o objetivo de tornar o programa mais robusto e evitar problemas com entradas inválidas, foram criadas classes de exceção \texttt{MatrixMultiplicationException }. Essa exceção é disparada, com uma mensagem de erro descritiva, caso a função de multiplicação seja aplicada em matrizes com shape inconsistentes.
 
-Para manter a integridade do programa e evitar vazamentos de memória, os Tipos Abstratos de Dados (TADs) implementam destrutores apropriados. Além disso, os métodos \texttt{SegTree::update} e  \texttt{SegTree::build} garantem que as matrizes a serem substituídas são deletadas.Foram realizados testes com o Valgrind, e nenhum erro relacionado à alocação de memória foi observado.
+Para manter a integridade do programa e evitar vazamentos de memória, os Tipos Abstratos de Dados (TADs) implementam destrutores apropriados. Além disso, os métodos \texttt{SegTree::update} e  \texttt{SegTree::build} garantem que as matrizes a serem substituídas são deletadas. Foram realizados testes com o Valgrind, e nenhum erro relacionado à alocação de memória foi observado.
 
 Entretanto, é importante destacar que o programa ainda possui limitações, uma vez que não cobre um amplo espectro de possíveis entradas de dados, presumindo que o usuário fornecerá entradas corretas. 
 
 
 \section{Análise Experimental}
 
-\subsection{Algoritmos de Ordenação}
-O presente experimento foi conduzido com o propósito de avaliar o custo computacional de diferentes algoritmos de ordenação. Foram gerados 29 grafos, variando o número de vértices de 1000 a 30000. A quantidade de arestas em cada grafo foi estabelecida como 50\% superior ao número de vértices. O tempo de execução de cada algoritmo de ordenação foi medido em relação a esses grafos, utilizando a biblioteca \texttt{chrono}. Os resultados temporais obtidos foram então representados graficamente, conforme ilustrado na Figura no Apêndice B.
+O presente experimento foi conduzido com o propósito de avaliar o custo computacional das operações de atualização e consulta para a Árvore de Segmentação e para o Vetor Simples de Matrizes. Dois conjuntos de testes foram gerados, sendo que, no primeiro, empregou-se um vetor de matrizes com tamanhos variando de 100 a 20 mil, e o número de operações correspondia sempre à metade do tamanho do vetor.
 
+Os resultados evidenciaram uma notável discrepância no desempenho entre os dois métodos implementados. A Árvore de Segmentação apresentou um tempo de consulta significativamente inferior ao vetor simples, corroborando a análise teórica de complexidade. Conforme esperado, a \texttt{SegTree} demonstrou uma complexidade de consulta \(O(\log n)\), enquanto o \texttt{SimpleVector} exibiu uma complexidade \(O(n)\). No entanto, a visualização da curva em formato logarítmico tornou-se desafiadora devido às oscilações e à disparidade nas magnitudes de tempo entre os dois métodos.
 
+Em relação à operação de atualização, o \texttt{SimpleVector} destacou-se, pois basta acessar uma posição no vetor e modificar a matriz, resultando em uma complexidade \(O(1)\). Em contraste, na Árvore de Segmentação, é necessário modificar todo um ramo da árvore, resultando em uma complexidade \(O(\log n)\).
 
-Ao analisar o gráfico, destacam-se três grupos de desempenho. O grupo de pior desempenho inclui os algoritmos \texttt{bubble\_sort} e \texttt{selection\_sort}; em segundo lugar, temos o \texttt{insertion\_sort}; e o terceiro grupo engloba os demais algoritmos, que apresentam um custo temporal abaixo de décimos de segundo para todos os grafos.
+No segundo conjunto de testes, foi empregado um vetor de matrizes de tamanho variando de 100 a 1000, com o número de operações correspondendo a 90\% do tamanho. Observou-se a mesma comparação entre os métodos do conjunto anterior. No entanto, o formato de curva logarítmica na consulta da Árvore de Segmentação pôde ser melhor visualizado.
 
-Presume-se que o desempenho superior do \texttt{insertion\_sort} em relação ao primeiro grupo deve-se à sua adaptabilidade a dados parcialmente ordenados, ou seja, os grafos fornecidos já possuem uma ordenação razoável. Os algoritmos do primeiro grupo não se beneficiam da ordenação parcial.
-
-Como esperado, os algoritmos \texttt{merge\_sort}, \texttt{heap\_sort}, \texttt{quick\_sort} apresentaram desempenho muito superior aos outros grupos, especialmente para grafos grandes. Isso pode ser explicado, em primeiro lugar, pela função de complexidade desses três algoritmos, que no pior caso é \(O(n \log n)\) para o \texttt{merge\_sort} e \texttt{heap\_sort}, e \(O(n^2)\) para o \texttt{quick\_sort}, embora geralmente o \texttt{quick\_sort} apresente \(O(n \log n)\), conforme observado no gráfico.
-
-Além disso, o uso de estruturas de dados auxiliares, como Heaps e arrays extras, também contribuem para a eficiência desses três algoritmos.
-
-No grupo de melhor desempenho, é destacado um terceiro algoritmo de ordenação: o Count Sort. O Count Sort é eficiente para conjuntos de dados com um intervalo pequeno de valores, como é o caso dos grafos do experimento, que têm uma faixa limitada de cores. Sua complexidade temporal é linear \(O(n)\), onde \(n\) é o número de vértices, o que o torna uma escolha eficiente para o problema proposto.
-
-
-\subsection{Validação}
-
-Ao analisarmos o tempo de execução da função de validação da coloração dos grafos, observamos uma curva linear, o que está em conformidade com a análise de complexidade \(O(n)\). A Figura correspondente pode ser encontrada no Apêndice B.
-Essa análise é fundamentada na compreensão da complexidade dos métodos envolvidos na validação da coloração: \texttt{bool validate\_grapgh} e \texttt{bool validate}.
-
+Em síntese, os resultados reforçam a eficácia da Árvore de Segmentação em operações de consulta, enquanto o \texttt{SimpleVector} se destaca em operações de atualização. A escolha entre essas estruturas de dados deve considerar os requisitos específicos da aplicação em questão. Ver Figuras no Apêndice B.
 
 
 
@@ -333,7 +321,7 @@ Para compilar o projeto, siga as instruções abaixo:
 Para executar o projeto compilado, utilize o seguinte comando:
 
 \begin{verbatim}
-./bin/tp2.out
+./bin/tp3.out
 \end{verbatim}
 
 Este comando executará o programa principal.
@@ -353,22 +341,34 @@ Isso removerá os arquivos objetos e executáveis.
 \section{Figuras}
 
 \begin{figure}[H]
-    \begin{minipage}{\textwidth}
+    \begin{minipage}{0.48\textwidth}
         \centering
-        \includegraphics[width=0.8\linewidth]{~/Documents/UFMG-CODE/graphColoration/experiments/validation_time_vs_graph_size.png}
-        \caption{Desempenho da função de validação dos grafos do experimento.}
-        \label{fig:validacao}
+       \includegraphics[width=\linewidth, height=2.5in]{~/Documents/UFMG-CODE/segTree/experiments/updateTime1k.png}
+        \caption{Update Time 1k}
+        \label{fig:figura1}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=2.5in]{~/Documents/UFMG-CODE/segTree/experiments/queryTime1k.png}
+        \caption{Query Time 1k}
+        \label{fig:figura2}
     \end{minipage}
 \end{figure}
 
 \vspace{1cm}
 
 \begin{figure}[H]
-    \begin{minipage}{\textwidth}
+    \begin{minipage}{0.48\textwidth}
         \centering
-        \includegraphics[width=0.8\linewidth]{~/Documents/UFMG-CODE/graphColoration/experiments/sorting_time_vs_graph_size.png}
-        \caption{Desempenho dos algoritmos de ordenação para os grafos do experimento.}
-        \label{fig:ordenacao}
+        \includegraphics[width=\linewidth, height=2.5in]{~/Documents/UFMG-CODE/segTree/experiments/updateTime20k.png}
+        \caption{Update Time 20k}
+        \label{fig:figura3}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth, height=2.5in]{~/Documents/UFMG-CODE/segTree/experiments/queryTime20k.png}
+        \caption{Query Time 20k}
+        \label{fig:figura4}
     \end{minipage}
 \end{figure}
 

@@ -19,6 +19,7 @@ struct Vector2D {
 
 
 LI** allocate_array2D(int rows, int cols);
+void deallocate_array2D(LI** array, int rows);
 
 
 #endif // UTILS_HPP

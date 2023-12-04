@@ -54,9 +54,9 @@ Matrix* SegTree::query(int a, int b, int p, int l, int r) {
 
     int m = (l+r) / 2;
 
-    Matrix left_child = *query(a, b, 2*p, l, m);
-    Matrix right_child = *query(a, b, 2*p+1, m+1, r);
-    Matrix* result = left_child * right_child;
+    Matrix* left_child = query(a, b, 2*p, l, m);
+    Matrix* right_child = query(a, b, 2*p+1, m+1, r);
+    Matrix* result = (*left_child) * (*right_child);
 
 
     return result;

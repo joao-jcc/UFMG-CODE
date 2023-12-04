@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall -Iinclude -std=c++11
+CFLAGS = -Wall -Iinclude -std=c++17
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -23,7 +23,7 @@ run: all
 
 
 time:
-	$(CC) $(CFLAGS) -o experiments/time experiments/time.cpp src/matrix.cpp src/utils.cpp src/segTree.cpp
+	$(CC) $(CFLAGS) -o experiments/time experiments/time.cpp src/matrix.cpp src/utils.cpp src/segTree.cpp src/simpleVector.cpp
 	./experiments/time
 
 clean:
