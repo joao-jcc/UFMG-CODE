@@ -1,0 +1,36 @@
+$date
+	Mon Jul  3 09:02:41 2023
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ns
+$end
+$scope module test $end
+$var wire 1 ! Q $end
+$var reg 1 " D $end
+$var reg 1 # clk $end
+$var reg 1 $ reset $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+1$
+0#
+x"
+x!
+$end
+#6
+0$
+1"
+#12
+1!
+1#
+#18
+0#
+#24
+1#
+#30
+0#
+#36
