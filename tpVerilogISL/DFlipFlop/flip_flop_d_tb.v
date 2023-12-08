@@ -17,10 +17,12 @@ initial begin
     $dumpfile("flip_flop_d.vcd");
     $dumpvars(0, flip_flop_d_tb);
 
-    D = 1;
-    #50;
-    D = 0;
-    #50;
+    repeat (5) begin
+
+        D = ~D;
+        #25;
+
+    end
 
     $finish;
 end

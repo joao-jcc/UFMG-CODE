@@ -1,0 +1,61 @@
+$date
+	Fri Dec  8 20:25:02 2023
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ns
+$end
+$scope module flip_flop_d_tb $end
+$var wire 1 ! Q $end
+$var reg 1 " CLK $end
+$var reg 1 # D $end
+$scope module ffd $end
+$var wire 1 " CLK $end
+$var wire 1 # D $end
+$var reg 1 ! Q $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+1#
+1"
+1!
+$end
+#10
+0"
+#20
+1"
+#25
+0#
+#30
+0"
+#40
+0!
+1"
+#50
+0"
+1#
+#60
+1!
+1"
+#70
+0"
+#75
+0#
+#80
+0!
+1"
+#90
+0"
+#100
+1!
+1"
+1#
+#110
+0"
+#120
+1"
+#125
