@@ -58,6 +58,11 @@ vector<int>& end_times, vector<int>& parents, vector<int>& colors) {
             DFS_visit(graph, v, time, born_times, end_times, parents, colors);
 
         }
+
+        // vértice adjacente é cinza
+        if (colors[v] == 1) {
+
+        }
     }
     
     // todas as arestas de u foram percorridas
