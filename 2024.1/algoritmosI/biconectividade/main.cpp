@@ -5,52 +5,69 @@
 using namespace std;
 
 // estruturas auxiliares para problema da articulação e clusters
-vector<vector<int>> graph; // vetor de vetor para representar o grafo
 
-vector<int> born; // tempos de início zerados
-vector<bool> visited; // true: visitado, false: não-visitado
+vector<vector<int>> graph;  // vetor de vetores
+vector<int> born; // tempo de descobrimento do vértice
 vector<int> low; // mínimo tempo de nascimento alcançavel
+stack<int> s; // pilha auxiliar ao problema de clusters
 
-vector<int> parents;
-vector<vector<int>> components;
-stack<int> s;
+// resultados
+vector<int> links; // links ed borda
+vector<vector<int>> components; // vetor de vetores que representam componentes biconexas
 
-int time_ = 0;
-
-
-void read_graph(int n_vertex) {    
-    for (int i=0; i < n_vertex; ++i) {
-        
-        // grau do vértice i
-        int degree; scanf(" %d", &degree);
-        graph[i].resize(degree);
+int time_ = 0; // timestamp
+int links_count = 0;
+int clusters_count = 0;
 
 
-        // leitura dos vizinhos j do vértice i
-        for (int j=0; j<degree; ++j) {
-            int neigh; scanf(" %d", &graph[i][j]);
+void output(bool mode, int n) {
+    if (mode) {
+        std::sort(links.begin(), links.end());
+        printf("%d\n", links_count);
+        for (int link : links) {
+            printf("%d\n", link+1);
         }
+    } else {
+        for (int i=0; i < clusters_count; ++i) {
+            int cluster_size = components[i].size();
+            printf("%d %d", n+i+1, cluster_size);
+            for (int j=0; j < cluster_size; ++j) {
+                printf(" %d", components[i][j] + 1);
+            }
+        
+        printf("\n");
+        }
+    }
+}
+
+// função de leitura do grafo
+void read_graph(int m) {    
+    for (int i=0; i < m; ++i) {
+        // grau do vértice i
+        int x, y; scanf(" %d %d", &x, &y);
+        graph[x-1].push_back(y-1);
+        graph[y-1].push_back(x-1);
     }
 }
 
 
 void DFS_cut(int u, int parent) {
     
-    visited[u] = true; // vértice u descoberto
     born[u] = low[u] = ++time_; // tempo de descoberta de u
     int children = 0; // numero de filhos de u na árvore de precedencia
 
     // percorre-se todos os vértices adjacentes a u
     for (int v : graph[u]) {
         // vértice adjacente ainda não foi descoberto
-        if (!visited[v]) {
+        if (born[v] == 0) {
             // chama-se DFS_cut para o novo vértice descoberto v, cujo pai é u
             DFS_cut(v, u);
 
             low[u] = min(low[u], low[v]);
 
             if (parent != -1 && born[u] <= low[v]) {
-                printf("%d ", u); // u é de corte
+                links.push_back(u); // u é de corte
+                ++links_count;
             }
 
             ++children;
@@ -62,20 +79,20 @@ void DFS_cut(int u, int parent) {
     }
 
     if (parent == -1 && children >= 2) {
-        printf("%d ", u); // u é de corte    
+        links.push_back(u); // u é de corte
+        ++links_count;
     }
 }
 
 
-void DFS_cluster(int u) {
+void DFS_cluster(int u, int parent) {
     born[u] = low[u] = ++time_; // tempo de descoberta de u
     s.push(u);
 
     for (int v : graph[u]) {
         if (born[v] == 0) {
-            parents[v] = u; // u é pai de v
             
-            DFS_cluster(v);
+            DFS_cluster(v, u); // u é pai de v
 
             low[u] = min(low[u], low[v]);
 
@@ -91,61 +108,50 @@ void DFS_cluster(int u) {
 
                 } while (y != v);
                 component.push_back(u);
+                std::sort(component.begin(), component.end());
                 components.push_back(component);
+                ++clusters_count;
 
             }
-        } else if (v != parents[u]) {
+        } else if (v != parent) {
             low[u] = min(low[u], born[v]);
         }
     }
 }
 
 
-void DFS(int n_vertex) {
+void DFS(int n, bool mode) {
     // para cada vértice u
-    for (int u=0; u < n_vertex; ++u) {
-            // se o vértice adjacente é branco
-            if ( !visited[u] ) {
-                DFS_cut(u, -1);
+    for (int u=0; u < n; ++u) {
+            // se o vértice u ainda não foi descoberto
+            if ( born[u] == 0 ) {
+                mode ? DFS_cut(u, -1) : DFS_cluster(u, -1);
             }
         }
-    printf("\n");
 }
 
 
 int main(void) {
     
-    // lendo o número de vértices do grafo
-    int n_vertex; scanf(" %d", &n_vertex);
-    
-    // Inicializando o vetor graph com tamanho n_vertex
-    graph.resize(n_vertex);
+    // lendo o número de vértices do grafo e inicializando o grafo
+    int n, m; scanf(" %d %d", &n, &m);
+
+    graph.resize(n);
 
     // declarando grafo como lista de adjacências: array de vetores
-    read_graph(n_vertex);
+    read_graph(m);
 
     // arrays auxiliares DFS
-    born.resize(n_vertex, 0); // tempos de início zerados
-    visited.resize(n_vertex, false); // todos os vértices são inicialmente não visitados
-    low.resize(n_vertex, 0); // mínimo tempo de nascimento alcançável
-    parents.resize(n_vertex, -1);
+    born.resize(n, 0); // tempos de início zerados (indicam que vértices não foram descobertos)
+    low.resize(n, 0); // mínimo tempo de nascimento alcançável
 
-    // DFS(n_vertex);
-    DFS_cluster(0);
-    
-    printf("_______\n");
-    for (const auto& component : components) {
-        for (int v : component) {
-            printf("%d ", v);
-        }
-        
-        printf("\n");
-    }
+    DFS(n, false);
+    output(false, n);
 
     return 0;
 
 }
 
 
-// gerar variáveis globais
+// gerar variáveis globais  [OK]
 // colocar macros de competição
