@@ -1,5 +1,6 @@
 #include <vector>
 #include <stack>
+#include <set>
 #include <stdio.h>
 #include <algorithm>
 
@@ -12,7 +13,7 @@ vector<int> low; // mínimo tempo de nascimento alcançavel
 stack<int> s; // pilha auxiliar ao problema de clusters
 
 // resultados
-vector<int> links; // links ed borda
+set<int> links; // links ed borda
 vector<vector<int>> components; // vetor de vetores que representam componentes biconexas
 
 int time_ = 0; // timestamp
@@ -26,7 +27,6 @@ bool lexico_compare(const std::vector<int>& a, const std::vector<int>& b) {
 
 void output(int n) {
     // etapa de link de borda
-    std::sort(links.begin(), links.end());
     printf("%d\n", links_count);
     for (int link : links) {
         printf("%d\n", link+1);
@@ -46,16 +46,27 @@ void output(int n) {
     }
 
     // etapa da floresta
+    int forest_edges_count = 0;
     int forest_vertexs = clusters_count+links_count;
-    printf("%d %d", forest_vertexs, forest_vertexs-1);
-    if (forest_vertexs-1 > 0) {printf("\n");};
 
+    struct tuple {int link; int id;};
+    vector<tuple> forest_edges;
     for (int link : links) {
-         for (int i=0; i < clusters_count; ++i)  {
+        for (int i=0; i < clusters_count; ++i)  {
             if (count(components[i].begin(), components[i].end(), link) > 0) {
-                printf("%d %d", link+1, n+i+1);
-                if (i < clusters_count-1) {printf("\n");};            };
+                forest_edges.push_back(tuple{link+1, n+i+1});
+                ++forest_edges_count;           
+            };
         }
+    }
+
+    printf("%d %d", forest_vertexs, forest_edges_count);
+    if (forest_edges_count > 0) {printf("\n");};
+
+
+    for(int i=0; i < forest_edges_count; ++i) {
+        printf("%d %d", forest_edges[i].link, forest_edges[i].id);
+        if (i < forest_edges_count-1) {printf("\n");}; 
     }
 }
 
@@ -88,10 +99,7 @@ void DFS_aux(int u, int parent) {
 
             if (born[u] <= low[v]) {
                 // u é de corte
-                if (parent != -1) {
-                    links.push_back(u);
-                    ++links_count;
-                }
+                if (parent != -1) {links.insert(u);}
 
                 // cluster
                 vector<int> component;
@@ -106,7 +114,6 @@ void DFS_aux(int u, int parent) {
                 component.push_back(u);
                 std::sort(component.begin(), component.end());
                 components.push_back(component);
-                ++clusters_count;
 
             }
 
@@ -118,10 +125,7 @@ void DFS_aux(int u, int parent) {
         }
     }
 
-    if (parent == -1 && children >= 2) {
-        links.push_back(u); // u é de corte
-        ++links_count;
-    }
+    if (parent == -1 && children >= 2) {links.insert(u);}
 }
 
 
@@ -133,6 +137,9 @@ void DFS(int n) {
             DFS_aux(u, -1);
         }
     }
+
+    links_count = links.size();
+    clusters_count = components.size();
 }
 
 
