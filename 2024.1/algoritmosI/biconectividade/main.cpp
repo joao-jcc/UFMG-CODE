@@ -13,7 +13,7 @@ vector<int> low; // mínimo tempo de nascimento alcançavel
 stack<int> s; // pilha auxiliar ao problema de clusters
 
 // resultados
-set<int> links; // links ed borda
+set<int> links; // links de borda
 vector<vector<int>> components; // vetor de vetores que representam componentes biconexas
 
 int time_ = 0; // timestamp
@@ -23,7 +23,6 @@ int clusters_count = 0;
 bool lexico_compare(const std::vector<int>& a, const std::vector<int>& b) {
     return std::lexicographical_compare(a.begin(), a.end(), b.begin(), b.end());
 }
-
 
 void output(int n) {
     // etapa de link de borda
@@ -112,7 +111,7 @@ void DFS_aux(int u, int parent) {
 
                 } while (y != v);
                 component.push_back(u);
-                std::sort(component.begin(), component.end());
+                sort(component.begin(), component.end());
                 components.push_back(component);
 
             }
