@@ -1,9 +1,8 @@
 #include <vector>
 #include <stack>
 #include <set>
-#include <algorithm>
 #include <stdio.h>
-
+#include <algorithm>
 
 using namespace std;
 
@@ -14,30 +13,34 @@ vector<int> low; // mínimo tempo de nascimento alcançavel
 stack<int> s; // pilha auxiliar ao problema de clusters
 
 // resultados
-vector<bool> links; // links de borda
-set<set<int>> clusters; // set de sets que representam componentes biconexas
+set<int> links; // links ed borda
+vector<vector<int>> components; // vetor de vetores que representam componentes biconexas
 
 int time_ = 0; // timestamp
 int links_count = 0;
 int clusters_count = 0;
 
+bool lexico_compare(const std::vector<int>& a, const std::vector<int>& b) {
+    return std::lexicographical_compare(a.begin(), a.end(), b.begin(), b.end());
+}
+
+
 void output(int n) {
     // etapa de link de borda
     printf("%d\n", links_count);
-    for (int i=0; i < n; ++i) {
-        if (links[i]) {printf("%d\n", i+1);}
+    for (int link : links) {
+        printf("%d\n", link+1);
     }
 
     // etapa de componentes biconexas
+    std::sort(components.begin(), components.end(), lexico_compare);
     printf("%d\n", clusters_count);
-    int i = 0;
-    for (set<int> cluster : clusters) {
-        int cluster_size = cluster.size();
+    for (int i=0; i < clusters_count; ++i) {
+        int cluster_size = components[i].size();
         printf("%d %d", n+i+1, cluster_size);
-        for (int v : cluster) {
-            printf(" %d", v + 1);
+        for (int j=0; j < cluster_size; ++j) {
+            printf(" %d", components[i][j] + 1);
         }
-        ++i;
     
     printf("\n");
     }
@@ -48,17 +51,12 @@ void output(int n) {
 
     struct tuple {int link; int id;};
     vector<tuple> forest_edges;
-
-    for (int i=0; i < n; ++i) {
-
-        if (!links[i]) {continue;}
-        int j = 0;
-        for (set<int> cluster : clusters)  {
-            if (count(cluster.begin(), cluster.end(), i) > 0) {
-                forest_edges.push_back(tuple{i+1, n+j+1});
-                ++forest_edges_count;         
+    for (int link : links) {
+        for (int i=0; i < clusters_count; ++i)  {
+            if (count(components[i].begin(), components[i].end(), link) > 0) {
+                forest_edges.push_back(tuple{link+1, n+i+1});
+                ++forest_edges_count;           
             };
-            j++;  
         }
     }
 
@@ -101,20 +99,22 @@ void DFS_aux(int u, int parent) {
 
             if (born[u] <= low[v]) {
                 // u é de corte
-                if (parent != -1) {links[u] = true; ++links_count;}
+                if (parent != -1) {links.insert(u);}
 
                 // cluster
-                set<int> cluster;
+                vector<int> component;
                 int y;
 
                 do {
                     y = s.top();
                     s.pop();
-                    cluster.insert(y);
+                    component.push_back(y);
 
                 } while (y != v);
-                cluster.insert(u);
-                clusters.insert(cluster); ++clusters_count;
+                component.push_back(u);
+                std::sort(component.begin(), component.end());
+                components.push_back(component);
+
             }
 
             ++children;
@@ -125,7 +125,7 @@ void DFS_aux(int u, int parent) {
         }
     }
 
-    if (parent == -1 && children >= 2) {links[u] = true; ++links_count;}
+    if (parent == -1 && children >= 2) {links.insert(u);}
 }
 
 
@@ -137,6 +137,9 @@ void DFS(int n) {
             DFS_aux(u, -1);
         }
     }
+
+    links_count = links.size();
+    clusters_count = components.size();
 }
 
 
@@ -153,8 +156,7 @@ int main(void) {
     // arrays auxiliares DFS
     born.resize(n, 0); // tempos de início zerados (indicam que vértices não foram descobertos)
     low.resize(n, 0); // mínimo tempo de nascimento alcançável
-    links.resize(n, false);
-    
+
     DFS(n); output(n);
 
     return 0;
