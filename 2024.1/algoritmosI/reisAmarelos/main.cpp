@@ -3,43 +3,36 @@
 #include <queue>
 
 using namespace std;
-// par de interiros que representam arestas com pesos (.first: vertice y, .second: weight)
-// ou vértice e sua distância da origem (.fisrt: distance, .second: vertice label)
-typedef pair<int, int> node;
+#define INF (unsigned)!((int)0)
 
 /*
+node: (peso da aresta, vértice de destino) ou (distancia pata origem, vértice)
 N: número de vértices no grafo
 M: número de conexões no grafo
 J: número de monstros
 T: número máximo de turnos a serem jogados
 K: número de recursos do turno
+graph: mapa do jogo, grafo ponderado
+graph_t: mapa do jogo sem pesos para BFS da etapa dos monstros
+monsters: indica a posição inicial dos monstros no turno 0
+monsters_turn_position: posição dos monstros ao longo dos turnos até o turno onde não há mais mudança
 */
+typedef pair<int, int> node;
 int N, M, J, T, K; 
-
-vector<vector<node> > graph;  // grafo/mapa do jogo
-vector<vector<int> > graph_t; // grafo transposto sem pesos para bfs
-
-
-vector<bool> monsters; // posição inicial dos monstros: 0, 1, ... N-1
-vector<vector<bool> > monsters_turn_position; // posição dos monstros ao longo dos turnos: 0, 1,..., N-1
-
-// estruturas da bfs
-queue<int> frontier;
-vector<int> parents;
-vector<bool> explored;
-vector<int> depths;
+vector<vector<node> > graph;  
+vector<vector<int> > graph_t; 
+vector<bool> monsters;
+vector<vector<bool> > monsters_turn_position;
+int max_monster_turn;
 
 
-// função que incializa as variáveis e estruturas
+// função que incializa as variáveis globais 
 void init() {
+
     scanf(" %d %d %d %d %d", &N, &M, &J, &T, &K);
-    
-    // ler posição inicial dos monstros; no máximo tem-se 100 monstros e rotas de tamanho N
     monsters_turn_position.resize(N, std::vector<bool>(N, false));
     monsters.resize(N, false);
-    explored.resize(N, false);
-    parents.resize(N, -1);
-    depths.resize(N, 0);
+    max_monster_turn = -1;
 
     for (int j=0; j < J; ++j) {
         int p;
@@ -51,20 +44,29 @@ void init() {
     graph.resize(N);
     graph_t.resize(N);
     for (int i=0; i < M; ++i) {
-        // aresta de x para y com peso w
-        int x, y, w; 
+
+        int x, y, w;         // aresta de x para y com peso w
         scanf(" %d %d %d", &x, &y, &w);
         --x; --y; // vértices diminúidos de 1
+
         graph[x].push_back(make_pair(y, w)); 
         graph_t[y].push_back(x);
+
     }
 }
 
-
-void build_monsters_route() {
+// calcula a posição dos monstros ao longo dos turnos
+void build_monsters_route(vector<int> parents, vector<int> depths) {
     // loop por todas as posições iniciais dos monstros
     for (int i=0; i < N; ++i) {
         if (!monsters[i]) {continue;}
+        // não há caminho do monstro para a caravana
+        if (depths[i] == INF){
+            for (int turn=0; turn < N; ++turn) {
+                monsters_turn_position[turn][i] = true; // monstro parado
+            }
+            continue;
+        }
             // há monstro na posição inicial i
         int vertice = i;
         int turns = depths[i] + 1;
@@ -72,15 +74,22 @@ void build_monsters_route() {
             monsters_turn_position[turn][vertice] = true;
             vertice = parents[vertice];
         }
-        
+
+        max_monster_turn = turns > max_monster_turn ? turns : max_monster_turn;
+        --max_monster_turn;
     }
 }
 
-
+// calcula os caminhos mínimos dos monstros à caravana
 void bfs() {
+    // estruturas da bfs
+    vector<int> parents(N, -1);
+    vector<bool> explored(N, false);
+    vector<int> depths(N, INF);
+    queue<int> frontier;
     // vértice de início/caravana
+    depths[0] = 0;
     frontier.push(0);
-
     while(!frontier.empty()) {
         int u = frontier.front();
         frontier.pop();
@@ -98,6 +107,8 @@ void bfs() {
             }
         }
     }
+
+    build_monsters_route(parents, depths);
 }
 
 
@@ -123,6 +134,7 @@ void print(bool graph_flag=false, bool monsters_turn_flag=false) {
             }
             printf("\n");
         }
+        printf("max monster turn: %d\n", max_monster_turn);
     }
 }
 
@@ -131,7 +143,6 @@ int main(void) {
     
     init();
     bfs();
-    build_monsters_route();
 
     print(false, true);
 
