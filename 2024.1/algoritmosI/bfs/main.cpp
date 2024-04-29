@@ -13,7 +13,7 @@ vector<int> depths;
 vector<bool> explored;
 queue<int> frontier;
 int start;
-int goal;
+int n, m; 
 
 
 // função de leitura do grafo não-direcionado
@@ -39,7 +39,6 @@ void print(int n) {
 
 void init(bool print_flag=false) {
     // lendo o número de vértices do grafo e inicializando o grafo
-    int n, m; 
     scanf(" %d %d", &n, &m);
     graph.resize(n);
     
@@ -54,13 +53,14 @@ void init(bool print_flag=false) {
 }
 
 
-bool bfs(int start, int goal) {
+void bfs(int start) {
     // vértice de início
     frontier.push(start);
 
     while(!frontier.empty()) {
         int v = frontier.front();
         frontier.pop();
+        explored[v] = true;
 
         // observa-se os vértices adjacentes a v
         for (int u : graph[v]) {
@@ -68,37 +68,31 @@ bool bfs(int start, int goal) {
             if (!explored[u]) {
                 // v é pai de u
                 parents[u] = v;
-                
-                // caso u seja o vértice objetivo
-                if (u == goal) {
-                    return true; // há solução
-                }
 
-                // caso não sej adicione u à fronteira
                 frontier.push(u);
+                explored[u] = true;
             }
         }
-        // v foi explorado
-        explored[v] = true;
     }
-
-    return false; // não há solução
 }
 
-void print_solution(int goal) {
-    int v = goal;
-    stack<int> solution;
-    solution.push(v);
-    while(parents[v] != -1) {
-        v = parents[v];
-        solution.push(v);
-    }
+void paths(int n) {
 
-    while(!solution.empty()) {
-        printf("%d", solution.top());
-        solution.pop();
+    stack<int> path;
+    for (int i=0; i < n; ++i) {
+        printf("%d: ", i);
+        int v = i;
+        path.push(v);
+        while(parents[v] != -1) {
+            v = parents[v];
+            path.push(v);
+        }
+        while(!path.empty()) {
+            printf("%d", path.top());
+            path.pop();
+        }
+        printf("\n");
     }
-    printf("\n");
 }
 
 
@@ -107,14 +101,9 @@ int main(void) {
     init();
 
     int start = 2;
-    int goal = 1;
-
     
-    if (bfs(start, goal)) {
-        printf("Solved!\n");
-        print_solution(goal);
-    }
-
+    bfs(start);
+    paths(n);
 
     return 0;
 }
