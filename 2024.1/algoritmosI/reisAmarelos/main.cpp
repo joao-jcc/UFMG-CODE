@@ -56,6 +56,11 @@ void init() {
 
     }
 
+    // adicionando ciclos
+    // for (int i=0; i < N; ++i) {
+    //     graph[i].push_back(make_pair(1, i));
+    // }
+
 }
 
 
@@ -137,7 +142,7 @@ bool djkistra(int source) {
 
         int u = pq.top().second;
         pq.pop();
-        printf("u: %d\n", u);
+        printf("==== turn: %d ====\n (u=%d)\n", turn, u);
         if (u == N-1) {
             while (u != -1) {
                 printf("%d ", u);
@@ -148,6 +153,7 @@ bool djkistra(int source) {
             } // solução encontrada
 
         // loop thorugh all adjacent vertices of u
+
         for (node edge : graph[u]) {
             int v = edge.second;
             int w = edge.first;
@@ -159,12 +165,13 @@ bool djkistra(int source) {
             if ((distances[v] > hyp_distance) && (resources >= hyp_distance)) {
 
                 // se há monstro em v e no turno dado vá para o próximo vértice
-                if (monsters_turn_position[turn][v]) {
+                if (monsters_turn_position[turn+1][v]) {
                     continue;
                 }
-
                 distances[v] = hyp_distance;
-
+                
+                
+                printf("new node: (%d, %d)\n", hyp_distance, v);
                 // neste ponto já se sabe a distância real de v
                 pq.push(make_pair(distances[v], v));
                 // u é pai de v
@@ -210,11 +217,8 @@ int main(void) {
     
     init();
     bfs();
-    
-    int solution = djkistra(0);
-    if (solution) {printf("ok!");}
-
-    // print(true, false);
+    print(true, true);
+    if (djkistra(0)) {printf("ok!");}
 
     return 0;
 }
