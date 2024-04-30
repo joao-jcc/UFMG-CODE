@@ -58,6 +58,7 @@ void init() {
 
 }
 
+
 // calcula a posição dos monstros ao longo dos turnos
 void build_monsters_route(vector<int> parents, vector<int> depths) {
     // loop por todas as posições iniciais dos monstros
@@ -82,6 +83,7 @@ void build_monsters_route(vector<int> parents, vector<int> depths) {
         --max_monster_turn;
     }
 }
+
 
 // calcula os caminhos mínimos dos monstros à caravana
 void bfs() {
@@ -117,24 +119,33 @@ void bfs() {
 }
 
 
-void djkistra(int source) {
+bool djkistra(int source) {
     priority_queue<node, vector<node>, greater<node> > pq;
     vector<int> distances(N, 1000);
     vector<int> parents(N, -1);
 
-    int resources = K; // qauntidade de recursos igual a K no turno 0
+    int resources = K; // quantidade de recursos igual a K no turno 0
+    int turn = 0;
 
     pq.push(make_pair(0, source));
     distances[source] = 0;
 
-    while(!pq.empty()) {
+    while(!pq.empty() && turn <= T) {
         //  vértice com distância mínima da fonte
         // rótulo do vértice em .second
         // distância do vértice à fonte em .first
 
         int u = pq.top().second;
         pq.pop();
-
+        printf("u: %d\n", u);
+        if (u == N-1) {
+            while (u != -1) {
+                printf("%d ", u);
+                u = parents[u];
+            }
+            printf("\n");
+            return true;
+            } // solução encontrada
 
         // loop thorugh all adjacent vertices of u
         for (node edge : graph[u]) {
@@ -143,19 +154,28 @@ void djkistra(int source) {
             
             // se a distância é menor e os recursos a suportam
             int hyp_distance = distances[u] + w;
+            
+            // consigo acessa v a partir de u
             if ((distances[v] > hyp_distance) && (resources >= hyp_distance)) {
+
+                // se há monstro em v e no turno dado vá para o próximo vértice
+                if (monsters_turn_position[turn][v]) {
+                    continue;
+                }
+
                 distances[v] = hyp_distance;
 
                 // neste ponto já se sabe a distância real de v
-
                 pq.push(make_pair(distances[v], v));
                 // u é pai de v
                 parents[v] = u;
             }
         }
 
-        resources += K;
+        resources += K; ++turn;
     }
+
+    return false; // não há solução
 }
 
 
@@ -189,10 +209,12 @@ void print(bool graph_flag=false, bool monsters_turn_flag=false) {
 int main(void) {
     
     init();
-    // bfs();
-    djkistra(0);
+    bfs();
+    
+    int solution = djkistra(0);
+    if (solution) {printf("ok!");}
 
-    print(true, false);
+    // print(true, false);
 
     return 0;
 }
