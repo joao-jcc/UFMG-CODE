@@ -137,31 +137,36 @@ bool djkistra(int source) {
         int u = best_node.second;
         int distance = best_node.first;
 
+        // checar se u é loop
+        bool loop_u = (min_distances[u] != distance);
+
         printf("==== turn: %d ====\n (u=%d) (distance=%d)\n", turn, u, distance);
-        // if (u == N-1) {
-        //     while (u != -1) {
-        //         printf("%d ", u);
-        //         u = parents[u];
-        //     }
-        //     printf("\n");
-        //     return true;
-        //     } // solução encontrada
+        if (u == N-1) {
+            while (u != -1) {
+                printf("%d ", u);
+                u = parents[u];
+            }
+            printf("\n");
+            return true;
+            } // solução encontrada
 
         // loop thorugh all adjacent vertices of u
-
         for (node edge : graph[u]) {
+            
             int v = edge.second;
             int w = edge.first;
-            
+            printf("lin158\n");
+            // u é um vértice de loop se a distance de u é diferente da distancia minima de u
+            int hyp_distance = loop_u ? distance + w : min_distances[u] + w;
+            printf("lin161\n");
             // se a distância é menor e os recursos a suportam
-            int hyp_distance = min_distances[u] + w;
-            // consigo acessa v a partir de u
             if ((min_distances[v] > hyp_distance) && (resources >= hyp_distance)) {
+                printf("lin164\n");
                 // se há monstro em v e no turno dado vá para o próximo vértice
-                // if (monsters_turn_position[turn+1][v]) {
-                //     printf("MONSTER!\n");
-                //     continue;
-                // }
+                if (monsters_turn_position[turn+1][v]) {
+                    printf("MONSTER!\n");
+                    continue;
+                }
                 min_distances[v] = hyp_distance;
                 
                 
@@ -171,6 +176,13 @@ bool djkistra(int source) {
                 // u é pai de v
                 parents[v] = u;
             }
+        }
+
+        // adicionar um loop em u
+        if (loop_u) {
+            pq.push(make_pair(distance + 1, u));        
+        } else {
+            pq.push(make_pair(min_distances[u] + 1, u));
         }
 
         resources += K; ++turn;
