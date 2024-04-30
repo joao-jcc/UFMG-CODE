@@ -55,12 +55,6 @@ void init() {
         graph_t[y].push_back(x);
 
     }
-
-    // adicionando ciclos
-    // for (int i=0; i < N; ++i) {
-    //     graph[i].push_back(make_pair(1, i));
-    // }
-
 }
 
 
@@ -126,31 +120,32 @@ void bfs() {
 
 bool djkistra(int source) {
     priority_queue<node, vector<node>, greater<node> > pq;
-    vector<int> distances(N, 1000);
     vector<int> parents(N, -1);
+    vector<int> min_distances(N, 1000);
 
     int resources = K; // quantidade de recursos igual a K no turno 0
     int turn = 0;
-
+    min_distances[0] = 0;
     pq.push(make_pair(0, source));
-    distances[source] = 0;
 
     while(!pq.empty() && turn <= T) {
         //  vértice com distância mínima da fonte
         // rótulo do vértice em .second
         // distância do vértice à fonte em .first
 
-        int u = pq.top().second;
-        pq.pop();
-        printf("==== turn: %d ====\n (u=%d)\n", turn, u);
-        if (u == N-1) {
-            while (u != -1) {
-                printf("%d ", u);
-                u = parents[u];
-            }
-            printf("\n");
-            return true;
-            } // solução encontrada
+        node best_node = pq.top(); pq.pop();
+        int u = best_node.second;
+        int distance = best_node.first;
+
+        printf("==== turn: %d ====\n (u=%d) (distance=%d)\n", turn, u, distance);
+        // if (u == N-1) {
+        //     while (u != -1) {
+        //         printf("%d ", u);
+        //         u = parents[u];
+        //     }
+        //     printf("\n");
+        //     return true;
+        //     } // solução encontrada
 
         // loop thorugh all adjacent vertices of u
 
@@ -159,27 +154,30 @@ bool djkistra(int source) {
             int w = edge.first;
             
             // se a distância é menor e os recursos a suportam
-            int hyp_distance = distances[u] + w;
-            
+            int hyp_distance = min_distances[u] + w;
             // consigo acessa v a partir de u
-            if ((distances[v] > hyp_distance) && (resources >= hyp_distance)) {
-
+            if ((min_distances[v] > hyp_distance) && (resources >= hyp_distance)) {
                 // se há monstro em v e no turno dado vá para o próximo vértice
-                if (monsters_turn_position[turn+1][v]) {
-                    continue;
-                }
-                distances[v] = hyp_distance;
+                // if (monsters_turn_position[turn+1][v]) {
+                //     printf("MONSTER!\n");
+                //     continue;
+                // }
+                min_distances[v] = hyp_distance;
                 
                 
                 printf("new node: (%d, %d)\n", hyp_distance, v);
                 // neste ponto já se sabe a distância real de v
-                pq.push(make_pair(distances[v], v));
+                pq.push(make_pair(min_distances[v], v));
                 // u é pai de v
                 parents[v] = u;
             }
         }
 
         resources += K; ++turn;
+    }
+
+    for (int i=0; i < N; ++i) {
+        printf("%d: %d\n", i, min_distances[i]);
     }
 
     return false; // não há solução
@@ -218,7 +216,7 @@ int main(void) {
     init();
     bfs();
     print(true, true);
-    if (djkistra(0)) {printf("ok!");}
+    if (djkistra(0)) {printf("Solution Found!\n");}
 
     return 0;
 }
