@@ -5,6 +5,7 @@
 
 using namespace std;
 #define INF INT_MAX
+bool PRINT = true;
 
 /*
 node: (peso da aresta, vértice de destino) ou (distancia pata origem, vértice)
@@ -19,6 +20,7 @@ monsters: indica a posição inicial dos monstros no turno 0
 monsters_turn_position: posição dos monstros ao longo dos turnos até o turno onde não há mais mudança
 resources: quantidade de recursos do jogador no turno corrente
 */
+
 typedef pair<int, int> node;
 struct tuple3 {
     int distance;
@@ -73,6 +75,10 @@ void init() {
         graph[x].push_back(make_pair(w, y)); 
         graph_t[y].push_back(x);
 
+    }
+
+    for (int i=0; i < N; ++i) {
+        graph[i].push_back(make_pair(1, i));
     }
 }
 
@@ -136,79 +142,87 @@ void bfs() {
 
 }
 
-
+/*
+[x] loops
+[x] monstros
+[x] turnos
+[ ] recursos
+*/
 bool djkistra(int source) {
     priority_queue<tuple3, vector<tuple3>, compareTuple3> pq;
     vector<int> parents(N, -1);
     vector<int> min_distances(N, INF);
+    vector<int> explored(N, false);
 
-    int resources = K; // quantidade de recursos igual a K no turno 0
-    int turn = 0;
     min_distances[0] = 0;
-    pq.push(tuple3{0, source, 0});
+    pq.push(tuple3{0, source, 0}); // distance, vertice, turn
 
-    while(!pq.empty() && turn <= T) {
-        //  vértice com distância mínima da fonte
-        // rótulo do vértice em .second
-        // distância do vértice à fonte em .first
+    while(!pq.empty()) {
 
         tuple3 tuple = pq.top(); pq.pop();
         int u = tuple.vertice;
         int distance = tuple.distance;
-        turn = tuple.turn;
+        int turn = tuple.turn;
 
-        // checar se u é loop
-        bool loop_u = (min_distances[u] != distance);
+        explored[u] = true;
 
-        printf("==== turn: %d ====\n (u=%d) (distance=%d)\n", turn, u, distance);
+        if (PRINT) printf("POP <- (v=%d d=%d t=%d)\n", u, distance, turn);
+
+        // solução encontrada
         if (u == N-1) {
-            while (u != -1) {
-                printf("%d ", u);
-                u = parents[u];
-            }
-            printf("\n");
+            printf("1\n%d %d\n", distance, turn);
             return true;
-            } // solução encontrada
+        } 
 
-        // loop thorugh all adjacent vertices of u
+    
+        if (turn >= T) {continue;} // excede o número de turnos permitido
+
+
+        // loop por todos os vértice adjacentes a u
         for (node edge : graph[u]) {
-            
-            int v = edge.second;
+    
             int w = edge.first;
+            int v = edge.second;
+            
+            // monstros: olhando turno atual e futuro
+            int indice = turn > max_monster_turn ? max_monster_turn : turn;
+            if (monsters_turn_position[indice][v] || monsters_turn_position[indice+1][v]) {
+                if (PRINT) printf("MONSTER!\n");
+                continue;
+            }
 
-            // u é um vértice de loop se a distance de u é diferente da distancia minima de u
-            int hyp_distance = loop_u ? distance + w : min_distances[u] + w;
-
-            // se a distância é menor e os recursos a suportam
-            if ((min_distances[v] > hyp_distance) && (resources >= hyp_distance)) {
-                // se há monstro em v e no turno dado vá para o próximo vértice
-                int indice = turn + 1 > max_monster_turn ? max_monster_turn : turn + 1;
-                if (monsters_turn_position[indice][v]) {
-                    printf("MONSTER!\n");
-                    continue;
-                }
+            int hyp_distance = distance + w; // distância candidata
+            if (!explored[v]) {
+                
                 min_distances[v] = hyp_distance;
-                
-                
-                printf("new node: (%d, %d)\n", hyp_distance, v);
-                // neste ponto já se sabe a distância real de v
                 pq.push(tuple3{min_distances[v], v, turn+1});
                 // u é pai de v
                 parents[v] = u;
+
+                if (PRINT) printf("PUSH <- (v=%d d=%d t=%d)\n", v, min_distances[v], turn+1);
+
+            } else if (min_distances[v] > hyp_distance) {
+                min_distances[v] = hyp_distance;
+                pq.push(tuple3{min_distances[v], v, turn+1});
+                // u é pai de v
+                parents[v] = u;
+
+                if (PRINT) printf("PUSH <- (v=%d d=%d t=%d)\n", v, min_distances[v], turn+1);
+            } else if (v == u) {
+                // tem-se loop
+                 pq.push(tuple3{distance + 1, v, turn+1});
+                if (PRINT) printf("PUSH LOOP <- (v=%d d=%d t=%d)\n", v, distance+1, turn+1);
+
+
             }
-        }
 
-        // adicionar um loop em u
-        if (loop_u) {
-            pq.push(tuple3{distance + 1, u, turn+1});        
-        } else {
-            pq.push(tuple3{min_distances[u] + 1, u, turn+1});
+        if (PRINT) printf("\n__________________________\n");
         }
-
-        resources += K;
     }
 
-    return false; // não há solução
+    // não há solução
+    printf("0\n");
+    return false;
 }
 
 
@@ -243,15 +257,8 @@ int main(void) {
     
     init();
     bfs();
-    print(true, true);
-    if (djkistra(0)) {printf("Solution Found!\n");}
+    if (PRINT) print(true, true);
+    djkistra(0);
 
     return 0;
 }
-
-
-/*
-Próxima etapa:
-    calcular os caminhos mínimos dos mosntros até a caravana.
-    Juntar isso em uma estrutura matricial ou de adjacência com turnos x posicao de mosntros
-*/
