@@ -82,6 +82,10 @@ void init() {
     }
 }
 
+bool lack_rsc(int distance, int turn) {
+    return distance > (turn+1) * K;
+}
+
 
 // calcula a posição dos monstros ao longo dos turnos
 void build_monsters_route(vector<int> parents, vector<int> depths) {
@@ -95,7 +99,7 @@ void build_monsters_route(vector<int> parents, vector<int> depths) {
             }
             continue;
         }
-            // há monstro na posição inicial i
+        // há monstro na posição inicial i
         int vertice = i;
         int turns = depths[i] + 1;
         for (int turn=0; turn < turns; ++turn) {
@@ -146,7 +150,7 @@ void bfs() {
 [x] loops
 [x] monstros
 [x] turnos
-[ ] recursos
+[x] recursos
 */
 bool djkistra(int source) {
     priority_queue<tuple3, vector<tuple3>, compareTuple3> pq;
@@ -165,7 +169,7 @@ bool djkistra(int source) {
         int turn = tuple.turn;
 
         explored[u] = true;
-
+        
         if (PRINT) printf("POP <- (v=%d d=%d t=%d)\n", u, distance, turn);
 
         // solução encontrada
@@ -175,8 +179,7 @@ bool djkistra(int source) {
         } 
 
     
-        if (turn >= T) {continue;} // excede o número de turnos permitido
-
+        if (turn >= T) {if(PRINT) printf("EXCEDEU TURNOS!\n");continue;} // excede o número de turnos permitido
 
         // loop por todos os vértice adjacentes a u
         for (node edge : graph[u]) {
@@ -187,13 +190,18 @@ bool djkistra(int source) {
             // monstros: olhando turno atual e futuro
             int indice = turn > max_monster_turn ? max_monster_turn : turn;
             if (monsters_turn_position[indice][v] || monsters_turn_position[indice+1][v]) {
-                if (PRINT) printf("MONSTER!\n");
+                if (PRINT) printf("MONSTER! at (v=%d, t=%d/%d)\n", v, turn, turn+1);
                 continue;
             }
 
             int hyp_distance = distance + w; // distância candidata
-            if (!explored[v]) {
-                
+            if (!explored[v]) { 
+                // recursos insuficientes
+                if (lack_rsc(hyp_distance, turn+1)) {
+                if (PRINT) {printf("RECURSOS INSUFICIENTES! para (v=%d, d=%d, t=%d)\n", v, hyp_distance, turn+1);};
+                    continue;
+                }
+
                 min_distances[v] = hyp_distance;
                 pq.push(tuple3{min_distances[v], v, turn+1});
                 // u é pai de v
@@ -202,6 +210,10 @@ bool djkistra(int source) {
                 if (PRINT) printf("PUSH <- (v=%d d=%d t=%d)\n", v, min_distances[v], turn+1);
 
             } else if (min_distances[v] > hyp_distance) {
+                if (lack_rsc(hyp_distance, turn+1)) {
+                if (PRINT) {printf("RECURSOS INSUFICIENTES! para (v=%d, d=%d, t=%d)\n", v, hyp_distance, turn+1);};
+                    continue;
+                }
                 min_distances[v] = hyp_distance;
                 pq.push(tuple3{min_distances[v], v, turn+1});
                 // u é pai de v
@@ -210,14 +222,17 @@ bool djkistra(int source) {
                 if (PRINT) printf("PUSH <- (v=%d d=%d t=%d)\n", v, min_distances[v], turn+1);
             } else if (v == u) {
                 // tem-se loop
-                 pq.push(tuple3{distance + 1, v, turn+1});
+                if (lack_rsc(distance+1, turn+1)) {
+                    if (PRINT) {printf("RECURSOS INSUFICIENTES! para (v=%d, d=%d, t=%d)\n", v, distance+1, turn+1);};
+                    continue;
+                }
+                pq.push(tuple3{distance + 1, v, turn+1});
                 if (PRINT) printf("PUSH LOOP <- (v=%d d=%d t=%d)\n", v, distance+1, turn+1);
 
 
             }
-
-        if (PRINT) printf("\n__________________________\n");
         }
+        if (PRINT) printf("\n__________________________\n");
     }
 
     // não há solução
