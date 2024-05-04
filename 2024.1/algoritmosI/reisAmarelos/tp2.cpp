@@ -22,19 +22,20 @@ resources: quantidade de recursos do jogador no turno corrente
 */
 
 typedef pair<int, int> node;
-struct tuple3 {
+struct tuple4 {
     int distance;
     int vertice;
     int turn;
+    int parent;
 
     // Define the custom comparator function
-    bool operator<(const tuple3& other) const {
+    bool operator<(const tuple4& other) const {
         return distance < other.distance; // Order by distance from minor to greater
     }
 };
 
-struct compareTuple3 {
-    bool operator()(tuple3 const& t1, tuple3 const& t2)
+struct comparetuple4 {
+    bool operator()(tuple4 const& t1, tuple4 const& t2)
     {
         return t1.distance > t2.distance;
     }
@@ -153,24 +154,25 @@ void bfs() {
 [x] recursos
 */
 bool djkistra(int source) {
-    priority_queue<tuple3, vector<tuple3>, compareTuple3> pq;
+    priority_queue<tuple4, vector<tuple4>, comparetuple4> pq;
     vector<int> parents(N, -1);
     vector<int> min_distances(N, INF);
     vector<int> explored(N, false);
 
     min_distances[0] = 0;
-    pq.push(tuple3{0, source, 0}); // distance, vertice, turn
+    pq.push(tuple4{0, source, 0, -1}); // distance, vertice, turn
 
     while(!pq.empty()) {
 
-        tuple3 tuple = pq.top(); pq.pop();
+        tuple4 tuple = pq.top(); pq.pop();
         int u = tuple.vertice;
         int distance = tuple.distance;
         int turn = tuple.turn;
+        int p = tuple.parent;
 
         explored[u] = true;
         
-        if (PRINT) printf("POP <- (v=%d d=%d t=%d)\n", u, distance, turn);
+        if (PRINT) printf("POP <- (u=%d d=%d t=%d p=%d)\n", u, distance, turn, p);
 
         // solução encontrada
         if (u == N-1) {
@@ -186,16 +188,19 @@ bool djkistra(int source) {
     
             int w = edge.first;
             int v = edge.second;
-            
+            printf("adj de %d: %d\n", u, v);
             // monstros: olhando turno atual e futuro
             int indice = turn > max_monster_turn ? max_monster_turn : turn;
             if (monsters_turn_position[indice][v] || monsters_turn_position[indice+1][v]) {
-                if (PRINT) printf("MONSTER! at (v=%d, t=%d/%d)\n", v, turn, turn+1);
+                printf("here1\n");
+                if (PRINT) printf("MONSTER! at (v=%d, t=%d/%d)\n", v, indice, indice+1);
                 continue;
             }
 
+                printf("here2\n");
             int hyp_distance = distance + w; // distância candidata
             if (!explored[v]) { 
+                                printf("here3\n");
                 // recursos insuficientes
                 if (lack_rsc(hyp_distance, turn+1)) {
                 if (PRINT) {printf("RECURSOS INSUFICIENTES! para (v=%d, d=%d, t=%d)\n", v, hyp_distance, turn+1);};
@@ -203,7 +208,7 @@ bool djkistra(int source) {
                 }
 
                 min_distances[v] = hyp_distance;
-                pq.push(tuple3{min_distances[v], v, turn+1});
+                pq.push(tuple4{min_distances[v], v, turn+1, u});
                 // u é pai de v
                 parents[v] = u;
 
@@ -215,7 +220,7 @@ bool djkistra(int source) {
                     continue;
                 }
                 min_distances[v] = hyp_distance;
-                pq.push(tuple3{min_distances[v], v, turn+1});
+                pq.push(tuple4{min_distances[v], v, turn+1, u});
                 // u é pai de v
                 parents[v] = u;
 
@@ -226,7 +231,7 @@ bool djkistra(int source) {
                     if (PRINT) {printf("RECURSOS INSUFICIENTES! para (v=%d, d=%d, t=%d)\n", v, distance+1, turn+1);};
                     continue;
                 }
-                pq.push(tuple3{distance + 1, v, turn+1});
+                pq.push(tuple4{distance + 1, v, turn+1, u});
                 if (PRINT) printf("PUSH LOOP <- (v=%d d=%d t=%d)\n", v, distance+1, turn+1);
 
 
