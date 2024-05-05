@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <vector>
 #include <queue>
+#include <stack>
 #include <limits.h>
 
 using namespace std;
 #define INF INT_MAX
-bool PRINT = true;
 
 /*
 node: (peso da aresta, vértice de destino) ou (distancia pata origem, vértice)
@@ -22,20 +22,19 @@ resources: quantidade de recursos do jogador no turno corrente
 */
 
 typedef pair<int, int> node;
-struct tuple4 {
+struct tuple3 {
     int distance;
     int vertice;
     int turn;
-    int parent;
 
     // Define the custom comparator function
-    bool operator<(const tuple4& other) const {
+    bool operator<(const tuple3& other) const {
         return distance < other.distance; // Order by distance from minor to greater
     }
 };
 
-struct comparetuple4 {
-    bool operator()(tuple4 const& t1, tuple4 const& t2)
+struct comparetuple3 {
+    bool operator()(tuple3 const& t1, tuple3 const& t2)
     {
         return t1.distance > t2.distance;
     }
@@ -49,6 +48,9 @@ vector<bool> monsters;
 vector<vector<bool> > monsters_turn_position;
 int max_monster_turn;
 
+// OUTPUT
+int COST, TURN;
+vector<int> player_path;
 
 // função que incializa as variáveis globais 
 void init() {
@@ -56,7 +58,7 @@ void init() {
     scanf(" %d %d %d %d %d", &N, &M, &J, &T, &K);
     monsters_turn_position.resize(N, std::vector<bool>(N, false));
     monsters.resize(N, false);
-    max_monster_turn = -1;
+    max_monster_turn = 0;
 
     for (int j=0; j < J; ++j) {
         int p;
@@ -77,7 +79,7 @@ void init() {
         graph_t[y].push_back(x);
 
     }
-
+    // loops
     for (int i=0; i < N; ++i) {
         graph[i].push_back(make_pair(1, i));
     }
@@ -91,6 +93,7 @@ bool lack_rsc(int distance, int turn) {
 // calcula a posição dos monstros ao longo dos turnos
 void build_monsters_route(vector<int> parents, vector<int> depths) {
     // loop por todas as posições iniciais dos monstros
+
     for (int i=0; i < N; ++i) {
         if (!monsters[i]) {continue;}
         // não há caminho do monstro para a caravana
@@ -100,7 +103,7 @@ void build_monsters_route(vector<int> parents, vector<int> depths) {
             }
             continue;
         }
-        // há monstro na posição inicial i
+        // há monstro na posição inicial i e há caminho para caravana
         int vertice = i;
         int turns = depths[i] + 1;
         for (int turn=0; turn < turns; ++turn) {
@@ -126,10 +129,8 @@ void bfs() {
     depths[0] = 0;
     frontier.push(0);
     while(!frontier.empty()) {
-        int u = frontier.front();
-        frontier.pop();
+        int u = frontier.front(); frontier.pop();
         explored[u] = true;
-
         // observa-se os vértices adjacentes a u
         for (int v: graph_t[u]) {
             // caso v não tenha sido explorado
@@ -142,10 +143,10 @@ void bfs() {
             }
         }
     }
-
     build_monsters_route(parents, depths);
 
 }
+
 
 /*
 [x] loops
@@ -154,94 +155,80 @@ void bfs() {
 [x] recursos
 */
 bool djkistra(int source) {
-    priority_queue<tuple4, vector<tuple4>, comparetuple4> pq;
-    vector<int> parents(N, -1);
-    vector<int> min_distances(N, INF);
-    vector<int> explored(N, false);
+    priority_queue<tuple3, vector<tuple3>, comparetuple3> pq;
+    
+    vector<vector<int> > min_distances(N, vector<int>(T, INF));
+    vector<vector<int> > parents(N, vector<int>(T, -2));
+    vector<vector<bool> > explored(N, vector<bool>(T, false));
+    int u, distance, turn;
 
-    min_distances[0] = 0;
-    pq.push(tuple4{0, source, 0, -1}); // distance, vertice, turn
+    min_distances[0][0] = 0;
+    parents[0][0] = -1;
+    explored[0][0] = true;
+    pq.push(tuple3{0, source, 0}); // distance, vertice, turn
 
     while(!pq.empty()) {
 
-        tuple4 tuple = pq.top(); pq.pop();
-        int u = tuple.vertice;
-        int distance = tuple.distance;
-        int turn = tuple.turn;
-        int p = tuple.parent;
+        tuple3 tuple = pq.top(); pq.pop();
 
-        explored[u] = true;
-        
-        if (PRINT) printf("POP <- (u=%d d=%d t=%d p=%d)\n", u, distance, turn, p);
+        // excedeu número de turnos máximo
+        if (tuple.turn > T) {continue;}
 
+        u = tuple.vertice;
+        distance = tuple.distance;
+        turn = tuple.turn;
+
+        explored[u][turn] = true;
         // solução encontrada
         if (u == N-1) {
-            printf("1\n%d %d\n", distance, turn);
+            COST = distance; TURN = turn;
+            stack<int> solution;
+            solution.push(u);
+
+            for (int i=0; i < turn; ++i) {
+                u = parents[u][turn-i];
+                solution.push(u);
+            }
+            
+            while(!solution.empty()) {
+                printf("%d ", solution.top());
+                solution.pop();
+            }
             return true;
         } 
 
-    
-        if (turn >= T) {if(PRINT) printf("EXCEDEU TURNOS!\n");continue;} // excede o número de turnos permitido
 
         // loop por todos os vértice adjacentes a u
         for (node edge : graph[u]) {
     
             int w = edge.first;
             int v = edge.second;
-            printf("adj de %d: %d\n", u, v);
+            
             // monstros: olhando turno atual e futuro
             int indice = turn > max_monster_turn ? max_monster_turn : turn;
-            if (monsters_turn_position[indice][v] || monsters_turn_position[indice+1][v]) {
-                printf("here1\n");
-                if (PRINT) printf("MONSTER! at (v=%d, t=%d/%d)\n", v, indice, indice+1);
-                continue;
-            }
-
-                printf("here2\n");
+            if (monsters_turn_position[indice][v] || monsters_turn_position[indice+1][v]) {continue;}
+            
             int hyp_distance = distance + w; // distância candidata
-            if (!explored[v]) { 
-                                printf("here3\n");
+            if (!explored[v][turn+1]) { 
                 // recursos insuficientes
-                if (lack_rsc(hyp_distance, turn+1)) {
-                if (PRINT) {printf("RECURSOS INSUFICIENTES! para (v=%d, d=%d, t=%d)\n", v, hyp_distance, turn+1);};
-                    continue;
-                }
+                if (lack_rsc(hyp_distance, turn+1)) {continue;}
 
-                min_distances[v] = hyp_distance;
-                pq.push(tuple4{min_distances[v], v, turn+1, u});
+                min_distances[v][turn+1] = hyp_distance;
+                pq.push(tuple3{min_distances[v][turn+1], v, turn+1});
                 // u é pai de v
-                parents[v] = u;
+                parents[v][turn+1] = u;
 
-                if (PRINT) printf("PUSH <- (v=%d d=%d t=%d)\n", v, min_distances[v], turn+1);
-
-            } else if (min_distances[v] > hyp_distance) {
-                if (lack_rsc(hyp_distance, turn+1)) {
-                if (PRINT) {printf("RECURSOS INSUFICIENTES! para (v=%d, d=%d, t=%d)\n", v, hyp_distance, turn+1);};
-                    continue;
-                }
-                min_distances[v] = hyp_distance;
-                pq.push(tuple4{min_distances[v], v, turn+1, u});
+            } else if (min_distances[v][turn+1] > hyp_distance) {
+                if (lack_rsc(hyp_distance, turn+1)) {continue;}
+                min_distances[v][turn+1] = hyp_distance;
+                pq.push(tuple3{min_distances[v][turn+1], v, turn+1});
                 // u é pai de v
-                parents[v] = u;
-
-                if (PRINT) printf("PUSH <- (v=%d d=%d t=%d)\n", v, min_distances[v], turn+1);
-            } else if (v == u) {
-                // tem-se loop
-                if (lack_rsc(distance+1, turn+1)) {
-                    if (PRINT) {printf("RECURSOS INSUFICIENTES! para (v=%d, d=%d, t=%d)\n", v, distance+1, turn+1);};
-                    continue;
-                }
-                pq.push(tuple4{distance + 1, v, turn+1, u});
-                if (PRINT) printf("PUSH LOOP <- (v=%d d=%d t=%d)\n", v, distance+1, turn+1);
-
+                parents[v][turn+1] = u;
 
             }
         }
-        if (PRINT) printf("\n__________________________\n");
     }
-
-    // não há solução
-    printf("0\n");
+    COST = distance; TURN = turn;
     return false;
 }
 
@@ -255,6 +242,15 @@ void print(bool graph_flag=false, bool monsters_turn_flag=false) {
             printf("%d: ", u);
             for (node edge : graph[u]) {
                 printf(" (%d %d)", edge.first, edge.second);
+            }
+            printf("\n");
+        }
+
+        printf("=== GRAFO T ===\n");
+        for (int u=0; u < N; ++u) {
+            printf("%d: ", u);
+            for (int v : graph_t[u]) {
+                printf(" %d", v);
             }
             printf("\n");
         }
@@ -277,8 +273,13 @@ int main(void) {
     
     init();
     bfs();
-    if (PRINT) print(true, true);
-    djkistra(0);
+    print(true, true);
+
+    if(djkistra(0)) {
+        printf("1\n");
+    } else {printf("0\n");};
+    printf("%d %d", COST, TURN);
+
 
     return 0;
 }
