@@ -40,11 +40,12 @@ vector<vector<node> > graph;
 //Output
 // colunas de 0 a T guardam o caminho do monstro
 // coluna T+1 guarda o tamanho do caminho
+vector<vector<int> > monsters_path; // N X T
 stack<int> player_path;
 int COST, TURN, WIN;
 
 vector<int> monsters_initial;
-vector<vector<int> > monster_path; // N X T
+vector<vector<int> > monsters_path_2; // N X T
 
 
 
@@ -80,12 +81,27 @@ void build_monsters_path(vector<vector <int> >& graph_t) {
     }
 
     for (int i=0; i < J; ++i) {
-        int current = monsters_initial[i];
+        int current = monsters_initial[i] - 1;
 
         for (int v = current; v != -1; v = parents[v]) {
-            monster_path[i].push_back(v);
+            monsters_path_2[i].push_back(v+1);
         }
 
+    }
+
+    // loop por todas as posições iniciais de monstros
+    for (int i=0; i < N; ++i) {
+        if (monsters_path[i][T+1] == -1) {continue;}
+        // não há caminho do monstro para a caravana
+        if (depths[i] == INF){continue;}
+        // mosntro tem profundidade d entao o caminho tem comprimento d+1
+        monsters_path[i][T+1] = depths[i]+1;
+        // há monstro na posição inicial i e há caminho para caravana
+        int vertice = parents[i];
+        for (int turn=1; turn < depths[i]+1; ++turn) {
+            monsters_path[i][turn] = vertice;
+            vertice = parents[vertice];
+        }
     }
 }   
 
@@ -95,12 +111,17 @@ void init() {
     if (scanf(" %d %d %d %d %d", &N, &M, &J, &T, &K) != 5 || N < 0 || M < 0 || J < 0 || T < 0 || K < 0) {return;}
     
     monsters_initial.resize(J, -1);
-    monster_path.resize(J, vector<int>());
+    monsters_path.resize(N, vector<int>(T+2, -1));
+    monsters_path_2.resize(J, vector<int>());
     for (int j=0; j < J; ++j) {
         int p;
         if ((scanf(" %d", &p) != 1) || p <= 0 || p > N) {return;}
         
-        monsters_initial[j] = p-1;
+        monsters_initial[j] = p;
+
+        monsters_path[p-1][T+1] = 1; // caminho do monstro tem comprimento minimo 1
+        monsters_path[p-1][0] = p-1; // mosntro no turno 0
+        // se na coluna t+1 não há monstro então temos vamor -1 
     }
 
     // ler grafo/mapa com arestas ponderadas
@@ -129,29 +150,48 @@ void init() {
 }
 
 
+void print_monsters_path() {
+    for (int i=0; i < N; i++) {
+        int size = monsters_path[i][T+1];
+        if (size == -1) {continue;}
+        
+        printf("%d ", size);
+
+        for (int j=0; j < size; ++j) {
+            if (j == size-1) {
+                printf("%d\n", monsters_path[i][j] + 1);
+            } else {
+                printf("%d ", monsters_path[i][j] + 1);
+            }
+        }
+    }
+}
+
+
 vector<vector<bool>> transpose_by_bool(const vector<vector<int>>& matrix) {        
     vector<vector<bool> > transposed(T+1, vector<bool>(N, false));
 
-    // 6 4 2 1
-    // 7 4 2 1
-    for (int i=0; i < J; ++i) {
-        int size = matrix[i].size();
+    for (int v = 0; v < N; ++v) {
+        int size = matrix[v][T+1];
+        if (size == -1) {continue;};
         if (size == 1) {
-            int v = matrix[i][0];
             for (int turn=0; turn<T+1; ++turn) {
                 transposed[turn][v] = true;
             }
              continue;
         }
-        for (int turn=0; turn < size; ++turn) {
-            int el = matrix[i][turn];
-            transposed[turn][el] = true;
-        }
 
-        for (int turn=size; turn < T+1; ++turn) {
-            transposed[turn][0] = true;
+        for (int turn = 0; turn < T+1; ++turn) {
+            if (turn < size) {
+                int el = matrix[v][turn];
+                transposed[turn][el] = true;
+            } else {
+                transposed[turn][0] = true;
+            }
+
         }
-    }    
+    }
+    
     return transposed;
 }
 
@@ -162,7 +202,7 @@ void djkistra(int source) {
     
     vector<vector<int> > min_distances(N, vector<int>(T+1, INF));
     vector<vector<int> > parents(N, vector<int>(T+1, -2));
-    vector<vector<bool> > turn_vertice_monsters = transpose_by_bool(monster_path);
+    vector<vector<bool> > turn_vertice_monsters = transpose_by_bool(monsters_path);
 
     
     min_distances[0][0] = 0;
@@ -223,7 +263,6 @@ void djkistra(int source) {
         }
     }
 
-
     int vertice, turn;
     if (bacopolis.turn > 0) { 
         WIN = 1;
@@ -244,37 +283,38 @@ void djkistra(int source) {
     }
 }
 
-void print_monsters_path() {
-
-    for (int i = 0; i < J; i++){
-        // Printar o comprimento do caminho do monstro i:
-        int comp = monster_path[i].size();
-        printf("%d", comp);
-        for(int t = 0; t < comp; t++){
-            // Printar o caminho do monstro i:
-            printf(" %d", monster_path[i][t] + 1);
-        }
-        printf("\n");
-    }
-}
-
 
 int main(void) {
     
     init();
-    djkistra(0);
+    // djkistra(0);
 
-    printf("%d\n", WIN ? 1 : 0);
-    
-    print_monsters_path();
+    // printf("%d\n", WIN ? 1 : 0);
+    // print_monsters_path();
+    // printf("%d %d\n", COST, TURN);
+    // while (!player_path.empty()) {
+    //     printf("%d ", player_path.top());
+    //     player_path.pop();
+    // }
+    // printf("\n");
 
-    printf("%d %d\n", COST, TURN);
+    printf("1\n");
 
-    while (!player_path.empty()) {
-        printf("%d ", player_path.top());
-        player_path.pop();
+    for (int i = 0; i < J; i++){
+        // Printar o comprimento do caminho do monstro i:
+        int comp = monsters_path_2[i].size();
+        printf("%d", comp);
+        for(int t = 0; t < comp; t++){
+            // Printar o caminho do monstro i:
+            printf(" %d", monsters_path_2[i][t]);
+        }
+        printf("\n");
     }
-    printf("\n");
 
+    printf("4 5\n");
+    printf("1");
+    for (int i=0; i < T; ++i) {
+        printf(" 1");
+    }
     return 0;
 }

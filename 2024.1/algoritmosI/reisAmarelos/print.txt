@@ -1,0 +1,9 @@
+    vector<vector<bool> > turn_vertice_monsters = transpose_by_bool(monster_path);
+
+    for (int t=0; t < T+1; ++t) {
+        printf("%d: ", t);
+        for (int v=0; v < N; ++v) {
+            printf("%d ", turn_vertice_monsters[t][v] ? 1 : 0);
+        }
+        printf("\n");
+        }

@@ -1,174 +1,144 @@
-#include <algorithm>
-#include <queue>
-#include <set>
-#include <stack>
 #include <stdio.h>
 #include <vector>
-
-#define INF 0x3f3f3f3f
+#include <queue>
+#include <stack>
+#include <algorithm>
+#include <limits.h>
 
 using namespace std;
+#define INF INT_MAX
 
-typedef pair<int, int> node;  //(Pesos, Vertices)
 
-struct tuple3{
-    int custo;
-    int destino;
-    int turno_visitado;
+typedef pair<int, int> node;
 
-    bool operator<(const tuple3& outro) const{
-        return custo < outro.custo; // Order by distance from minor to greater
-    };
-};
+int N, M, J, T, K;
+vector<vector<node> > graph;  
 
-struct comparetuple3{
-    bool operator()(tuple3 const& t1, tuple3 const& t2){
-        if(t1.custo != t2.custo) {
-            return t1.custo > t2.custo;
-        } 
-        else if(t1.turno_visitado != t2.turno_visitado){
-            return t1.turno_visitado < t2.turno_visitado;
-        } 
-        else{
-            return t1.destino > t2.destino;
+//Output
+// colunas de 0 a T guardam o caminho do monstro
+// coluna T+1 guarda o tamanho do caminho
+vector<vector<int> > monsters_path; // N X T
+stack<int> player_path;
+int COST, TURN, WIN;
+
+vector<int> monsters_initial;
+vector<vector<int> > monsters_path_2; // N X T
+
+
+
+// calcula a posição dos monstros ao longo dos turnos
+void build_monsters_path(vector<vector <int> >& graph_t) {
+
+    // bfs no grafo transposto
+    vector<int> parents(N, -1);
+    vector<bool> explored(N, false);
+    vector<int> depths(N, INF);
+    queue<int> frontier;
+    // vértice de início/caravana
+    depths[0] = 0; 
+    explored[0] = true;
+    frontier.push(0);
+
+    while(!frontier.empty()) {
+        int u = frontier.front(); frontier.pop();
+        // observa-se os vértices adjacentes a u
+        for (int v: graph_t[u]) {
+            // caso v não tenha sido explorado
+            if (!explored[v]) {
+                // u é pai de v
+                parents[v] = u;
+                depths[v] = depths[u] + 1;
+                explored[v] = true;
+                frontier.push(v);
+            }
+            else if (depths[v] == depths[u] + 1 && parents[v] > u) {
+                parents[v] = u;
+            }
         }
-    };
-};
+    }
 
-class Graph{
-    private:
-        int _num_vertices;
-        vector<vector<node>> _grafo;
-        vector<int> _posicao_monstro;   // [0]->posição do 1° monstro dado na entrada , [1]->posição do 2° monstro dado na entrada, ...
-        /*
-        _posicao_monstro[0] = 6
-        _posicao_monstro[1] = 7
-        ordem dada pela entrada
-        */
-        vector<vector<int>> monsters_path;
+    for (int i=0; i < J; ++i) {
+        int current = monsters_initial[i] - 1;
 
-        // Para fazer BFS:
-        int _num_turnos;
-        int _num_monstros;
-        vector<vector<int>> _inverso; // grafo transposto
-        vector<int> _distancia;        
-        vector<int> _parente;
+        for (int v = current; v != -1; v = parents[v]) {
+            monsters_path_2[i].push_back(v+1);
+        }
+
+    }
+
+    // loop por todas as posições iniciais de monstros
+    for (int i=0; i < N; ++i) {
+        if (monsters_path[i][T+1] == -1) {continue;}
+        // não há caminho do monstro para a caravana
+        if (depths[i] == INF){continue;}
+        // mosntro tem profundidade d entao o caminho tem comprimento d+1
+        monsters_path[i][T+1] = depths[i]+1;
+        // há monstro na posição inicial i e há caminho para caravana
+        int vertice = parents[i];
+        for (int turn=1; turn < depths[i]+1; ++turn) {
+            monsters_path[i][turn] = vertice;
+            vertice = parents[vertice];
+        }
+    }
+}   
+
+
+// função que incializa as variáveis globais 
+void init() {
+    if (scanf(" %d %d %d %d %d", &N, &M, &J, &T, &K) != 5 || N < 0 || M < 0 || J < 0 || T < 0 || K < 0) {return;}
     
-    public:
-        Graph(int vertices, int turnos, int recursos, int inimigos){
-            _num_vertices = vertices;
-            _grafo.resize(vertices);
-            _posicao_monstro.resize(inimigos, -1); // dimensão J
-            monsters_path.resize(inimigos);
+    monsters_initial.resize(J, -1);
+    monsters_path.resize(N, vector<int>(T+2, -1));
+    monsters_path_2.resize(J, vector<int>());
+    for (int j=0; j < J; ++j) {
+        int p;
+        if ((scanf(" %d", &p) != 1) || p <= 0 || p > N) {return;}
+        
+        monsters_initial[j] = p;
 
-            // Para BFS
-            _num_turnos = turnos;
-            _num_monstros = inimigos;
-            _inverso.resize(vertices);
-            _distancia.resize(vertices, -1);
-            _parente.resize(vertices, -1);
-        };
-
-        int lendo_entrada(int arestas, int num_monstros){
-            for(int i=0; i < num_monstros; ++i){
-                int temp;
-                if((scanf(" %d", &temp) != 1) || temp <= 0 || temp > _num_vertices){
-                    return 1; // Falha na leitura
-                }
-                _posicao_monstro[i] = temp; // no seu caso é p
-            }
-
-            for (int i=0; i < arestas; ++i){ // Adicionar arestas:
-                int u, v, peso; 
-
-                if(scanf(" %d %d %d", &u, &v, &peso) != 3 || u < 0 || v < 0){
-                    return 1; // Falha na leitura
-                }
-
-                _grafo[u-1].push_back({v-1, peso}); // grafo direcionado
-                // Pegar o grafo transposto Gt sem pesos para fazer BFS simples da parte dos monstros
-                _inverso[v-1].push_back(u-1);
-                // Resolver problema que monstros tem uma predileção por caminhos lexicograficamente pequenos:
-                sort(_inverso[v-1].begin(), _inverso[v-1].end());
-            }
-
-            // loops
-            for(int i=0; i < _num_vertices; ++i){
-                _grafo[i].push_back(make_pair(1, i));
-            }
-            return 0;
-        };
-
-        void BFS(){
-            int origem = 0; // pq vértice 1 está na posição 0
-            // No construtor foi inicializado todas as distâncias e pais como -1
-
-            queue<int> fila; //armazenar os vértices a serem visitados na BFS.
-            fila.push(origem);
-            _distancia[origem] = 0; //distância do vértice de origem para ele mesmo como 0
-
-            vector<bool> visitado(_num_vertices, false);
-
-            visitado[origem] = true;
-
-            while(!fila.empty()){ // enquanto houver vértices a serem visitados
-                //Retiramos o primeiro vértice da fila q e o armazenamos em u.
-                int u = fila.front(); 
-                fila.pop();
-
-                for(int v : _inverso[u]){ // Iteramos sobre todos os vizinhos ao vértice u
-                    if (!visitado[v]){ //verificamos se sua distância ainda não foi definida
-                        visitado[v] = true; 
-                        _distancia[v] = _distancia[u] + 1; // Se v ainda não foi visitado, atualizamos sua distância como a distância do vértice u mais 1
-                        _parente[v] = u; // definimos o pai do vértice v como o vértice u
-                        fila.push(v); // Adicionamos o vértice v à fila q, pois precisamos visitar seus vizinhos na próxima iteração do loop.
-                    }
-                    else if(_distancia[v] == _distancia[u] + 1 && _parente[v] > u){
-                        _parente[v] = u;
-                    }
-                }
-            }
-
-            for (int i = 0; i < _num_monstros; i++) {
-                int atual = _posicao_monstro[i] - 1; // Vértice 6 tem indice 5
-
-                for (int v = atual; v != -1; v = _parente[v]){
-                    monsters_path[i].push_back(v + 1);
-                }
-            }
-
-            for (int i = 0; i < _num_monstros; i++){
-                // Printar o comprimento do caminho do monstro i:
-                int comp = monsters_path[i].size();
-                printf("%d", comp);
-                for(int t = 0; t < comp; t++){
-                    // Printar o caminho do monstro i:
-                    printf(" %d", monsters_path[i][t]);
-                }
-                printf("\n");
-            }
-        };
-};
-
-int main(){
-    int vertices, arestas; // n° espaços no mapa, n° coneões no mapa
-    int num_monstros, max_turno, RecursosPorTurno;
-
-    if(scanf(" %d %d %d %d %d", &vertices, &arestas, &num_monstros, &max_turno, &RecursosPorTurno) != 5 || vertices < 0 || arestas < 0){
-        return 1; // Falha na leitura, encerrando o programa
+        monsters_path[p-1][T+1] = 1; // caminho do monstro tem comprimento minimo 1
+        monsters_path[p-1][0] = p-1; // mosntro no turno 0
+        // se na coluna t+1 não há monstro então temos vamor -1 
     }
 
-    Graph g(vertices, max_turno, RecursosPorTurno, num_monstros);
-       
-    if(g.lendo_entrada(arestas, num_monstros) == 1){
-        return 1;
+    // ler grafo/mapa com arestas ponderadas
+    vector<vector <int> > graph_t(N, vector<int>());
+    graph.resize(N);
+    for (int i=0; i < M; ++i) {
+
+        int x, y, w;         // aresta de x para y com peso w
+
+        if (scanf(" %d %d %d", &x, &y, &w) != 3 || x < 0 || y < 0 || w < 0) {return;}
+        --x; --y; // vértices diminúidos de 1
+
+        graph[x].push_back(make_pair(w, y)); 
+        graph_t[y].push_back(x);
+        // Resolver problema que monstros tem uma predileção por caminhos lexicograficamente pequenos:
+        sort(graph_t[y].begin(), graph_t[y].end());
+
     }
 
-    g.BFS();
-    printf("1\n");
-    printf("1 ");
-    for(int i=0; i < max_turno; i++){
-        printf(" 1");
+    // loops
+    for (int i=0; i < N; ++i) {
+        graph[i].push_back(make_pair(1, i));
+    }
+
+    build_monsters_path(graph_t);
+}
+
+int main(void) {
+    
+    init();
+    printf("LUCCA\n");
+    for (int i = 0; i < J; i++){
+        // Printar o comprimento do caminho do monstro i:
+        int comp = monsters_path_2[i].size();
+        printf("%d", comp);
+        for(int t = 0; t < comp; t++){
+            // Printar o caminho do monstro i:
+            printf(" %d", monsters_path_2[i][t]);
+        }
+        printf("\n");
     }
 
     return 0;
