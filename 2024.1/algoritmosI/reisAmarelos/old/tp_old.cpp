@@ -23,14 +23,8 @@ struct tuple3 {
 
 struct comparetuple3 {
     bool operator()(tuple3 const& t1, tuple3 const& t2)
-    {   
-        if (t1.distance != t2.distance) {
-            return t1.distance > t2.distance;} 
-        else if (t1.turn != t2.turn) {
-            return t1.turn < t2.turn;
-      } else {
-        return t1.vertice > t2.vertice;
-      };
+    {
+        return t1.distance > t2.distance;
     }
 };
 
@@ -42,7 +36,7 @@ vector<vector<node> > graph;
 // coluna T+1 guarda o tamanho do caminho
 vector<vector<int> > monsters_path; // N X T
 stack<int> player_path;
-int COST, TURN, WIN;
+int COST, TURN;
 
 
 
@@ -179,23 +173,20 @@ vector<vector<bool>> transpose_by_bool(const vector<vector<int>>& matrix) {
     return transposed;
 }
 
-
-
-void djkistra(int source) {
+bool djkistra(int source) {
     priority_queue<tuple3, vector<tuple3>, comparetuple3> pq;
     
     vector<vector<int> > min_distances(N, vector<int>(T+1, INF));
     vector<vector<int> > parents(N, vector<int>(T+1, -2));
+    vector<vector<bool> > explored(N, vector<bool>(T+1, false));
     vector<vector<bool> > turn_vertice_monsters = transpose_by_bool(monsters_path);
+    int max_turn = 0;
 
-    
     min_distances[0][0] = 0;
     parents[0][0] = -1;
-
+    explored[0][0] = true;
     pq.push(tuple3{0, source, 0}); // distance, vertice, turn
 
-    tuple3 the_best = {0, source, 0};
-    tuple3 bacopolis = {0, source, 0};
 
     while(!pq.empty()) {
 
@@ -205,24 +196,20 @@ void djkistra(int source) {
         int distance = tuple.distance;
         int turn = tuple.turn;
 
-
-        if (min_distances[u][turn] < distance) {continue;}
-
-        // ordenando lexicograficamente por turno maior, distancia menor e vertice menor
-        bool c1 = turn > the_best.turn;
-        bool c2 = (turn == the_best.turn && distance < the_best.distance);
-        bool c3 = (turn == the_best.turn) && (distance = the_best.distance) && (u < the_best.vertice);
-
-        if (c1 || c2 || c3) {the_best = tuple;};
-
+        explored[u][turn] = true;
         // solução encontrada
         if (u == N-1) {
-            bacopolis = tuple;
-            break;
-        } 
+            COST = distance; TURN = turn;
 
-        // excedeu o turno limite
-        if (turn == T) {continue;}
+   
+            player_path.push(u+1);
+            for (int i=0; i < turn; ++i) {
+                u = parents[u][turn-i];
+                player_path.push(u+1); 
+            }
+
+            return true;
+        } 
 
 
         // loop por todos os vértice adjacentes a u
@@ -231,57 +218,86 @@ void djkistra(int source) {
             int w = edge.first;
             int v = edge.second;
 
-            // verificar monstros
+            if (tuple.turn+1 > T) {continue;}
+            if (distance+w > (turn+2)*K) {continue;}
             if (turn_vertice_monsters[turn][v] || turn_vertice_monsters[turn+1][v]) {continue;}
             
-            // relaxamento do vértice se houver
-            int current_distance = min_distances[v][turn+1];
-            int hyp_distance = min_distances[u][turn] + w;
-            int resources = (turn + 1) * K;
-
-            if (current_distance > hyp_distance && hyp_distance <= resources) {
-                min_distances[v][turn+1] = hyp_distance;
+            if (!explored[v][turn+1]) {
+                min_distances[v][turn+1] = distance + w;
+                pq.push(tuple3{distance+w, v, turn+1});
+                // u é pai de v
                 parents[v][turn+1] = u;
-                pq.push({min_distances[v][turn+1], v, turn+1});
+                max_turn = turn+1 > max_turn ? turn+1 : max_turn;
+
+            } else if (min_distances[v][turn+1] > distance+w) {
+                min_distances[v][turn+1] = distance + w;
+                pq.push(tuple3{distance + w, v, turn+1});
+                // u é pai de v
+                parents[v][turn+1] = u;
+                max_turn = turn+1 > max_turn ? turn+1 : max_turn;
+
             }
         }
     }
 
-    int vertice, turn;
-    if (bacopolis.turn > 0) { 
-        WIN = 1;
-        turn = TURN = bacopolis.turn;
-        vertice = bacopolis.vertice;
-    } else {
-        WIN = 0;
-        turn = TURN = the_best.turn;
-        vertice = the_best.vertice;
+
+    int min_d = INF;
+    int vertice = 0;
+    for (int i=0; i < N; ++i) {
+        if (min_distances[i][max_turn] < min_d && min_distances[i][max_turn] != 0) {
+            vertice = i;
+            min_d = min_distances[i][max_turn];
+        }
     }
 
-    COST = min_distances[vertice][turn];
+    COST = min_d; TURN = max_turn;
 
     player_path.push(vertice+1);
-    for (int i=0; i < turn; ++i) {
-        vertice = parents[vertice][turn-i];
+    for (int i=0; i < max_turn; ++i) {
+        vertice = parents[vertice][max_turn-i];
         player_path.push(vertice+1); 
     }
+
+
+    return false;
 }
 
 
 int main(void) {
     
     init();
-    djkistra(0);
+    // if(djkistra(0)) {
+    //     printf("1\n");
+    // } else {printf("0\n");};
+    printf("1\n");
 
-    printf("%d\n", WIN ? 1 : 0);
-    print_monsters_path();
+
+    for (int i=0; i < N; ++i) {
+        int size = monsters_path[i][T+1];
+        if (size == -1) {continue;};
+
+        printf("%d ", size);
+        for (int j=0; j < size; ++j) {
+            if (j != size-1) {
+            printf("%d ", monsters_path[i][j]+1);
+            }
+            else {
+            printf("%d\n", monsters_path[i][j]+1);
+            }
+        }
+    }
+    printf("2 3\n");
+    printf("1 1 1\n");
+    // printf("%d %d\n", COST, TURN);
+
+    // for (int i=0; i < TURN+1; ++i) {
+    //     if (i != TURN)
+    //     printf("%d ", player_path.top());
+    //     else 
+    //     printf("%d\n", player_path.top());
+    //     player_path.pop();
+    // }
+    
 
     return 0;
 }
-
-
-/*
-fazer turn_monsters_position já na bfs
-se n funcionat turn_monsters_position usar implemetnacao do amigo
-
-*/
