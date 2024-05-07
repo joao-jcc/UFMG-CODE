@@ -275,13 +275,12 @@ int main(void) {
 
     printf("%d\n", WIN ? 1 : 0);
     print_monsters_path();
+    printf("%d %d\n", COST, TURN);
+    while (!player_path.empty()) {
+        printf("%d ", player_path.top());
+        player_path.pop();
+    }
+    printf("\n");
 
     return 0;
 }
-
-
-/*
-fazer turn_monsters_position já na bfs
-se n funcionat turn_monsters_position usar implemetnacao do amigo
-
-*/
