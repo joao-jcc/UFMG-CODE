@@ -1,7 +1,7 @@
 #include "equation.hpp"
 
 Equation::Equation() 
-: dimension_(0), coefs_(std::vector<Fraction>()), bcoef_(Fraction()), pivot_(-1) {
+: dimension_(0), coefs_(std::vector<Fraction>()), bcoef_(Fraction()), pivot_pos_(-1), last_operation_("") {
 
 }
 
@@ -11,9 +11,9 @@ void Equation::config(std::vector<Fraction> coefs, Fraction bcoef) {
     coefs_ = coefs;
     bcoef_ = bcoef;
     for (int i=0; i < dimension_; ++i) {
-        if (!coefs_[i].is_zero()) {pivot_ = i; return;}
+        if (!coefs_[i].is_zero()) {pivot_pos_ = i; return;}
     }
-    pivot_ = dimension_; // coeficientes todos nulos
+    pivot_pos_ = dimension_; // coeficientes todos nulos
 }
 
 
@@ -22,13 +22,16 @@ std::string Equation::to_string(int length) {
 
     for (int i = 0; i < dimension_; ++i) {
         std::stringstream coef_stream;
-        coef_stream.width(length);  // Define o comprimento do campo
-        coef_stream << coefs_[i].to_string();
+        
+        // Align the fraction to the left with a fixed width
+        coef_stream << std::left << std::setw(length) << coefs_[i].to_string();
 
+        // Add the variable directly after the fraction with consistent spacing
         if (i != dimension_ - 1) {
-            result << coef_stream.str() << " x" << (i + 1) << " + ";
+            result << coef_stream.str();
         } else {
-            result << coef_stream.str() << " x" << (i + 1) << " = " << bcoef_.to_string();
+            // Last term (before the equals sign)
+            result << coef_stream.str() << " | " << std::left << std::setw(length) << bcoef_.to_string();
         }
     }
 
@@ -36,8 +39,9 @@ std::string Equation::to_string(int length) {
 }
 
 
+
 bool Equation::is_null() {
-    return pivot_ >= dimension_;
+    return pivot_pos_ >= dimension_;
 }
 
 // OVERLOAD DE OPERADORES

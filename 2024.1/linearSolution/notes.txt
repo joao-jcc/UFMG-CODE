@@ -3,7 +3,7 @@ Fractions
 1. Para executar subtração de frações duas frações intermediárias são criadas; no caso
 da divisão, são duas; Isso é devido a utilização de outras funções mais elementares, como:
 soma, multiplicação e inversão, como subrotinas da divisão e subtração. Existe abordagem melhor? deve ser aplicada?
-
+O mesmo se observa para os operadores de equações
 
 2. O algoritmo de MDC em utils.hpp pode ser melhorado para o algoritmo de euclides.
 
@@ -11,11 +11,16 @@ soma, multiplicação e inversão, como subrotinas da divisão e subtração. Ex
 operações nos sistemas lineares.
 
 4. Faz sentido manter frações como 0/2, 0/-3, ... ou todas devem ser reduzidas a 0/1? função associadas são
-operartor+-*/...
+operartor+-*/... [solved]
 
 
 Equations
 1. too verbose! coefficients, bcoefficient; replace by coefs ou bcoef; [solved]
+
+
+System
+1. Uniformizar prints
+2. Solve deve gerar uma string completa do escalonamento se a flag especificada
 
 
 Geral

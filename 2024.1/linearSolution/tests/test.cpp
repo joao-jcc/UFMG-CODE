@@ -11,55 +11,36 @@
 TEST_CASE("Getters and Setters [Fraction]") {
     Fraction f1 = Fraction(2, 4);
 
-    CHECK_EQ(f1.get('n'), 2);
-    CHECK_EQ(f1.get('d'), 4);
+    CHECK_EQ(f1.get('n'), 1);
+    CHECK_EQ(f1.get('d'), 2);
     CHECK_EQ(f1.get('s'), 1);
 }
 
 
-TEST_CASE("Sign [Fraction]") {
+TEST_CASE("Sign and Reduce [Fraction]") {
     Fraction f1 = Fraction(2, -4);
-
-    CHECK_EQ(f1.get('n'), 2);
-    CHECK_EQ(f1.get('d'), 4);
-    CHECK_EQ(f1.get('s'), -1);
-
-   Fraction f2 = Fraction(-10, -2);
-
-    CHECK_EQ(f2.get('n'), 10);
-    CHECK_EQ(f2.get('d'), 2);
-    CHECK_EQ(f2.get('s'), 1);
-
-   Fraction f3 = Fraction(0, -2);
-
-    CHECK_EQ(f3.get('n'), 0);
-    CHECK_EQ(f3.get('d'), 2);
-    CHECK_EQ(f3.get('s'), 1);
-
-}
-
-
-TEST_CASE("Reduce [Fraction]") {
-    Fraction f1 = Fraction(2, -4);
-    f1.reduce();
 
     CHECK_EQ(f1.get('n'), 1);
     CHECK_EQ(f1.get('d'), 2);
     CHECK_EQ(f1.get('s'), -1);
 
-   Fraction f2 = Fraction(0, -2);
-   f2.reduce();
+   Fraction f2 = Fraction(-10, -2);
 
-    CHECK_EQ(f2.get('n'), 0);
+    CHECK_EQ(f2.get('n'), 5);
     CHECK_EQ(f2.get('d'), 1);
     CHECK_EQ(f2.get('s'), 1);
 
-   Fraction f3 = Fraction(-112, -4);
-   f3.reduce();
+   Fraction f3 = Fraction(0, -2);
 
-    CHECK_EQ(f3.get('n'), 28);
+    CHECK_EQ(f3.get('n'), 0);
     CHECK_EQ(f3.get('d'), 1);
     CHECK_EQ(f3.get('s'), 1);
+
+   Fraction f4 = Fraction(-112, -4);
+
+    CHECK_EQ(f4.get('n'), 28);
+    CHECK_EQ(f4.get('d'), 1);
+    CHECK_EQ(f4.get('s'), 1);
 
 }
 
@@ -81,7 +62,7 @@ TEST_CASE("Operator= [Fraction]") {
 TEST_CASE("Operator== [Fraction]") {
    Fraction f1 = Fraction(2, 4);
    Fraction f2 = Fraction(1, 2);
-   CHECK_EQ(f1 == f2, false);
+   CHECK_EQ(f1 == f2, true);
 }
 
 
@@ -100,8 +81,8 @@ TEST_CASE("Operator+ [Fraction]") {
 
    Fraction f6 = f4 + f5; // (-1/2) + (3/30)
    
-   CHECK_EQ(24, f6.get('n'));
-   CHECK_EQ(60, f6.get('d'));
+   CHECK_EQ(2, f6.get('n'));
+   CHECK_EQ(5, f6.get('d'));
    CHECK_EQ(-1, f6.get('s'));
 
    Fraction f7 = Fraction(0, 1);
@@ -133,8 +114,8 @@ TEST_CASE("Operator- [Fraction]") {
 
    Fraction f6 = f4 - f5; // (-1/2) - (3/30)
    
-   CHECK_EQ(36, f6.get('n'));
-   CHECK_EQ(60, f6.get('d'));
+   CHECK_EQ(3, f6.get('n'));
+   CHECK_EQ(5, f6.get('d'));
    CHECK_EQ(-1, f6.get('s'));
 
    Fraction f7 = Fraction(0, 1);
@@ -166,8 +147,8 @@ TEST_CASE("Operator* [Fraction]") {
 
    Fraction f6 = f4 * f5; // (-1/2) * (3/30)
    
-   CHECK_EQ(3, f6.get('n'));
-   CHECK_EQ(60, f6.get('d'));
+   CHECK_EQ(1, f6.get('n'));
+   CHECK_EQ(20, f6.get('d'));
    CHECK_EQ(-1, f6.get('s'));
 
    Fraction f7 = Fraction(0, 1);
@@ -175,7 +156,7 @@ TEST_CASE("Operator* [Fraction]") {
    Fraction f8 = f4 * f7; // (-1/2) * (0/1)
    
    CHECK_EQ(0, f8.get('n'));
-   CHECK_EQ(2, f8.get('d'));
+   CHECK_EQ(1, f8.get('d'));
    CHECK_EQ(1, f8.get('s'));
 
    Fraction f9 = f4 * 5; // (-1/2) * 5
@@ -185,7 +166,7 @@ TEST_CASE("Operator* [Fraction]") {
 
    Fraction f10 = f9 * 0; // (-1/2) * 0
    CHECK_EQ(0, f10.get('n'));
-   CHECK_EQ(2, f10.get('d'));
+   CHECK_EQ(1, f10.get('d'));
    CHECK_EQ(1, f10.get('s'));
 }
 

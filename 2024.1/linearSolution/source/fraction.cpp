@@ -6,8 +6,10 @@ Fraction::Fraction(int numerator, int denominator) {
         exit(1);
     }
 
+
     sign_ = denominator * numerator < 0 ? -1 : 1;
     numerator_ = abs(numerator); denominator_ = abs(denominator);
+    reduce();
 }
 
 
@@ -25,7 +27,7 @@ std::string Fraction::to_string() {
     std::string d = std::to_string(denominator_);
     std::string n = std::to_string(numerator_);
 
-    return sign_ == 1? n + '/' + d : '-' + n + '/' + d;
+    return sign_ == 1? '+' + n + '/' + d : '-' + n + '/' + d;
 }
 
 
@@ -87,8 +89,8 @@ bool Fraction::operator==(const Fraction& fraction2) const{
 }
 
 
-Fraction Fraction::operator/(const Fraction& fraction2) {
-    Fraction fraction_inverted = invert(fraction2);
+Fraction Fraction::operator/(Fraction& fraction2) {
+    Fraction fraction_inverted = fraction2.invert();
 
     return (*this) * fraction_inverted;
 }
@@ -106,8 +108,8 @@ Fraction Fraction::operator-(const Fraction& fraction2) {
     return (*this) + (fraction * -1);
 }
 
-Fraction Fraction::invert(const Fraction& fraction) {
-    return Fraction(fraction.get('d') * fraction.get('s'), fraction.get('n'));
+Fraction Fraction::invert() {
+    return Fraction(denominator_ * sign_, numerator_);
 }
 
 bool Fraction::is_zero() {

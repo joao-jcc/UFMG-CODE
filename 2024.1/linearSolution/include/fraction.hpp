@@ -24,8 +24,8 @@ class Fraction {
         Fraction operator-(int number);
         Fraction operator=(const Fraction& fraction2);
         bool operator==(const Fraction& fraction2) const;
-        Fraction operator/(const Fraction& fraction2);
-        Fraction invert(const Fraction& fraction);
+        Fraction operator/(Fraction& fraction2);
+        Fraction invert();
 
         bool is_zero();
 
