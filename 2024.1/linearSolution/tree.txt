@@ -1,0 +1,23 @@
+.
+├── Makefile
+├── bin
+│   └── main
+├── include
+│   ├── equation.hpp
+│   ├── fraction.hpp
+│   ├── system.hpp
+│   └── utils.hpp
+├── notes.txt
+├── source
+│   ├── equation.cpp
+│   ├── fraction.cpp
+│   ├── main.cpp
+│   ├── system.cpp
+│   └── utils.cpp
+├── tests
+│   └── test.cpp
+├── third_party
+│   └── doctest.h
+└── tree.txt
+
+6 directories, 15 files

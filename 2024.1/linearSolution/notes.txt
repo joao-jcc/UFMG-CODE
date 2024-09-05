@@ -1,0 +1,26 @@
+Fractions
+
+1. Para executar subtração de frações duas frações intermediárias são criadas; no caso
+da divisão, são duas; Isso é devido a utilização de outras funções mais elementares, como:
+soma, multiplicação e inversão, como subrotinas da divisão e subtração. Existe abordagem melhor? deve ser aplicada?
+
+
+2. O algoritmo de MDC em utils.hpp pode ser melhorado para o algoritmo de euclides.
+
+3. Criar uma variável estática para contabilizar o número de instâncias Fractions são cridas para as
+operações nos sistemas lineares.
+
+4. Faz sentido manter frações como 0/2, 0/-3, ... ou todas devem ser reduzidas a 0/1? função associadas são
+operartor+-*/...
+
+
+Equations
+1. too verbose! coefficients, bcoefficient; replace by coefs ou bcoef; [solved]
+
+
+Geral
+
+1. Uso de strings e char*, conflito e adaptação de formatos c++ e c. Função printf ou std::cout ou c.str(). Resolver
+   conflito.
+
+2. Saber quando usar funções const e objetos const.
