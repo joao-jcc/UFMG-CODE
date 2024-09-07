@@ -9,15 +9,13 @@ class System {
         System();
         ~System();
 
-        void print(std::string separator, int max_coef_length=6, int max_operation_length=15);
+        void print(std::string separator="", int max_coef_length=6);
 
         void add(Equation& equation);
 
         void sort();
 
-        void pivot_to_one(int index);
-
-        void solve(bool print_flag);
+        void solve();
 
     private:
         std::vector<Equation> equations_;

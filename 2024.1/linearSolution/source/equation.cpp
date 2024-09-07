@@ -1,7 +1,7 @@
 #include "equation.hpp"
 
 Equation::Equation() 
-: dimension_(0), coefs_(std::vector<Fraction>()), bcoef_(Fraction()), pivot_pos_(-1), last_operation_("") {
+: dimension_(0), coefs_(std::vector<Fraction>()), bcoef_(Fraction()), pivot_pos_(-1) {
 
 }
 
@@ -39,10 +39,22 @@ std::string Equation::to_string(int length) {
 }
 
 
-
 bool Equation::is_null() {
     return pivot_pos_ >= dimension_;
 }
+
+
+Equation Equation::normalize() {
+    // equação nula não tem pivô: retorna equação vazia
+    if (is_null()) {Equation();}
+
+    Fraction factor = coefs_[pivot_pos_].invert();
+
+    // retorna equação normalizada
+    return (*this) * factor;
+
+}
+
 
 // OVERLOAD DE OPERADORES
 Equation Equation::operator+(Equation& e2) {
@@ -72,6 +84,7 @@ Equation Equation::operator-(Equation& e2) {
     return (*this) + e3;
 }
 
+
 // operador* para equação multiplicada pro escalar (fração ou inteiro)
 Equation Equation::operator*(int scalar) {
     std::vector<Fraction> coefs_result;
@@ -85,6 +98,7 @@ Equation Equation::operator*(int scalar) {
 
     return e_result;
 }
+
 
 Equation Equation::operator*(Fraction scalar) {
     std::vector<Fraction> coefs_result;

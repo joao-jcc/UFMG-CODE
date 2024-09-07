@@ -229,6 +229,11 @@ TEST_CASE("operator* [Equation]") {
    CHECK_EQ(coefs3[0] == Fraction(-4, 9), true);
    CHECK_EQ(coefs3[1] == Fraction(2, 9), true);
 
+   // os coeficientes de e1 permanecem os mesmos
+   CHECK_EQ(bcoef1 == Fraction(0, 1), true);
+   CHECK_EQ(coefs1[0] == Fraction(2, 3), true);
+   CHECK_EQ(coefs1[1] == Fraction(-1, 3), true);
+
 }
 
 

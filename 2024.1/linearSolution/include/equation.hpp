@@ -20,14 +20,6 @@ class Equation {
             return coefs_;
         }
 
-        std::string get_last_operation() {
-            return last_operation_;
-        }
-
-        void set_last_operation(std::string operation) {
-            last_operation_ = operation;
-        }
-
         Fraction get_coef(int i) const  {
             if (i > dimension_ - 1) {
                 printf("Índice fornecido é inválido!\n");
@@ -70,6 +62,9 @@ class Equation {
         // reconfigura totalmente a equação
         void config(std::vector<Fraction> coefs, Fraction bcoef);
 
+        // multiplica a equação para que o pivot valha 1
+        Equation normalize();
+
         // overload de operadores
         Equation operator+(Equation& e2);
         Equation operator-(Equation& e2);
@@ -89,7 +84,6 @@ class Equation {
         // termo independente
         Fraction bcoef_;
 
-        std::string last_operation_;
 };
 
 #endif
