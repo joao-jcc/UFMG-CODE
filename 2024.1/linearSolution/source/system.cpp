@@ -1,12 +1,57 @@
 #include "system.hpp"
 
-System::System() : equations_(std::vector<Equation>()) {
+System::System() : equations_(std::vector<Equation>()), count_equations_(0) {
 
 }
 
 
 System::~System() {
 
+}
+
+
+void System::read() {
+    std::cout << "Digite o número de equações: ";
+    int n_equations; std::cin >> n_equations;
+
+    std::cout << "Digite o número de variáveis: ";
+    int n_variables; std::cin >> n_variables;
+
+    for (int i=0; i < n_equations; ++i) {
+        std::cout << "Digite a eq." << i + 1 << "no formato coef_1 coef_2 ... coef_n | bcoef" << std::endl;
+        std::vector<Fraction> coefs;
+        
+        // lendo coeficientes
+        for (int j=0; j < n_variables; ++j) {
+            std::string coef_str; std::cin >> coef_str;
+            Fraction f; f.parse(coef_str);
+            coefs.push_back(f); // chamada polimórfica Fraction -> FractionParse
+        }
+
+        // lendo termo independente
+        std::string bcoef_str; std::cin >> bcoef_str; std::cin >> bcoef_str;
+        Fraction bcoef; bcoef.parse(bcoef_str);
+
+        Equation eq; eq.config(coefs, bcoef);
+        equations_.push_back(eq);
+    }
+}
+
+
+void System::read(std::string path) {
+    std::ifstream file;
+    file.open(path, std::ios::in);
+
+    if (!file.is_open()) {
+        std::cerr << "Erro ao abrir o arquivo!" << std::endl;
+        exit(1);
+    }
+
+    std::string line;
+
+    while(getline(file, line)) {
+        Equation e; e.parse(line); add(e);
+    }
 }
 
 
@@ -19,7 +64,7 @@ void System::print(std::string separator, int max_coef_length) {
         // Define a largura máxima do campo para a operação
 
         // Imprime a equação com o texto da última operação alinhado
-        printf("%s\n", equation.to_string(max_coef_length).c_str());
+        printf("%s  %s\n", equation.to_string(max_coef_length).c_str(), equation.get_description().c_str());
     }
 
     printf("\n");
@@ -37,14 +82,22 @@ void System::sort() {
 
 
 void System::add(Equation& equation) {
+    // incrementa o contador de equações
+    ++count_equations_;
+
+    // a equação tem uma descrição apenas no contexto do sistema
+    equation.set_description("e" + std::to_string(count_equations_));
+
+    // adiciono a equação no sistema
     equations_.push_back(equation);
-    // ordeno as equações com base no pivot
-    sort();
 }
 
 
 void System::solve() {
     print("BEGIN:\n");
+    // Ordena as equações (se necessário)
+    sort();
+    print("SORT:\n");
 
     // loop por todas as equações
     for (int i = 0; i < equations_.size(); ++i) {
@@ -78,4 +131,3 @@ void System::solve() {
 
     print("END:\n");
 }
-

@@ -9,11 +9,15 @@
 class Fraction {
     public:
         Fraction();
-        Fraction(int numerator, int denominator);
+        Fraction(int numerator, int denominator=1);
         ~Fraction();
 
-        std::string to_string();
         void reduce();
+
+        std::string to_string();
+        void parse(std::string coef_str); // reconstroi o objeto
+
+        bool is_zero();
 
         Fraction operator+(const Fraction& fraction2);
         Fraction operator+(int number);
@@ -27,7 +31,6 @@ class Fraction {
         Fraction operator/(Fraction& fraction2);
         Fraction invert();
 
-        bool is_zero();
 
         // getters and setters
         int get(char letter) const {

@@ -115,3 +115,25 @@ Fraction Fraction::invert() {
 bool Fraction::is_zero() {
     return numerator_ == 0;
 }
+
+
+void Fraction::parse(std::string coef_str) {
+
+    int numerator, denominator;
+
+    // '/' está contida em coef_str
+    size_t pos = coef_str.find('/');
+    if (pos != std::string::npos) {
+
+        numerator = std::atoi(coef_str.substr(0, pos).c_str());
+        denominator = std::atoi(coef_str.substr(pos+1).c_str()); 
+
+    } else {
+
+        numerator = std::atoi(coef_str.c_str());
+        denominator = 1;
+        
+    }
+
+    *this = Fraction(numerator, denominator);
+}

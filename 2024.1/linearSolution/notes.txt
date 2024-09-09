@@ -16,11 +16,13 @@ operartor+-*/... [solved]
 
 Equations
 1. too verbose! coefficients, bcoefficient; replace by coefs ou bcoef; [solved]
+2. a descrição das equações podem ser armazenada ou interpretadas com árvores sintáticas; pilhas sintáticas.
+
 
 
 System
 1. Uniformizar prints
-2. Solve deve gerar uma string completa do escalonamento se a flag especificada
+2. Solve deve gerar uma string completa do escalonamento se a flag especificada [abandonada]
 
 
 Geral
@@ -29,3 +31,8 @@ Geral
    conflito.
 
 2. Saber quando usar funções const e objetos const.
+
+3. Faz sentido ter um FractionParse? adicionar Equation e Fraction em utils.hpp causa dependência circular. Faz sentido parse em utils.hpp?
+   parse deve ser métodos de Equation, System, Fraction. Deve ser criada uma classe Parse que atuará de dentro de Equation, 
+   Fraction, etc...?
+   

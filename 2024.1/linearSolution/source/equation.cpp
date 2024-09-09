@@ -1,8 +1,13 @@
 #include "equation.hpp"
 
 Equation::Equation() 
-: dimension_(0), coefs_(std::vector<Fraction>()), bcoef_(Fraction()), pivot_pos_(-1) {
+: dimension_(0), coefs_(std::vector<Fraction>()), bcoef_(Fraction()), pivot_pos_(-1), description_(std::string()) {
 
+}
+
+
+Equation::Equation(std::vector<Fraction>& coefs, Fraction& bcoef) {
+    config(coefs, bcoef);
 }
 
 
@@ -74,6 +79,7 @@ Equation Equation::operator+(Equation& e2) {
     Fraction bcoef_result = bcoef_ + bcoef_e2;
 
     Equation e3; e3.config(coefs_result, bcoef_result);
+    e3.set_description(*this, e2); // DESCRIÇÃO DA EQUAÇÃO
 
     return e3;
 }
@@ -87,16 +93,9 @@ Equation Equation::operator-(Equation& e2) {
 
 // operador* para equação multiplicada pro escalar (fração ou inteiro)
 Equation Equation::operator*(int scalar) {
-    std::vector<Fraction> coefs_result;
-    for (int i=0; i < dimension_; ++i) {
-        coefs_result.push_back(coefs_[i] * scalar);
-    }
+    Fraction scalar_fraction = Fraction(scalar, 1);
 
-    Fraction bcoef_result = bcoef_ * scalar;
-
-    Equation e_result; e_result.config(coefs_result, bcoef_result);
-
-    return e_result;
+    return (*this) * scalar_fraction;
 }
 
 
@@ -109,6 +108,26 @@ Equation Equation::operator*(Fraction scalar) {
     Fraction bcoef_result = bcoef_ * scalar;
 
     Equation e_result; e_result.config(coefs_result, bcoef_result);
+    e_result.set_description(*this, scalar); // DESCRIÇÃO DA EQUAÇÃO
 
     return e_result;
+}
+
+void Equation::parse(std::string line_equation) {
+    std::string parsed;
+    std::stringstream line_stream(line_equation);
+
+    std::vector<Fraction> coefs; Fraction bcoef;
+    while(getline(line_stream, parsed, ' ')) {
+        if (parsed == "|") {
+            getline(line_stream, parsed, ' ');
+            Fraction fraction; fraction.parse(parsed);
+            bcoef = fraction;
+        } else {
+            Fraction fraction; fraction.parse(parsed);
+            coefs.push_back(fraction);
+        }
+    }
+
+    config(coefs, bcoef);
 }

@@ -11,7 +11,9 @@ class Equation {
         // construtor padrão: equação vazia
         Equation();
 
-        std::string to_string(int length);
+        Equation(std::vector<Fraction>& coefs, Fraction& bcoef);
+
+        std::string to_string(int length=6);
 
         bool is_null();
 
@@ -58,9 +60,31 @@ class Equation {
             return pivot_pos_;
         }
 
+        std::string get_description() const {
+            return description_;
+        }
+
+        void set_description(Equation& e1, Equation& e2, char operation='+') {
+            std::string d1 = e1.get_description();
+            std::string d2 = e2.get_description();
+            if (d1 == "" || d2 == "") {return;}
+            description_ = "[" + d1 + "] " + operation + " [" + d2 + ")";
+
+        }
+
+        void set_description(Equation& e, Fraction& coef) {
+            if (e.get_description() == "") {return;}
+            description_ = "( " + coef.to_string() + " ) * [ " + e.get_description() + " ]";
+        }
+
+        void set_description(std::string description) {
+            description_ = description;
+        }
+
 
         // reconfigura totalmente a equação
         void config(std::vector<Fraction> coefs, Fraction bcoef);
+        void parse(std::string line_equation);
 
         // multiplica a equação para que o pivot valha 1
         Equation normalize();
@@ -83,6 +107,9 @@ class Equation {
 
         // termo independente
         Fraction bcoef_;
+
+        // descrição de combinações lineares que resulta na equação
+        std::string description_;
 
 };
 
