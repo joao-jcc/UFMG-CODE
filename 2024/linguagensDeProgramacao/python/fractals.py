@@ -90,7 +90,7 @@ def main():
     variaveis, terminais, axioma, regras, commands = set_parameters(letra)
     
     codedStr = genLSystem(variaveis, terminais, axioma, regras, iteracoes)
-    draw(commands, codedStr, variaveis)
+    cordX, cordY = draw(commands, codedStr, variaveis)
 
 
 if __name__ == '__main__':
