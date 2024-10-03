@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" 
+          content="width=device-width, initial-scale=1.0">
+    <title>Maze</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="wrapper">
+
+        <!--Menu Container-->
+        <div id="menu-container">
+
+            <h1 id="title">Maze</h1>
+            
+            <div id="btn-container">
+                <button id="btn-wall" class="btn-build">
+                    <div class="build-indicator wall"></div>
+                    <span class="build-text">Wall</span>
+                </button>
+    
+                <button id="btn-empty" class="btn-build">
+                    <div class="build-indicator empty"></div>
+                    <span class="build-text">Empty</span>
+                </button>
+    
+    
+                <button id="btn-start" class="btn-build">
+                    <div class="build-indicator start"></div>
+                    <span class="build-text">Start</span>
+                </button>
+    
+    
+                <button id="btn-end" class="btn-build">
+                    <div class="build-indicator end"></div>
+                    <span class="build-text">End</span>
+                </button>
+            
+            </div>
+            
+
+            <div id="resize-container">
+                <div class="input-group">
+                    <label for="maze-width">X:</label>
+                    <input type="number" id="maze-width" name="maze-width" min="1" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="maze-height">Y:</label>
+                    <input type="number" id="maze-height" name="maze-height" min="1" required>
+                </div>
+                
+                <button id="resize-btn">Resize Maze</button>
+            </div>
+            
+
+
+
+        </div>
+
+        <!--<Maze> Container-->
+        <div id="maze-container">
+
+            <div id="maze-display"></div>
+
+        </div>
+
+    </div>
+
+    <script type="module" src="js/index.js"></script>
+
+</body>
+
+</html>

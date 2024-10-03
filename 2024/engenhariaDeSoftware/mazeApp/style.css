@@ -1,0 +1,152 @@
+/* style.css */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    box-sizing: border-box; /* Ensures padding/borders are included in height calculations */
+}
+
+
+#wrapper {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+
+    min-height: 600px;
+    min-width: 800px;
+}
+
+button {
+    width: 100%;
+    padding: 5px;
+}
+
+
+/* Menu Style */
+
+#menu-container {
+    padding: 20px;
+    background-color: lightslategrey; /* Soft, complementary color */
+    color: white; /* Ensures readability */
+}
+
+#btn-container {
+    border-bottom: 1px dashed lightgray;
+    padding-bottom: 10px;
+}
+
+
+.btn-build:hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Hover effects for maze elements */
+.btn-build:hover .build-indicator.wall {
+    background-color: rgba(47, 79, 79, 0.8); /* Red overlay for walls */
+}
+
+.btn-build:hover .build-indicator.empty {
+    background-color: rgba(211, 211, 211, 0.8); /* Darker overlay for empty spaces */
+}
+
+.btn-build:hover .build-indicator.start {
+    background-color: rgba(0, 255, 127, 0.8); /* Lighter overlay for start point */
+}
+
+.btn-build:hover .build-indicator.end {
+    background-color: rgba(255, 99, 71, 0.8); /* Lighter overlay for end point */
+}
+
+
+#resize-container {
+    margin: 0px;
+    padding: 30px 20px 20px 20px; /* Add some spacing */
+    border-bottom: 1px dashed lightgray;
+}
+
+.input-group {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Center items vertically */
+    margin-bottom: 10px; /* Space between input groups */
+}
+
+label {
+    margin-right: 10px; /* Space between label and input */
+    white-space: nowrap; /* Prevents label text from wrapping */
+}
+
+input {
+    padding: 5px; /* Add padding to input fields */
+    width: 100%; /* Full width */
+    text-align: right;
+    margin: 0px;
+    border: 1px solid black;
+}
+
+
+#title {
+    text-transform: capitalize;
+    margin-bottom: 10px;
+    border-bottom: 1px solid lightgray;
+}
+
+#maze-container {
+    display: flex; /* Use flexbox to center content */
+    justify-content: center; /* Horizontally center */
+    align-items: center; /* Vertically center */
+    margin: 0;
+    padding: 0;
+    background-color: gainsboro; /* Neutral, subtle contrast */
+}
+
+#maze-display {
+    display: grid;
+    gap: 2px;
+    width: 90%;
+    height: 90%;
+    padding: 2px;
+    background-color: gray; /* Pathway background */
+}
+
+
+.wall {
+    background-color: rgb(47, 79, 79); /* Walls of the maze */
+}
+
+.empty {
+    background-color: rgb(211, 211, 211); /* Pathways in the maze */
+}
+
+.start {
+    background-color: rgb(0, 255, 127); /* Start point */
+}
+
+.end {
+    background-color: rgb(255, 99, 71); /* End point */
+}
+
+
+
+.btn-build {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Center items vertically */
+    padding: 5px; /* Add some padding */
+    background-color: inherit; /* Button color */
+    border: none; /* Remove default button border */
+    color: white; /* Text color */
+    cursor: pointer;
+    width: 30%;
+
+    font-size: 100%;
+}
+
+.build-indicator {
+    width: 40%; /* Adjust the size of the square */
+    aspect-ratio: 1 / 1;
+    border: 1px solid black;
+    margin-right: 8px; /* Space between the square and text */
+
+    min-width: 30px;
+}
