@@ -1,1 +1,0 @@
-criar variáveis css para guardas as cores e permitir mudancas de grupos de cores facilmente
