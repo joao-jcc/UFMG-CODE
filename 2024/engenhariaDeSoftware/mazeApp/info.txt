@@ -1,1 +1,8 @@
 criar variáveis css para guardas as cores e permitir mudancas de grupos de cores facilmente
+
+button backup: tira print do labirinto e mostra em mini tela
+
+bug resize 1x1
+
+
+deve haver apenas um start e um ends

@@ -1,17 +1,21 @@
 {
   "name": "mazeapp",
   "version": "1.0.0",
-  "main": "js/index.js",
+  "main": "src/scripts/index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build-tsc": "tsc",
+    "build-scss": "sass src/style/style.scss src/style/style.css",
+    "build": "concurrently \"npm run build-tsc\" \"npm run build-scss\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "concurrently": "^8.2.0",
+    "sass": "^1.79.4",
     "typescript": "^5.6.2"
   }
 }
