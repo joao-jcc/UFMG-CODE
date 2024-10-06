@@ -1,8 +1,12 @@
+import { unHash } from './algorithm.js';
+
 export enum MazeCells {
     WALL = 'wall',
     EMPTY = 'empty',
     START = 'start',
     END = 'end',
+    FRONTIER = 'frontier',
+    EXPLORED = 'explored',
     NONE = 'none',
 }
 
@@ -10,7 +14,9 @@ export class Maze {
     width: number;
     height: number;
     array: MazeCells[][];
-    arrayBackup: MazeCells[][];
+
+    start: [number, number];
+    end: [number, number]
 
     buildBlock: MazeCells;
     buildDrawing: boolean
@@ -18,25 +24,8 @@ export class Maze {
     constructor(width: number, height: number) {
         this.width = width;
         this.height = height;
-        this.array = [];
-        this.arrayBackup = [];
-        this.buildArray(true);
 
-        this.buildBlock = MazeCells.NONE;
-        this.buildDrawing = false;
-    }
-
-    // maze retorna a configuração de backup
-    reset(): void {
-        this.width = this.arrayBackup.length;
-        this.height = this.arrayBackup[0].length;
-
-        this.array = JSON.parse(JSON.stringify(this.arrayBackup)); // deepcopy da arrayBackup
-
-        this.buildBlock = MazeCells.NONE;
-        this.buildDrawing = false;
-
-        this.draw();
+        this.init();
     }
 
 
@@ -44,17 +33,22 @@ export class Maze {
         this.width = width;
         this.height = height;
 
+        this.init();
+    }
+
+
+    init() {
         this.array = [];
         this.buildBlock = MazeCells.NONE;
         this.buildDrawing = false;
 
-        this.buildArray(false);
-
+        this.buildArray();
         this.draw();
+        this.bindHandlers();
     }
 
 
-    buildArray(backupFlag: boolean = false): void {
+    buildArray(): void {
         let array: MazeCells[][] = [];
         for (let x = 0; x < this.height; ++x) {
             let row: MazeCells[] = [];
@@ -64,13 +58,13 @@ export class Maze {
             array.push(row);
         }
 
-        // Randomly choose a start and end
+        // Posição inicial e final do labirinto escolhida aleatoriamente
         let xStart = Math.floor(Math.random() * this.height);
         let yStart = Math.floor(Math.random() * this.width);
         let xEnd = xStart; 
         let yEnd = yStart;
 
-        // Ensure the end point is different from the start point
+        // Posição inicial e final devem ser diferentes
         while (xEnd === xStart && yEnd === yStart) {
             xEnd = Math.floor(Math.random() * this.height);
             yEnd = Math.floor(Math.random() * this.width);
@@ -78,19 +72,18 @@ export class Maze {
 
         array[xStart][yStart] = MazeCells.START;
         array[xEnd][yEnd] = MazeCells.END;
-        this.array = array;
 
-        if (backupFlag) {
-            this.arrayBackup = JSON.parse(JSON.stringify(array)); // deepcopy da array
-        }
+        this.array = array;
+        this.start = [xStart, yStart];
+        this.end = [xEnd, yEnd];
     }
 
-    // cria array html
+   
     draw(): void {
         let mazeDisplay = document.getElementById("maze-display");
         
         if (mazeDisplay) {
-            // Clear the previous maze display
+            // Limpa html em mazeDisplay
             mazeDisplay.innerHTML = '';
             mazeDisplay.style.gridTemplateColumns = `repeat(${this.width}, 1fr)`;
             mazeDisplay.style.gridTemplateRows = `repeat(${this.height}, 1fr)`;
@@ -118,8 +111,88 @@ export class Maze {
         }
     }
 
-    // SETTERS AND GETTERS
+    // SETTERS e GETTERS
     setBlock(buildBlock: MazeCells) : void {
         this.buildBlock = buildBlock;
     }
+
+
+    // Eventos e Binds
+
+    bindHandlers(): void {
+        // Seleciona todas as células (divs) do labirinto
+        const mazeCells = document.querySelectorAll<HTMLDivElement>('.mazeCell');
+
+        // Adiciona eventos para todas as células
+        mazeCells.forEach((mazeCell, index) => {
+            // Inicia desenho em mousedown
+            mazeCell.addEventListener('mousedown', (event: MouseEvent) => this.mazeCellPressed(event, index));
+
+            // Para de desenhar em mouseup
+            mazeCell.addEventListener('mouseup', (event: MouseEvent) => this.mazeUpLeave(event));
+
+            // Desenha enquanto o mouse se mouve desde que flag de desenho esteja ativa
+            mazeCell.addEventListener('mousemove', (event: MouseEvent) => this.mazeCellOver(event, index));
+        });
+
+        // Para de desenhar de o mouse deixa o mazeDisplay
+        const mazeDisplay = document.getElementById('maze-display');
+        mazeDisplay.addEventListener('mouseleave', (event: MouseEvent) => this.mazeUpLeave(event));
+    }
+
+    mazeCellPressed(event: MouseEvent, index: number): void {
+        if (this.buildBlock == MazeCells.NONE) {
+            console.log("Build Block is NONE; Nothing to draw!");
+            return;
+        }
+    
+        this.buildDrawing = true;
+        // Update the class of the clicked cell to represent a build block
+        const targetCell = event.target as HTMLDivElement; 
+        if (targetCell.classList.length >= 2) {
+            targetCell.classList.remove(targetCell.classList[1]);
+        }
+        
+        // update class html to fit new style
+        targetCell.classList.add(this.buildBlock.toLowerCase()); 
+    
+        // Update the maze array to reflect the change
+        let [row, col] = unHash(index, this.width);
+        this.array[row][col] = this.buildBlock;
+    }
+    
+    
+    mazeUpLeave(event: MouseEvent): void {
+        this.buildDrawing = false;
+    }
+    
+    
+    // Function to handle the pressing of a maze cell
+    mazeCellOver(event: MouseEvent, index: number): void {
+        if (this.buildBlock == MazeCells.NONE) {
+            return;
+        }
+    
+        // Only continue drawing if buildDrawing is true
+        if (!this.buildDrawing) {
+            return;
+        }
+    
+        // Update the class of the cell as mouse moves over it
+        const targetCell = event.target as HTMLDivElement;
+        if (targetCell.classList.length >= 2) {
+            targetCell.classList.remove(targetCell.classList[1]);
+        }
+    
+
+
+        targetCell.classList.add(this.buildBlock.toLowerCase());
+    
+        // Update the maze array
+        let [row, col] = unHash(index, this.width);
+        this.array[row][col] = this.buildBlock;
+    }
+    
+    
+
 }

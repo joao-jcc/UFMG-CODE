@@ -1,220 +1,187 @@
-// Import color variables
-@import 'colors';
-
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
   box-sizing: border-box;
-  color: $text-color;
+  color: gainsboro;
 }
-
 
 #wrapper {
   display: grid;
   grid-template-columns: 1fr 4fr;
   height: 100%;
-  
   padding: 0;
   margin: 0;
-
   min-height: 600px;
   min-width: 800px;
 }
 
-
 #menu {
-  background-color: $menu-color;
+  background-color: rgb(80, 80, 80);
 }
 
 #maze {
-  background-color: $maze-color;
+  background-color: gainsboro;
   justify-content: center;
 }
 
 #title {
-  color: $title-color;
+  color: gainsboro;
   text-align: left;
   text-transform: capitalize;
   margin-bottom: 10px;
-  border-bottom: 1px solid $divisor-color;
+  border-bottom: 1px solid lightgray;
 }
 
-
-
-// variáveis de margin
-$dsmall: 10px;
-$dmedium: 20px;
-$dlarge: 30px;
-
-// classes de margin
 .margin-vs {
-  margin-top: $dsmall;
+  margin-top: 10px;
 }
 
 .margin-vm {
-  margin-top: $dmedium;
+  margin-top: 20px;
 }
 
 .margin-vl {
-  margin-top: $dlarge;
+  margin-top: 30px;
 }
 
-
 .margin-bs {
-  margin-bottom: $dsmall;
+  margin-bottom: 10px;
 }
 
 .margin-bm {
-  margin-bottom: $dmedium;
+  margin-bottom: 20px;
 }
 
 .margin-bl {
-  margin-bottom: $dlarge;
+  margin-bottom: 30px;
 }
 
-// container básico
 .container {
   display: flex;
-  flex-direction: column; // elementos alinhados em coluna
-  align-items: center; // elementos centralizados na horizontal
-
+  flex-direction: column;
+  align-items: center;
   margin: 0px;
   padding: 0px;
   height: 100%;
   width: 100%;
-
   text-align: center;
 }
 
-
-// item do container
 .container > .item {
-    width: 90%;
+  width: 90%;
 }
 
-
 #btn-container {
-  border-bottom: 1px dashed $divisor-color;
+  border-bottom: 1px dashed lightgray;
   padding-bottom: 20px;
 }
 
-
 .btn-build {
   display: flex;
-  align-items: center; 
-  background-color: inherit; 
+  align-items: center;
+  background-color: inherit;
   border: none;
   margin: 10px 0px;
-  
   width: 40%;
-
-  color: $text-color;
+  color: gainsboro;
   font-size: 100%;
-
   cursor: pointer;
 }
 
 .build-indicator {
   width: 30%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1/1;
   border: 1px solid black;
   margin-right: 8px;
-
   min-width: 30px;
 }
 
-
 .btn-build:hover {
-  color: $textHover-color;
+  color: rgba(220, 220, 220, 0.8);
 }
 
 .btn-build:hover .build-indicator.wall {
-  background-color: $wallHover-color; 
+  background-color: rgba(40, 40, 40, 0.8);
 }
 
 .btn-build:hover .build-indicator.empty {
-  background-color: $emptyHover-color; 
+  background-color: rgba(237, 240, 252, 0.8);
 }
 
 .btn-build:hover .build-indicator.start {
-  background-color: $startHover-color; 
+  background-color: rgba(0, 171, 28, 0.8);
 }
 
 .btn-build:hover .build-indicator.end {
-  background-color: $endHover-color; 
+  background-color: rgba(255, 0, 0, 0.8);
 }
 
-
 .wall {
-  background-color: $wall-color;
+  background-color: rgb(40, 40, 40);
 }
 
 .empty {
-  background-color: $empty-color; 
+  background-color: rgb(237, 240, 252);
 }
 
 .start {
-  background-color: $start-color;
+  background-color: rgb(0, 171, 28);
 }
 
 .end {
-  background-color: $end-color;
+  background-color: rgb(255, 0, 0);
 }
 
 .frontier {
-  background-color: $frontier_color;
+  background-color: rgb(255, 150, 130);
 }
 
 .explored {
-  background-color: $explored_color;
+  background-color: rgb(212, 97, 85);
 }
 
 .solution {
-  background-color: $solution_color;
+  background-color: rgb(220, 235, 113);
 }
-
-
-// Resize Container
 
 #resize-container {
   padding-bottom: 20px;
-  border-bottom: 1px dashed $divisor-color;
+  border-bottom: 1px dashed lightgray;
 }
 
 #resize-container > .input-group {
-  display: flex; 
-  align-items: center; 
+  display: flex;
+  align-items: center;
   margin: 0px auto 20px auto;
   width: 80%;
 }
 
 label {
-  margin-right: 10px; 
-  white-space: nowrap; 
+  margin-right: 10px;
+  white-space: nowrap;
 }
 
 input {
   padding: 5px;
-  width: 100%; 
+  width: 100%;
   text-align: right;
   margin: 0px;
   border: 1px solid black;
 }
-
 
 #resize-container > button {
   width: 80%;
   padding: 5px;
 }
 
-
-// Maze
 #maze-display {
   display: grid;
   gap: 2px;
   width: 90%;
   height: 90%;
   padding: 2px;
-  background-color: $mazeBack-color;
+  background-color: black;
 }
+
+/*# sourceMappingURL=style.css.map */

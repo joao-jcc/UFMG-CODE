@@ -1,0 +1,31 @@
+// _colors.scss
+
+// Menu e Maze
+$menu-color: rgb(80, 80, 80);
+$maze-color: gainsboro;
+
+// Title
+$title-color: gainsboro;
+$text-color: gainsboro;
+$textHover-color: rgba($text-color, 0.8);
+
+// Dashed line color
+$divisor-color: lightgray;
+
+
+// mazeCell
+$wall-color:rgb(40, 40, 40);
+$empty-color:rgb(237, 240, 252);
+$start-color:rgb(0, 171, 28);
+$end-color:rgb(255, 0, 0);
+$solution_color: rgb(220, 235, 113);
+$explored_color: rgb(212, 97, 85, 255);
+$frontier_color: rgb(255, 150, 130);
+
+$mazeBack-color: black;
+
+// mazeCell hover
+$wallHover-color: rgba($wall-color, 0.8);
+$emptyHover-color: rgba($empty-color, 0.8);
+$startHover-color: rgba($start-color, 0.8);
+$endHover-color: rgba($end-color, 0.8);

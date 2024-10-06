@@ -6,18 +6,18 @@
     <meta name="viewport" 
           content="width=device-width, initial-scale=1.0">
     <title>Maze</title>
-    <link rel="stylesheet" href="style/index.css">
+    <link rel="stylesheet" href="style/style.css">
 </head>
 
 <body class="dark-mode">
     <div id="wrapper">
 
         <!--Menu Container-->
-        <div id="menu-container">
+        <div id="menu" class="container">
 
-            <h1 id="title">Maze</h1>
+            <h1 id="title" class="item margin-vl">Maze</h1>
             
-            <div id="btn-container">
+            <div id="btn-container" class="item margin-vs margin-bm">
                 <button id="btn-wall" class="btn-build">
                     <div class="build-indicator wall"></div>
                     <span class="build-text">Wall</span>
@@ -43,7 +43,7 @@
             </div>
             
 
-            <div id="resize-container">
+            <div id="resize-container" class="item margin-vs">
                 <div class="input-group">
                     <label for="maze-width">X:</label>
                     <input type="number" id="maze-width" name="maze-width" min="1" required>
@@ -55,7 +55,6 @@
                 </div>
                 
                 <button id="resize-btn">Resize Maze</button>
-                <button id="reset-btn">Reset</button>
             </div>
             
 
@@ -64,7 +63,7 @@
         </div>
 
         <!--<Maze> Container-->
-        <div id="maze-container">
+        <div id="maze" class="container">
 
             <div id="maze-display"></div>
 
