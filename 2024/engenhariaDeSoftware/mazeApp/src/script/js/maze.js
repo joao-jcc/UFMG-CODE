@@ -1,4 +1,4 @@
-import { unHash } from './algorithm.js';
+import { hash } from './algorithm.js';
 export var MazeCells;
 (function (MazeCells) {
     MazeCells["WALL"] = "wall";
@@ -29,13 +29,8 @@ export class Maze {
         this.bindHandlers();
     }
     buildArray() {
-        let array = [];
-        for (let x = 0; x < this.height; ++x) {
-            let row = [];
-            for (let y = 0; y < this.width; ++y) {
-                row.push(Math.random() > 0.7 ? MazeCells.EMPTY : MazeCells.WALL);
-            }
-            array.push(row);
+        for (let i = 0; i < this.width * this.height; ++i) {
+            this.array.push(Math.random() > 0.2 ? MazeCells.EMPTY : MazeCells.WALL);
         }
         // Posição inicial e final do labirinto escolhida aleatoriamente
         let xStart = Math.floor(Math.random() * this.height);
@@ -47,11 +42,10 @@ export class Maze {
             xEnd = Math.floor(Math.random() * this.height);
             yEnd = Math.floor(Math.random() * this.width);
         }
-        array[xStart][yStart] = MazeCells.START;
-        array[xEnd][yEnd] = MazeCells.END;
-        this.array = array;
-        this.start = [xStart, yStart];
-        this.end = [xEnd, yEnd];
+        this.start = hash(xStart, yStart, this.width);
+        this.end = hash(xEnd, yEnd, this.width);
+        this.array[this.start] = MazeCells.START;
+        this.array[this.end] = MazeCells.END;
     }
     draw() {
         let mazeDisplay = document.getElementById("maze-display");
@@ -60,23 +54,21 @@ export class Maze {
             mazeDisplay.innerHTML = '';
             mazeDisplay.style.gridTemplateColumns = `repeat(${this.width}, 1fr)`;
             mazeDisplay.style.gridTemplateRows = `repeat(${this.height}, 1fr)`;
-            for (let x = 0; x < this.height; ++x) {
-                for (let y = 0; y < this.width; ++y) {
-                    let div = document.createElement("div");
-                    if (this.array[x][y] === MazeCells.WALL) {
-                        div.classList.add("mazeCell", "wall");
-                    }
-                    else if (this.array[x][y] === MazeCells.EMPTY) {
-                        div.classList.add("mazeCell", "empty");
-                    }
-                    else if (this.array[x][y] === MazeCells.START) {
-                        div.classList.add("mazeCell", "start");
-                    }
-                    else if (this.array[x][y] === MazeCells.END) {
-                        div.classList.add("mazeCell", "end");
-                    }
-                    mazeDisplay.appendChild(div);
+            for (let i = 0; i < this.width * this.height; ++i) {
+                let div = document.createElement("div");
+                if (this.array[i] === MazeCells.WALL) {
+                    div.classList.add("mazeCell", "wall");
                 }
+                else if (this.array[i] === MazeCells.EMPTY) {
+                    div.classList.add("mazeCell", "empty");
+                }
+                else if (this.array[i] === MazeCells.START) {
+                    div.classList.add("mazeCell", "start");
+                }
+                else if (this.array[i] === MazeCells.END) {
+                    div.classList.add("mazeCell", "end");
+                }
+                mazeDisplay.appendChild(div);
             }
         }
     }
@@ -114,9 +106,8 @@ export class Maze {
         }
         // update class html to fit new style
         targetCell.classList.add(this.buildBlock.toLowerCase());
-        // Update the maze array to reflect the change
-        let [row, col] = unHash(index, this.width);
-        this.array[row][col] = this.buildBlock;
+        // Atualiza o labirinto
+        this.array[index] = this.buildBlock;
     }
     mazeUpLeave(event) {
         this.buildDrawing = false;
@@ -136,8 +127,7 @@ export class Maze {
             targetCell.classList.remove(targetCell.classList[1]);
         }
         targetCell.classList.add(this.buildBlock.toLowerCase());
-        // Update the maze array
-        let [row, col] = unHash(index, this.width);
-        this.array[row][col] = this.buildBlock;
+        // Atualiza o labirinto: array
+        this.array[index] = this.buildBlock;
     }
 }

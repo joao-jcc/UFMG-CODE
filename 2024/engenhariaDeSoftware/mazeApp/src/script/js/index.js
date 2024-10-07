@@ -1,4 +1,5 @@
 import { Maze, MazeCells } from './maze.js';
+import { DFS } from './algorithm.js';
 // maze: variável global que representa o labirinto
 let maze;
 // Bind Functions
@@ -6,6 +7,10 @@ function bindHandlers() {
     const resizeButton = document.getElementById("resize-btn");
     if (resizeButton) {
         resizeButton.addEventListener('click', clickOnResizeButton);
+    }
+    const searchButton = document.getElementById("search-btn");
+    if (searchButton) {
+        searchButton.addEventListener('click', clickOnSearchButton);
     }
     // Select all buttons with the class 'btn-build'
     const buildButtons = document.querySelectorAll('.btn-build');
@@ -15,6 +20,10 @@ function bindHandlers() {
     document.addEventListener('contextmenu', rightClick);
 }
 // Event Handlers
+function clickOnSearchButton() {
+    console.log("Search!");
+    DFS(maze);
+}
 function clickOnResizeButton() {
     const wInput = parseInt(document.getElementById("maze-width").value);
     const hInput = parseInt(document.getElementById("maze-height").value);

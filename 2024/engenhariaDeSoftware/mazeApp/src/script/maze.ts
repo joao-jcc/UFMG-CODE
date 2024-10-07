@@ -1,4 +1,4 @@
-import { unHash } from './algorithm.js';
+import { unHash, hash } from './algorithm.js';
 
 export enum MazeCells {
     WALL = 'wall',
@@ -13,10 +13,10 @@ export enum MazeCells {
 export class Maze {
     width: number;
     height: number;
-    array: MazeCells[][];
+    array: MazeCells[];
 
-    start: [number, number];
-    end: [number, number]
+    start: number;
+    end: number;
 
     buildBlock: MazeCells;
     buildDrawing: boolean
@@ -49,13 +49,8 @@ export class Maze {
 
 
     buildArray(): void {
-        let array: MazeCells[][] = [];
-        for (let x = 0; x < this.height; ++x) {
-            let row: MazeCells[] = [];
-            for (let y = 0; y < this.width; ++y) {
-                row.push(Math.random() > 0.7 ? MazeCells.EMPTY : MazeCells.WALL);
-            }
-            array.push(row);
+        for (let i=0; i < this.width * this.height; ++i) {
+            this.array.push(Math.random() > 0.2 ? MazeCells.EMPTY : MazeCells.WALL);
         }
 
         // Posição inicial e final do labirinto escolhida aleatoriamente
@@ -70,12 +65,10 @@ export class Maze {
             yEnd = Math.floor(Math.random() * this.width);
         }
 
-        array[xStart][yStart] = MazeCells.START;
-        array[xEnd][yEnd] = MazeCells.END;
-
-        this.array = array;
-        this.start = [xStart, yStart];
-        this.end = [xEnd, yEnd];
+        this.start = hash(xStart, yStart, this.width);
+        this.end = hash(xEnd, yEnd, this.width);
+        this.array[this.start] = MazeCells.START;
+        this.array[this.end] = MazeCells.END;
     }
 
    
@@ -88,25 +81,23 @@ export class Maze {
             mazeDisplay.style.gridTemplateColumns = `repeat(${this.width}, 1fr)`;
             mazeDisplay.style.gridTemplateRows = `repeat(${this.height}, 1fr)`;
 
-            for (let x = 0; x < this.height; ++x) {
-                for (let y = 0; y < this.width; ++y) {
-                    let div = document.createElement("div");
+            for (let i=0; i < this.width*this.height; ++i) {
+                let div = document.createElement("div");
 
-                    if (this.array[x][y] === MazeCells.WALL) {
-                        div.classList.add("mazeCell", "wall");
-                    } 
-                    else if (this.array[x][y] === MazeCells.EMPTY) {
-                        div.classList.add("mazeCell", "empty");
-                    }
-                    else if (this.array[x][y] === MazeCells.START) {
-                        div.classList.add("mazeCell", "start");
-                    }
-                    else if (this.array[x][y] === MazeCells.END) {
-                        div.classList.add("mazeCell", "end");
-                    }
-
-                    mazeDisplay.appendChild(div);
+                if (this.array[i] === MazeCells.WALL) {
+                    div.classList.add("mazeCell", "wall");
+                } 
+                else if (this.array[i] === MazeCells.EMPTY) {
+                    div.classList.add("mazeCell", "empty");
                 }
+                else if (this.array[i] === MazeCells.START) {
+                    div.classList.add("mazeCell", "start");
+                }
+                else if (this.array[i] === MazeCells.END) {
+                    div.classList.add("mazeCell", "end");
+                }
+
+                mazeDisplay.appendChild(div);
             }
         }
     }
@@ -118,7 +109,6 @@ export class Maze {
 
 
     // Eventos e Binds
-
     bindHandlers(): void {
         // Seleciona todas as células (divs) do labirinto
         const mazeCells = document.querySelectorAll<HTMLDivElement>('.mazeCell');
@@ -156,9 +146,8 @@ export class Maze {
         // update class html to fit new style
         targetCell.classList.add(this.buildBlock.toLowerCase()); 
     
-        // Update the maze array to reflect the change
-        let [row, col] = unHash(index, this.width);
-        this.array[row][col] = this.buildBlock;
+        // Atualiza o labirinto
+        this.array[index] = this.buildBlock;
     }
     
     
@@ -188,11 +177,9 @@ export class Maze {
 
         targetCell.classList.add(this.buildBlock.toLowerCase());
     
-        // Update the maze array
-        let [row, col] = unHash(index, this.width);
-        this.array[row][col] = this.buildBlock;
+        // Atualiza o labirinto: array
+        this.array[index] = this.buildBlock;
     }
-    
     
 
 }
