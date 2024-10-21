@@ -1,0 +1,1 @@
+fun del3(h::s::d::q::t) = h::s::q::t;

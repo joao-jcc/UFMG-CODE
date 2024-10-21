@@ -1,0 +1,1 @@
+fun red3 (a, b, c) = (a, c);
