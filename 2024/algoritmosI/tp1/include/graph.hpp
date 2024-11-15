@@ -1,29 +1,25 @@
-// graphW.hpp
 #ifndef GRAPH_HPP
 #define GRAPH_HPP
 
-#include <iostream>
-#include <fstream>
 #include <vector>
 #include <string>
 #include <unordered_map>
-
-using namespace std;
+#include <iostream>
 
 class Graph {
     public:
-        Graph(const string& inputFile);
-        void print() const;
-    
+        Graph();     
+            
+    private:
+        void _read();     
+
     public:
-        int N; // Number of vertices
-        vector<vector<int>> g;
-        vector<vector<int>> gt;
+        int N; 
+        std::vector<std::vector<int>> g;
+        std::vector<std::vector<int>> gt;
 
-        unordered_map<string, int> nameToIndex;
-        vector<string> indexToName;
-
-        void _read(const string& inputFile);
+        std::unordered_map<std::string, int> nameToIndex;
+        std::vector<std::string> indexToName;
 };
 
 #endif // GRAPH_HPP

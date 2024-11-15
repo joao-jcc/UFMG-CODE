@@ -4,7 +4,7 @@
 #include "dfs.hpp"
 #include "bfs.hpp"
 
-DFS::DFS(const Graph& graph) : graph(graph), nComponents(0) {
+DFS::DFS(const Graph& graph) : nComponents(0), graph(graph)  {
     components = std::vector<int>(graph.N, -1);
     _kosaraju();
     _genEdgesSCC();

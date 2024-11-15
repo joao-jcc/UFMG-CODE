@@ -1,3 +1,2 @@
 all:
-	g++ -std=c++11 -o main src/* -Iinclude
-	./main
+	g++ -Wall -Wextra -Wpedantic -Wformat-security -Wconversion -Werror -std=c++11 -o tp1 src/* -Iinclude

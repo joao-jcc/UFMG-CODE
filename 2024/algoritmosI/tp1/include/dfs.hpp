@@ -1,5 +1,3 @@
-// def.hpp
-
 #ifndef DFS_HPP
 #define DFS_HPP
 

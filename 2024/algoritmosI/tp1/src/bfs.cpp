@@ -1,13 +1,14 @@
 #include "bfs.hpp"
 #include <vector>
 #include <queue>
+#include <stack>
 
 
 BFS::BFS(const Graph& graph)
-    : graph(graph),
-      capital(-1),
+    : capital(-1),
       capitalCost(INT_MAX),
-      allParents(std::vector<std::vector<int>>(graph.N, std::vector<int>(graph.N, -1))) {
+      allParents(std::vector<std::vector<int>>(graph.N, std::vector<int>(graph.N, -1))),
+      graph(graph) {
         _findCapital();
 }
 
