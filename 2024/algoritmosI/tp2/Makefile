@@ -14,7 +14,7 @@ OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(BIN_DIR)/%.o, $(SRCS))
 
 # Compilador e flags
 CXX = g++
-CXXFLAGS = -Wall -Wextra -Wpedantic -Wformat-security -Wconversion -std=c++11 -I$(INC_DIR)
+CXXFLAGS = -Wall -Wextra -Wpedantic -Wformat-security -Wconversion -Werror -std=c++11 -I$(INC_DIR)
 
 # Regra padrão
 all: $(TARGET)

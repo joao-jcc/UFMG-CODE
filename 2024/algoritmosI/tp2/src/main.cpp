@@ -7,11 +7,8 @@
 int main() {
 
     Graph ggr;
-    ggr.print();
-
     Flow flow(ggr);
-
-    std::cout << "max flow: " << flow.fordFulkerson() << std::endl;
-
+    flow.print();
+    
     return 0;
 }

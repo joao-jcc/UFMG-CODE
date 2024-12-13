@@ -12,22 +12,35 @@ void Graph::_read() {
         exit(1);
     }
     std::cin >> N >> M; // Inicializa número de vértices e arestas
-    
+    N += 2; // dois vértices adicionais para representar o gerador-base e o sumidouro
+
     graph = std::vector<std::vector<size_t>>(N, std::vector<size_t>(N, 0));
     graphR = std::vector<std::vector<size_t>>(N, std::vector<size_t>(N, 0));
+    isGenerator = std::vector<bool>(N, false);
 
     // lê tipo dos vértices: gerador ou consumidor
-    for (size_t i = 0; i < N; ++i) {
-        size_t v; size_t type;
-        std::cin >> v >> type;
-    } 
+    for (size_t i = 1; i < N-1; ++i) {
+        size_t v; size_t c; // v: vértice, c: consumo
+        std::cin >> v >> c;
+        if (c == 0) {
+            // adiciona aresta infinita do gerador-base ao gerador v
+            graph[0][v] = std::numeric_limits<size_t>::max(); 
+            graphR[0][v] = std::numeric_limits<size_t>::max();
+            isGenerator[v] = true;
+        }
+        else {
+            // incrementa aresta do consumidor v ao sumidoudouro
+            graph[v][N-1] += c;
+            graphR[v][N-1] += c;            
+        }
+    }
 
     size_t u, v, c; // aresta (u, v) com capacidade c
     for (size_t i = 0; i < M; ++i) {
         std::cin >> u >> v >> c;
 
-        graph[u-1][v-1] = c;
-        graphR[u-1][v-1] = c;
+        graph[u][v] += c;
+        graphR[u][v] += c;
     }
 }
 

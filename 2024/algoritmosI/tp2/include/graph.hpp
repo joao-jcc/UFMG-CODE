@@ -19,6 +19,7 @@ class Graph {
         size_t M; // número de arestas
         std::vector<std::vector<size_t>> graph;
         std::vector<std::vector<size_t>> graphR; // grafo residual
+        std::vector<bool> isGenerator;
 
 };
 
