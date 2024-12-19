@@ -7,6 +7,7 @@
 int main() {
 
     Graph ggr;
+    ggr.print();
     Flow flow(ggr);
     flow.print();
     

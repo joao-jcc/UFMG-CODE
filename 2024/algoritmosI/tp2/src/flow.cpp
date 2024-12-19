@@ -2,7 +2,6 @@
 #include <vector>
 #include <queue>
 #include <limits>
-#include <algorithm>
 
 #define UNDEFINED std::numeric_limits<size_t>::max()
 
