@@ -1,4 +1,8 @@
 #include "graph.hpp"
+#include <vector>
+#include <string>
+#include <iostream>
+#include <limits>
 
 #define _ ios_base::sync_with_stdio(0);cin.tie(0); // Otimização para entrada/saída padrão.
 
@@ -47,24 +51,5 @@ void Graph::_read() {
         // Incrementa a capacidade entre os vértices.
         graph[u][v] += c;
         graphR[u][v] += c;
-    }
-}
-
-// Imprime o grafo e o grafo residual.
-void Graph::print() {
-    std::cout << "GRAPH" << std::endl;
-    for (size_t i = 0; i < N; ++i) {
-        for (size_t j = 0; j < N; ++j) {
-            std::cout << std::setw(3) << graph[i][j] << " ";
-        }
-        std::cout << std::endl;
-    }
-
-    std::cout << "\nRESIDUAL" << std::endl;
-    for (size_t i = 0; i < N; ++i) {
-        for (size_t j = 0; j < N; ++j) {
-            std::cout << std::setw(3) << graphR[i][j] << " ";
-        }
-        std::cout << std::endl;
     }
 }

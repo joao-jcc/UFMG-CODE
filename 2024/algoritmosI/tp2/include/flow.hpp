@@ -1,11 +1,12 @@
 #ifndef FLOW_HPP
 #define FLOW_HPP
 
+#include "graph.hpp"
+#include "utils.hpp"
+#include <iostream>
 #include <vector>
 #include <queue>
 #include <limits>
-#include "graph.hpp"
-#include "utils.hpp"
 
 // Classe para calcular o fluxo máximo em um grafo e informações relacionadas.
 class Flow {

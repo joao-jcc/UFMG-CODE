@@ -1,5 +1,3 @@
-#include <iostream>
-#include <vector>
 #include "graph.hpp"
 #include "flow.hpp"
 
@@ -8,7 +6,7 @@
 int main() {
     // Cria um grafo a partir da entrada padrão.
     Graph ggr;
-    
+
     // Calcula o fluxo máximo e outras métricas relacionadas.
     Flow flow(ggr);
     flow.print(); // Exibe os resultados do fluxo.

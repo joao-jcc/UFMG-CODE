@@ -4,14 +4,13 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include <iomanip>
+#include <limits>
 
 // Classe que representa um grafo orientado para cálculo de fluxo.
 class Graph {
 public:
     Graph(); // Construtor que inicializa o grafo.
-    void print(); // Imprime o grafo e o grafo residual.
-
+    
 private:
     void _read(); // Método auxiliar para leitura dos dados do grafo.
 
