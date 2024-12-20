@@ -84,7 +84,7 @@ def set_parameters(letter):
             
 
 def main():
-    letra = 'c'
+    letra = 'a'
     iteracoes = 7
 
     variaveis, terminais, axioma, regras, commands = set_parameters(letra)

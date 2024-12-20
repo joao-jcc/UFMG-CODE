@@ -1,0 +1,48 @@
+.
+├── Makefile
+├── bin
+│   └── tp1
+├── correctness.py
+├── include
+│   ├── bfs.hpp
+│   ├── dfs.hpp
+│   ├── graph.hpp
+│   └── patrol.hpp
+├── outs
+│   ├── 1.txt
+│   ├── 2.txt
+│   ├── 3.txt
+│   ├── 4.txt
+│   ├── 5.txt
+│   ├── 6.txt
+│   ├── 7.txt
+│   └── 8.txt
+├── script.sh
+├── src
+│   ├── bfs.cpp
+│   ├── dfs.cpp
+│   ├── graph.cpp
+│   ├── main.cpp
+│   └── patrol.cpp
+├── tests
+│   ├── inputs
+│   │   ├── testCase01.txt
+│   │   ├── testCase02.txt
+│   │   ├── testCase03.txt
+│   │   ├── testCase04.txt
+│   │   ├── testCase05.txt
+│   │   ├── testCase06.txt
+│   │   ├── testCase07.txt
+│   │   └── testCase08.txt
+│   └── outputs
+│       ├── testCase01.txt
+│       ├── testCase02.txt
+│       ├── testCase03.txt
+│       ├── testCase04.txt
+│       ├── testCase05.txt
+│       ├── testCase06.txt
+│       ├── testCase07.txt
+│       └── testCase08.txt
+└── tree.txt
+
+8 directories, 38 files
