@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <limits>
+#include <cstddef>
 
 // Classe que representa um grafo orientado para cálculo de fluxo.
 class Graph {

@@ -1,5 +1,6 @@
 #include "utils.hpp"
 #include <vector>
+#include <cstddef>
 
 // Compara duas arestas com base nos critérios de ordenação especificados.
 bool edgeComparator(const Edge& e1, const Edge& e2) {

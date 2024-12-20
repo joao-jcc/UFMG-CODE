@@ -3,6 +3,7 @@
 #include <vector>
 #include <queue>
 #include <limits>
+#include <cstddef>
 
 #define UNDEFINED std::numeric_limits<size_t>::max() // Representa vértices não definidos no BFS (sem pais).
 

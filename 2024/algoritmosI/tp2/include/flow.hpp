@@ -7,6 +7,7 @@
 #include <vector>
 #include <queue>
 #include <limits>
+#include <cstddef>
 
 // Classe para calcular o fluxo máximo em um grafo e informações relacionadas.
 class Flow {

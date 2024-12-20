@@ -2,6 +2,7 @@
 #define UTILS_HPP
 
 #include <vector>
+#include <cstddef>
 
 // Estrutura que representa uma aresta em um grafo.
 struct Edge {

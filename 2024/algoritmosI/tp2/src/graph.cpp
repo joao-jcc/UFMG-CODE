@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <limits>
+#include <cstddef>
 
 #define _ ios_base::sync_with_stdio(0);cin.tie(0); // Otimização para entrada/saída padrão.
 
