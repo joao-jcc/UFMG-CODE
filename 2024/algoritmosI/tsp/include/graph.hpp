@@ -22,8 +22,8 @@ class Graph {
     public:
         Graph();
         void read();
+        void read(const std::string& file_path);
         void print();
-
     
     public:
         std::map<std::string, size_t> name_to_index;

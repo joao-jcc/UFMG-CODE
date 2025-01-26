@@ -13,12 +13,12 @@ class TSP {
         TSP();
 
         void solve();
+        void read(const std::string& file_path); 
         void print_solution();
+        char method;
     
     private:
         Graph graph;
-        char method;
-        
         std::vector<size_t> best_path;
         size_t best_cost;
 

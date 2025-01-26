@@ -9,6 +9,22 @@ void TSP::_read() {
     graph.read();
 }
 
+
+void TSP::read(const std::string& file_path) {
+    std::ifstream file(file_path);
+
+    if (!file.is_open()) {
+        std::cerr << "Erro ao abrir o arquivo: " << file_path << std::endl;
+        exit(1);
+    }
+
+    file >> method; 
+    graph.read(file_path);
+
+    file.close();
+}
+
+
 void TSP::print_solution() {
     std::cout << "## SOLUTION ##" << std::endl;
     for (size_t u : best_path) {
