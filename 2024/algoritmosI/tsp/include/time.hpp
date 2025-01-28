@@ -2,23 +2,26 @@
 #define TIME_HPP
 
 #include <vector>
+#include <iostream>
 #include <chrono>
 #include <string>
 #include <fstream>
 #include "tsp.hpp"
 
+
 class Time {
     public:
-        Time(TSP tsp);
+        Time();
 
-        std::chrono::milliseconds execute(size_t repeat=1000, char method='b');
+        std::chrono::microseconds execute(char method, size_t repeat=1000);
         void executeAll(std::string folder, std::string save_path, size_t repeat, char method);
 
-        void save(std::string path, size_t times);
+        void save(std::string path);
     
     private:
         TSP tsp;
-        std::vector<std::chrono::milliseconds> clocks; 
+        std::vector<std::chrono::microseconds> clocks; 
+        std::vector<size_t> number_vertices;
 
 };
 

@@ -55,6 +55,8 @@
         "algorithm": "cpp",
         "__tree": "cpp",
         "map": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "charconv": "cpp",
+        "forward_list": "cpp"
     }
 }

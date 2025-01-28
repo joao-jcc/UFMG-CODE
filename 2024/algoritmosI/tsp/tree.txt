@@ -1,25 +1,14 @@
 .
 ├── Makefile
-├── experiments
-│   ├── Makefile
-│   ├── include
-│   │   └── time.hpp
-│   ├── results
-│   │   └── t00.txt
-│   └── src
-│       ├── main.cpp
-│       └── time.cpp
 ├── include
 │   ├── graph.hpp
+│   ├── time.hpp
 │   └── tsp.hpp
-├── main
 ├── src
 │   ├── graph.cpp
 │   ├── main.cpp
+│   ├── time.cpp
 │   └── tsp.cpp
-├── test
-│   ├── g00.txt
-│   └── g01.txt
 └── tree.txt
 
-8 directories, 15 files
+3 directories, 9 files

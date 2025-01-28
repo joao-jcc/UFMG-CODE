@@ -1,0 +1,7 @@
+3 6
+salvador palmas 10
+palmas beloHorizonte 20
+beloHorizonte salvador 30
+salvador beloHorizonte 15
+beloHorizonte palmas 10
+palmas salvador 5

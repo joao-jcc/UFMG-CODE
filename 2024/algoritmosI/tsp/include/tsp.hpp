@@ -11,20 +11,20 @@
 class TSP {
     public:
         TSP();
+        
+        Graph* graph; 
 
-        void solve();
-        void read(const std::string& file_path); 
+        void solve(char method);
         void print_solution();
-        char method;
+
+        void set(Graph& graph);
     
-    private:
-        Graph graph;
+    public:
         std::vector<size_t> best_path;
         size_t best_cost;
+        bool initialized;
 
-    private:
-        void _read();
-
+    public:
         // Soluções do TSP
         void _brute_force_aux(size_t root, 
                     size_t total_cost, 
@@ -33,10 +33,6 @@ class TSP {
                     size_t end);
 
         void _brute_force();
-
-        void _greedy();
-        void _dynamic();
-
 
 };
 

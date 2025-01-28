@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <vector>
 #include <string>
 #include <map>
@@ -10,6 +11,7 @@
 class Node {
     public:
         Node(size_t v, size_t w);
+        Node();
     
     public:
         size_t v;
@@ -22,15 +24,17 @@ class Graph {
     public:
         Graph();
         void read();
-        void read(const std::string& file_path);
+        void read(std::string& path);
         void print();
     
     public:
-        std::map<std::string, size_t> name_to_index;
-        std::vector<std::string> index_to_name;
+        std::vector<std::vector<Node>> g; // estrutura principal do grafo 
         size_t N; // número de vértices
         size_t M; // número de arestas
-        std::vector<std::vector<Node>> g; // estrutura principal do grafo 
+        std::vector<std::string> index_to_name;
+        std::map<std::string, size_t> name_to_index;
+        
+       
 
 };
 

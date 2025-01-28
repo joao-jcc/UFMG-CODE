@@ -1,34 +1,22 @@
 #include "tsp.hpp"
 
-TSP::TSP() {
-    _read();
+TSP::TSP() : 
+    graph(nullptr), 
+    best_path(std::vector<size_t>()), 
+    best_cost(UNDEFINED),
+    initialized(false) {}
+
+void TSP::set(Graph& graph) { 
+    this->graph = &graph; 
+    initialized=true; 
+    best_cost = UNDEFINED;
+    best_path.clear();
 }
-
-void TSP::_read() {
-    std::cin >> method;
-    graph.read();
-}
-
-
-void TSP::read(const std::string& file_path) {
-    std::ifstream file(file_path);
-
-    if (!file.is_open()) {
-        std::cerr << "Erro ao abrir o arquivo: " << file_path << std::endl;
-        exit(1);
-    }
-
-    file >> method; 
-    graph.read(file_path);
-
-    file.close();
-}
-
 
 void TSP::print_solution() {
-    std::cout << "## SOLUTION ##" << std::endl;
+    std::cout << "---- SOLUTION ----" << std::endl;
     for (size_t u : best_path) {
-        std::cout << u << " ";
+        std::cout << graph->index_to_name[u] << " ";
     }
     std::cout << std::endl;
 
@@ -36,24 +24,29 @@ void TSP::print_solution() {
 }
 
 
-void TSP::solve() {
+void TSP::solve(char method) {
+    if (!initialized) {
+        std::cerr << "ERRO: TSP não inicializado!" << std::endl;
+        exit(1);
+    }
     switch(method) {
         case 'b':
             _brute_force();
             break;
         
         case 'g':
-            _greedy();
+            // _greedy(graph);
             break;
         
         case 'd':
-            _dynamic();
+            // _dynamic(graph);
             break;
         
         default:
             _brute_force();
             break;
     }
+
 }
 
 void TSP::_brute_force_aux(size_t root, 
@@ -63,8 +56,8 @@ void TSP::_brute_force_aux(size_t root,
                            size_t end) {
     path[root] = index;
 
-    for (Node node : graph.g[root]) {
-        if (node.v == end && index == graph.N - 1) {
+    for (Node node : graph->g[root]) {
+        if (node.v == end && index == graph->N - 1) {
 
             if (best_cost > cost + node.w) {
                 best_cost = cost + node.w; best_path = path;
@@ -74,7 +67,9 @@ void TSP::_brute_force_aux(size_t root,
         }
 
         // branch and bound
-        if (path[node.v] != UNDEFINED || cost + node.w >= best_cost) { continue; }
+        if (path[node.v] != UNDEFINED) {continue;}
+        // branch and bound
+        // if (cost + node.w >= best_cost) { continue; }
 
         _brute_force_aux(node.v, cost + node.w, path, index + 1, end);
     }
@@ -84,17 +79,8 @@ void TSP::_brute_force_aux(size_t root,
 
 
 void TSP::_brute_force() {
-    std::vector<size_t> path(graph.N, UNDEFINED);
-    for (size_t root = 0; root < graph.N; ++root) {
+    std::vector<size_t> path(graph->N, UNDEFINED);
+    for (size_t root = 0; root < graph->N; ++root) {
         _brute_force_aux(root, 0, path, 0, root);
     }
-}
-
-
-void TSP::_greedy() {
-    
-}
-
-void TSP::_dynamic() {
-    
 }
