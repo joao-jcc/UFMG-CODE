@@ -23,13 +23,8 @@ class TSP {
 
     public:
         // Soluções do TSP
-        void _brute_force_aux(size_t root, 
-                    size_t total_cost, 
-                    std::vector<size_t>& path, 
-                    size_t n,
-                    size_t end);
-
         void _brute_force();
+        size_t _brute_force_aux(size_t root, size_t sbin, size_t end);
 
         void _greedy();
 

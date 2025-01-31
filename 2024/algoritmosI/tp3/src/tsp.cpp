@@ -1,5 +1,25 @@
 #include "tsp.hpp"
 
+// funções para gerenciar conjuntos bit-wise
+static size_t full_set (size_t n) {
+    return (1 << n) - 1;
+}
+
+static size_t del_set (size_t sbin, size_t element) {
+    return ~(1 << element) & sbin;
+}
+
+static size_t init_set (size_t n, size_t element) {
+    return del_set(full_set(n), element);
+}
+
+static bool find_set (size_t set, size_t element) {
+    return ((1 << element) & set) == (1 << element);
+}
+
+
+// TSP
+
 TSP::TSP(Graph graph) :
     graph(graph), 
     best_path(std::vector<size_t>()), 
@@ -41,148 +61,44 @@ void TSP::solve() {
 
 }
 
-void TSP::_brute_force_aux(size_t root, 
-                           size_t cost, 
-                           std::vector<size_t>& path,
-                           size_t index,
-                           size_t end) {
-    path[root] = index;
 
-    for (Node node : graph.adj_list[root]) {
-        if (node.v == end && index == graph.N - 1) {
-            ++count_solutions;
- 
-            if (best_cost > cost + node.w) {
-                best_cost = cost + node.w; best_path = path;
-            }
 
-            path[root] = UNDEFINED; return;
-        }
+size_t TSP::_brute_force_aux(size_t root, size_t sbin, size_t end) {
 
-        if (path[node.v] != UNDEFINED) {continue;}
- 
-        _brute_force_aux(node.v, cost + node.w, path, index + 1, end);
+    // caso base: retorna o peso da aresta conectada à origem 0
+    if (sbin == 0) {
+        return graph.matrix[root][end];
     }
 
-    path[root] = UNDEFINED;
+    size_t min_cost = MAX_SIZET;
+    for (size_t v=0; v < graph.N; ++v) {
+        if (find_set(sbin, v)) {
+
+            size_t new_sbin = del_set(sbin, v);
+            size_t cost = graph.matrix[root][v] + _brute_force_aux(v, new_sbin, end);
+            
+            min_cost = min_cost > cost ? cost : min_cost;
+        }
+    }
+
+
+    return min_cost;
 }
 
 
 void TSP::_brute_force() {
-    std::vector<size_t> path(graph.N, UNDEFINED);
-    for (size_t root = 0; root < graph.N; ++root) {
-        _brute_force_aux(root, 0, path, 0, root);
+    for (size_t root=0; root < graph.N; ++root) {
+        size_t cost = _brute_force_aux(root, init_set(graph.N, root), root);
+        best_cost = best_cost > cost ? cost : best_cost;
     }
- }
+}
 
 
 void TSP::_greedy() {
-    size_t current_vertice = 0; // Começa no vértice inicial
-    best_path.clear();
-    best_path.push_back(current_vertice);
-    size_t best_cost = 0;
-
-    std::vector<bool> visited(graph.N, false); 
-    visited[current_vertice] = true;
-
-    for (size_t i = 1; i < graph.N; ++i) {
-        size_t min_distance = std::numeric_limits<size_t>::max();
-        size_t min_vertice = UNDEFINED;
-
-        // Procura o próximo nó com menor distância
-        for (const Node& node : graph.adj_list[current_vertice]) {
-            if (!visited[node.v] && node.w < min_distance) {
-                min_distance = node.w;
-                min_vertice = node.v;
-            }
-        }
-
-        // Atualiza os custos e caminho
-        if (min_vertice != UNDEFINED) {
-            best_cost += min_distance;
-            best_path.push_back(min_vertice);
-            visited[min_vertice] = true;
-            current_vertice = min_vertice;
-        }
-    }
-
- 
-    for (const Node& node : graph.adj_list[current_vertice]) {
-        if (node.v == 0) {
-            best_cost += node.w;
-            break;
-        }
-    }
-
-    this->best_cost = best_cost;
+   
 
 }
-
 
 void TSP::_dynamic() {
-    size_t n = graph.N;
-    std::vector<std::vector<size_t>> dp(1 << n, std::vector<size_t>(n, MAX_SIZET));
-    std::vector<std::vector<size_t>> parent(1 << n, std::vector<size_t>(n, UNDEFINED));
-
-    // Inicializa o custo para visitar o primeiro nó a partir do nó 0
-    dp[1][0] = 0;
-
-    // Itera sobre todos os subconjuntos de nós
-    for (size_t mask = 1; mask < (1 << n); ++mask) {
-        for (size_t u = 0; u < n; ++u) {
-            if (dp[mask][u] == MAX_SIZET) continue;
-
-            // Tenta visitar todos os nós não visitados
-            for (const Node& node : graph.adj_list[u]) {
-                size_t v = node.v;
-                if (!(mask & (1 << v))) {
-                    size_t new_mask = mask | (1 << v);
-                    if (dp[new_mask][v] > dp[mask][u] + node.w) {
-                        dp[new_mask][v] = dp[mask][u] + node.w;
-                        parent[new_mask][v] = u;
-                    }
-                }
-            }
-        }
-    }
-
-    size_t final_mask = (1 << n) - 1;
-    size_t min_cost = MAX_SIZET;
-    size_t last_node = UNDEFINED;
-
-    for (size_t u = 1; u < n; ++u) {
-        if (dp[final_mask][u] != MAX_SIZET && graph.adj_list[u][0].w != MAX_SIZET) {
-            size_t total_cost = dp[final_mask][u] + graph.adj_list[u][0].w;
-            if (total_cost < min_cost) {
-                min_cost = total_cost;
-                last_node = u;
-            }
-        }
-    }
-
-    // Reconstruir o caminho
-    if (last_node != UNDEFINED) {
-        best_cost = min_cost;
-        best_path.clear();
-
-        size_t current_node = last_node;
-        size_t current_mask = final_mask;
-
-        while (current_node != UNDEFINED) {
-            best_path.push_back(current_node);
-            size_t prev_node = parent[current_mask][current_node];
-            current_mask ^= (1 << current_node);
-            current_node = prev_node;
-        }
-
-        for (size_t i = 0; i < n / 2; ++i) {
-            size_t temp = best_path[i];
-            best_path[i] = best_path[n - i - 1];
-            best_path[n - i - 1] = temp;
-}
-        
-    } else {
-        best_cost = UNDEFINED;
-        best_path.clear();
-    }
+    
 }

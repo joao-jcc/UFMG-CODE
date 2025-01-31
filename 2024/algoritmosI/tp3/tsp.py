@@ -1,28 +1,34 @@
-def tsp(graph, i, S):
-    if (len(S) == 0):
-        # distância da cidade i para a origem 0
-        return graph[i][0]
+from itertools import permutations
 
-    min_value = None
-    for v in S:
-        scopy = S.copy(); scopy.remove(v)
-        value = tsp(graph, v, scopy) + graph[i][v]
+def calculate_path_distance(path, graph):
+    distance = 0
+    for i in range(len(path) - 1):
+        distance += graph[path[i]][path[i + 1]]
+    distance += graph[path[-1]][path[0]]  # Retorno ao ponto inicial
+    return distance
 
-        if min_value is None or min_value > value:
-            min_value = value
+def tsp_brute_force(graph):
+    nodes = list(graph.keys())
+    min_distance = float('inf')
+    best_path = None
     
-    return min_value
+    for perm in permutations(nodes):
+        current_distance = calculate_path_distance(perm, graph)
+        if current_distance < min_distance:
+            min_distance = current_distance
+            best_path = perm
+    
+    return best_path, min_distance
 
+# Definição do grafo
+nodes = ["Cyberia", "Augmented", "Quasar", "Elysium"]
+graph = {
+    "Cyberia": {"Augmented": 252, "Quasar": 120, "Elysium": 19},
+    "Augmented": {"Cyberia": 252, "Quasar": 117, "Elysium": 27},
+    "Quasar": {"Cyberia": 120, "Augmented": 117, "Elysium": 122},
+    "Elysium": {"Cyberia": 19, "Augmented": 27, "Quasar": 122}
+}
 
-
-
-if __name__ == "__main__":
-    graph = [
-        [0, 16, 11, 6],
-        [8, 0, 13, 16],
-        [4, 7, 0, 9],
-        [5, 12, 2, 0]
-    ]
-
-    v = tsp(graph, 0, [1, 2, 3])
-    print(v)
+best_path, min_distance = tsp_brute_force(graph)
+print("Melhor caminho:", best_path)
+print("Menor distância:", min_distance)

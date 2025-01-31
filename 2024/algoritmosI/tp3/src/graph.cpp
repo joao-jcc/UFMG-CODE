@@ -1,18 +1,15 @@
 #include "graph.hpp"
 
-Node::Node() {}
-Node::Node(size_t v, size_t w) : v(v), w(w) {
-}
-
 Graph::Graph() {
     _read();
 }
 
 void Graph::_read() {
+    size_t M;
     std::cin >> method;
     std::cin >> N >> M;
 
-    adj_list = std::vector<std::vector<Node>>(N, std::vector<Node>());
+    matrix = std::vector<std::vector<size_t>>(N, std::vector<size_t>(N, UNDEFINED));
     name_to_index = std::map<std::string, size_t>();
     index_to_name = std::vector<std::string>(N);
 
@@ -33,7 +30,7 @@ void Graph::_read() {
         size_t v = name_to_index[city2];
         index_to_name[u] = city1; index_to_name[v] = city2;
 
-        adj_list[u].push_back(Node(v, weight));
-        adj_list[v].push_back(Node(u, weight));
+        matrix[u][v] = weight;
+        matrix[v][u] = weight;
     }
 }

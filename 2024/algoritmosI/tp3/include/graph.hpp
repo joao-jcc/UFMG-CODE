@@ -7,15 +7,8 @@
 #include <string>
 #include <map>
 
-class Node {
-    public:
-        Node(size_t v, size_t w);
-        Node();
-    
-    public:
-        size_t v;
-        size_t w;
-};
+#define MAX_SIZET std::numeric_limits<size_t>::max()
+#define UNDEFINED std::numeric_limits<size_t>::max()
 
 
 class Graph {
@@ -24,9 +17,8 @@ class Graph {
         Graph();
     
     public:
-        std::vector<std::vector<Node>> adj_list; // estrutura principal do grafo 
+        std::vector<std::vector<size_t>> matrix; // estrutura principal do grafo 
         size_t N; // número de vértices
-        size_t M; // número de arestas
         std::vector<std::string> index_to_name;
         std::map<std::string, size_t> name_to_index;
         char method;
