@@ -1,4 +1,4 @@
-b
+d
 5 10
 Fusion Giga 240
 Fusion Energy 13
