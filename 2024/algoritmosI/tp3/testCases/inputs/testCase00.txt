@@ -1,8 +1,0 @@
-b
-4 6
-ssa bh 30
-ssa rio 10
-ssa sp 20
-bh rio 40
-bh sp 10
-rio sp 60

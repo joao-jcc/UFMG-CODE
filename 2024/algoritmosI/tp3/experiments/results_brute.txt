@@ -1,0 +1,7 @@
+Test Case	Vertices	Time (nanoseconds)
+testCase01.txt	4	2660125
+testCase02.txt	5	1952208
+testCase03.txt	6	2273375
+testCase04.txt	8	7247166
+testCase05.txt	9	43712083
+testCase06.txt	11	4992236750
