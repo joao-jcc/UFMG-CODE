@@ -14,7 +14,7 @@ static size_t init_set(size_t n, size_t element) {
 }
 
 static bool find_set(size_t set, size_t element) {
-    return ((1 << element) & set) == (1 << element); // Verifica se um elemento pertence ao conjunto
+    return (((size_t)1 << element) & set) == ((size_t)1 << element); // Verifica se um elemento pertence ao conjunto
 }
 
 
