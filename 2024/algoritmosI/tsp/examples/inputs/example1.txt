@@ -1,7 +1,0 @@
-4 6
-Brierbornedon Budwleyland 10
-Brierbornedon Hallow 15
-Brierbornedon Melodis 20
-Budwleyland Hallow 35
-Budwleyland Melodis 25
-Hallow Melodis 30

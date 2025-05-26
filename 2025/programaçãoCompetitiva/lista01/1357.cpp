@@ -1,5 +1,6 @@
 #include <iostream>
 #include <unordered_map>
+#include <vector>
 #include <string>
 
 using namespace std;
@@ -7,58 +8,62 @@ using namespace std;
 #define _ ios_base::sync_with_stdio(0);cin.tie(0);
 
 
-unordered_map<char, string> dig_to_braille = {
-    {'1', "*. .. .."},
-    {'2', "*. *. .."},
-    {'3', "** .. .."},
-    {'4', "** .* .."},
-    {'5', "*. .* .."},
-    {'6', "** *. .."},
-    {'7', "** ** .."},
-    {'8', "*. ** .."},
-    {'9', ".* *. .."},
-    {'0', ".* ** .."}
+unordered_map<char, vector<string>> dig_to_braille = {
+    {'1', {"*.", "..", ".."}},
+    {'2', {"*.", "*.", ".."}},
+    {'3', {"**", "..", ".."}},
+    {'4', {"**", ".*", ".."}},
+    {'5', {"*.", ".*", ".."}},
+    {'6', {"**", "*.", ".."}},
+    {'7', {"**", "**", ".."}},
+    {'8', {"*.", "**", ".."}},
+    {'9', {".*", "*.", ".."}},
+    {'0', {".*", "**", ".."}}
 };
 
 unordered_map<string, char> braille_to_digit = {
-    {"*. .. ..", '1'},
-    {"*. *. ..", '2'},
-    {"** .. ..", '3'},
-    {"** .* ..", '4'},
-    {"*. .* ..", '5'},
-    {"** .* *.", '6'},
-    {"** ** ..", '7'},
-    {"*. ** ..", '8'},
-    {".* *. ..", '9'},
-    {".* ** ..", '0'}
+    {"*.....", '1'},
+    {"*.*...", '2'},
+    {"**....", '3'},
+    {"**.*..", '4'},
+    {"*..*..", '5'},
+    {"***...", '6'},
+    {"****..", '7'},
+    {"*.**..", '8'},
+    {".**...", '9'},
+    {".***..", '0'}
 };
+
 
 int D; char L;
 string w;
 
 int main(void) {_
+    while (true) {
+        cin >> D; if (D == 0) break;
+        cin >> L;
+        if (L == 'S') {
+            cin >> w;
+            for (int j=0; j < 3; ++j) {
+                for (int i=0; i < D-1; ++i) {
+                    cout << dig_to_braille.at(w[i])[j] << " ";
+                }
+                cout << dig_to_braille.at(w[D-1])[j] << endl;
+            }
+        } else if (L == 'B') {
+            vector<string> strs(D, "");
+            for (int i=0; i < 3; ++i) {
+                for (int j=0; j < D; ++j) {
+                    cin >> w; strs[j] += w;
+                }
+            }
     
-    cin >> D >> L;
-    if (L == 'S') {
-        cin >> w;
-        
-        for (int i=0; i < D-1; ++i) {
-            cout << dig_to_braille.at(w[i]) << " ";
-        }
-        cout << dig_to_braille.at(w[D-1]) << endl;
-    } 
+            for (int i=0; i < strs.size(); ++i) {
+                cout << braille_to_digit.at(strs[i]);
+            }
     
-    else {
-        string p1, p2, p3;
-        for (int i=0; i <D-1; ++i) {
-            cin >> p1 >> p2 >> p3; w = p1 + " " + p2 + " " + p3;
-
-            cout << "\n--------w------" << endl;
-            cout << w << endl;
-            cout << braille_to_digit.at(w) << " ";
+            cout << endl;
         }
-        cin >> p1 >> p2 >> p3; w = p1 + " " + p2 + " " + p3; 
-        cout << braille_to_digit.at(w) << endl;
     }
 
     exit(0);

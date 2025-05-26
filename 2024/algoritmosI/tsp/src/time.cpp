@@ -1,24 +1,21 @@
 #include "time.hpp"
 
 
-Time::Time() :  tsp(TSP()) {
+Time::Time(){}
 
-}
-
-std::chrono::microseconds Time::execute(char method, size_t repeat) {
+std::chrono::nanoseconds Time::execute(size_t repeat) {
     if (!tsp.initialized) {
-        std::cerr << "TSP não inicilizado!" << std::endl;
+        std::cerr << "TSP não inicializado!" << std::endl;
         exit(1);
     }
 
     auto start = std::chrono::high_resolution_clock::now();
-
     for (size_t i=0; i < repeat; ++i) {
-        tsp.solve(method);
+        tsp.solve();
     }
     
     auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
 
     return duration;
 }
@@ -59,11 +56,12 @@ void Time::executeAll(std::string folder, std::string save_path, size_t repeat, 
         std::cout << "executing: " << file_path << std::endl;
         Graph graph; 
         graph.read(file_path);
+        graph.method = method;
         tsp.set(graph);
-        auto duration = execute(method, repeat);
+        auto duration = execute(repeat);
         clocks.push_back(duration);
         number_vertices.push_back(graph.N);
-        std::cout << "\t concluded: " << duration.count() << "microseconds" << std::endl;
+        std::cout << "\t concluded: " << duration.count() << " ns" << std::endl;
     }
     save(save_path);
 }

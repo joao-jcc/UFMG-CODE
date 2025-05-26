@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <sstream>
 #include <vector>
 #include <string>
 #include <map>
@@ -23,8 +22,8 @@ class Graph {
 
     public:
         Graph();
-        void read();
         void read(std::string& path);
+        void read();
         void print();
     
     public:
@@ -33,6 +32,7 @@ class Graph {
         size_t M; // número de arestas
         std::vector<std::string> index_to_name;
         std::map<std::string, size_t> name_to_index;
+        char method;
         
        
 

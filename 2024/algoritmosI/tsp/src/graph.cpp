@@ -8,6 +8,7 @@ Graph::Graph() {
 }
 
 void Graph::read() {
+    std::cin >> method;
     std::cin >> N >> M;
 
     g = std::vector<std::vector<Node>>(N, std::vector<Node>());
@@ -32,6 +33,7 @@ void Graph::read() {
         index_to_name[u] = city1; index_to_name[v] = city2;
 
         g[u].push_back(Node(v, weight));
+        g[v].push_back(Node(u, weight));
     }
 }
 
@@ -43,9 +45,8 @@ void Graph::read(std::string& path) {
         std::cerr << "Erro ao abrir o arquivo: " << path << std::endl;
         exit(1);
     }
-
+    file >> method;
     file >> N >> M;
-
     g = std::vector<std::vector<Node>>(N, std::vector<Node>());
     name_to_index = std::map<std::string, size_t>();
     index_to_name = std::vector<std::string>(N);
@@ -70,6 +71,7 @@ void Graph::read(std::string& path) {
         index_to_name[v] = city2;
 
         g[u].push_back(Node(v, weight));
+        g[v].push_back(Node(u, weight));
     }
 
     file.close();

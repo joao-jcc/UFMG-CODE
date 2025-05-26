@@ -14,7 +14,7 @@ class TSP {
         
         Graph* graph; 
 
-        void solve(char method);
+        void solve();
         void print_solution();
 
         void set(Graph& graph);
@@ -33,6 +33,10 @@ class TSP {
                     size_t end);
 
         void _brute_force();
+
+        void _greedy();
+
+        void _dynamic();
 
 };
 
